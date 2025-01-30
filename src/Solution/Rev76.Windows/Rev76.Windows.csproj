@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{407104B3-462B-4D3F-BAF2-4A6CC11AC146}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Rev76</RootNamespace>
-    <AssemblyName>Rev76</AssemblyName>
+    <ProjectGuid>{7DE0441F-87C2-4B91-86DE-53200A2B345D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rev76.Windows</RootNamespace>
+    <AssemblyName>Rev76.Windows</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,16 +23,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -46,22 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logging\Tracing.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rev76.DataModels\Rev76.DataModels.csproj">
-      <Project>{b53ef2b7-1205-4a14-961e-515fa1037f2b}</Project>
-      <Name>Rev76.DataModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rev76.Windows\Rev76.Windows.csproj">
-      <Project>{7de0441f-87c2-4b91-86de-53200a2b345d}</Project>
-      <Name>Rev76.Windows</Name>
-    </ProjectReference>
+    <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
