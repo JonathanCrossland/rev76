@@ -3,32 +3,36 @@
   "WorkspaceRootPath": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\bin\\debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\bin\\debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\logging\\tracing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\logging\\tracing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C81C0E3E-5040-4742-ACAE-0D5C22990601}|Rev76.Core\\Rev76.Core.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.core\\logging\\textwriterlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C81C0E3E-5040-4742-ACAE-0D5C22990601}|Rev76.Core\\Rev76.Core.csproj|solutionrelative:rev76.core\\logging\\textwriterlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.datamodels\\appdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\appdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C81C0E3E-5040-4742-ACAE-0D5C22990601}|Rev76.Core\\Rev76.Core.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.core\\logging\\tracing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C81C0E3E-5040-4742-ACAE-0D5C22990601}|Rev76.Core\\Rev76.Core.csproj|solutionrelative:rev76.core\\logging\\tracing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\windowmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\windowmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\win32.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\win32.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\systemtrayicon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\systemtrayicon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\[win32]\\win32.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\[win32]\\win32.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\[win32]\\win32constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\[win32]\\win32constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\[win32]\\win32modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\[win32]\\win32modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -51,92 +55,105 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "rev76.log",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\bin\\Debug\\rev76.log",
-              "RelativeDocumentMoniker": "Rev76\\bin\\Debug\\rev76.log",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\bin\\Debug\\rev76.log",
-              "RelativeToolTip": "Rev76\\bin\\Debug\\rev76.log",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-30T16:31:05.857Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Tracing.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Logging\\Tracing.cs",
-              "RelativeDocumentMoniker": "Rev76\\Logging\\Tracing.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Logging\\Tracing.cs",
-              "RelativeToolTip": "Rev76\\Logging\\Tracing.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABWAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
+              "RelativeDocumentMoniker": "Rev76\\Program.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
+              "RelativeToolTip": "Rev76\\Program.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T16:18:18.149Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AssemblyInfo.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Properties\\AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "Rev76\\Properties\\AssemblyInfo.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Properties\\AssemblyInfo.cs",
-              "RelativeToolTip": "Rev76\\Properties\\AssemblyInfo.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACAAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T16:13:38.116Z",
+              "WhenOpened": "2025-01-30T19:07:20.784Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AppData.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\AppData.cs",
-              "RelativeDocumentMoniker": "Rev76.DataModels\\AppData.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\AppData.cs",
-              "RelativeToolTip": "Rev76.DataModels\\AppData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T16:11:45.734Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "WindowManager.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\WindowManager.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\WindowManager.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\WindowManager.cs",
               "RelativeToolTip": "Rev76.Windows\\WindowManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T16:02:08.494Z",
+              "WhenOpened": "2025-01-30T18:47:53.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TextWriterListener.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Core\\Logging\\TextWriterListener.cs",
+              "RelativeDocumentMoniker": "Rev76.Core\\Logging\\TextWriterListener.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Core\\Logging\\TextWriterListener.cs",
+              "RelativeToolTip": "Rev76.Core\\Logging\\TextWriterListener.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-30T18:20:24.232Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Tracing.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Core\\Logging\\Tracing.cs",
+              "RelativeDocumentMoniker": "Rev76.Core\\Logging\\Tracing.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Core\\Logging\\Tracing.cs",
+              "RelativeToolTip": "Rev76.Core\\Logging\\Tracing.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-30T17:57:58.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Win32Modules.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Modules.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\[Win32]\\Win32Modules.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Modules.cs",
+              "RelativeToolTip": "Rev76.Windows\\[Win32]\\Win32Modules.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-30T17:02:56.788Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Win32Constants.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "RelativeToolTip": "Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwCUAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-30T17:01:27.509Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Win32.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Win32.cs",
-              "RelativeDocumentMoniker": "Rev76.Windows\\Win32.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Win32.cs",
-              "RelativeToolTip": "Rev76.Windows\\Win32.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\[Win32]\\Win32.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32.cs",
+              "RelativeToolTip": "Rev76.Windows\\[Win32]\\Win32.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAcwCsAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T16:01:43.004Z",
+              "WhenOpened": "2025-01-30T16:58:56.006Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
-              "RelativeDocumentMoniker": "Rev76\\Program.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
-              "RelativeToolTip": "Rev76\\Program.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAQwCsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "SystemTrayIcon.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\SystemTrayIcon.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\SystemTrayIcon.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\SystemTrayIcon.cs",
+              "RelativeToolTip": "Rev76.Windows\\SystemTrayIcon.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwFgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T14:56:51.242Z",
+              "WhenOpened": "2025-01-30T16:57:39.465Z",
               "EditorCaption": ""
             }
           ]

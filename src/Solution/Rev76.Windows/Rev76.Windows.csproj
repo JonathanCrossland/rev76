@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,9 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Win32.cs" />
+    <Compile Include="SystemTrayIcon.cs" />
+    <Compile Include="[Win32]\Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="[Win32]\Win32Constants.cs" />
+    <Compile Include="[Win32]\Win32Modules.cs" />
+    <Compile Include="[Win32]\Win32Tray.cs" />
     <Compile Include="WindowManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rev76.Core\Rev76.Core.csproj">
+      <Project>{C81C0E3E-5040-4742-ACAE-0D5C22990601}</Project>
+      <Name>Rev76.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

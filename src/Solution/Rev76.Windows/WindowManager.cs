@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Rev76.Windows
 {
@@ -10,6 +11,10 @@ namespace Rev76.Windows
             if (gameWindow != IntPtr.Zero)
             {
                 return Win32.SetForegroundWindow(gameWindow); 
+            }
+            else
+            {
+                Trace.TraceError("FindWindow did not find the ACC window");
             }
 
             return false;
