@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 namespace Rev76.Windows
 {
-
     public class WindowManager
     {
         public static Dictionary<IntPtr, OverlayWindow> Windows = new Dictionary<IntPtr, OverlayWindow>();
@@ -38,7 +37,6 @@ namespace Rev76.Windows
             {
                 Windows.Add(window.HWND, window);
             }
-
         }
 
         internal static void Remove(OverlayWindow window)
@@ -58,6 +56,5 @@ namespace Rev76.Windows
 
             Windows.Clear();
         }
-
     }
 }

@@ -4,3 +4,6 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Window
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Windows.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Windows.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Windows.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Rev76.Core.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Rev76.Core.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Wi.8F474284.Up2Date

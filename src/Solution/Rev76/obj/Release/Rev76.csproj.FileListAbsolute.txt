@@ -10,3 +10,7 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.csproj.CoreCom
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.csproj.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.exe
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Release\Rev76.Core.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Release\Rev76.Core.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.AppResources.resources
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Release\Rev76.csproj.GenerateResource.cache
