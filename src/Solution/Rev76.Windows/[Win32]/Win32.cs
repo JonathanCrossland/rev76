@@ -50,6 +50,51 @@ namespace Rev76.Windows
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr RegisterClassEx(ref WNDCLASSEX lpwcx);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool UpdateWindow(IntPtr hWnd);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WINDOWPOS
+        {
+            public IntPtr hwnd;                // Handle to the window whose position is changing
+            public IntPtr hwndInsertAfter;      // Handle to the window after which to insert
+            public int x;                      // New position of the window (x-coordinate)
+            public int y;                      // New position of the window (y-coordinate)
+            public int cx;                     // New width of the window
+            public int cy;                     // New height of the window
+            public uint flags;                 // Flags indicating the change
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool IsWindow(IntPtr hWnd);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BLENDFUNCTION
+        {
+            public byte BlendOp;             // Specifies the blend operation.
+            public byte BlendFlags;          // Must be 0.
+            public byte SourceConstantAlpha; // Specifies the transparency level (0 to 255).
+            public byte AlphaFormat;         // Specifies whether the source has an alpha channel (AC_SRC_ALPHA).
+        }
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool UpdateLayeredWindow(
+            IntPtr hwnd,                // Handle to the layered window
+            IntPtr hdcDest,             // Handle to the screen DC
+            ref POINT pptDest,          // New screen position of the layered window
+            ref SIZE psize,             // New size of the layered window
+            IntPtr hdcSrc,              // Handle to the DC with the layered window content
+            ref POINT pptSrc,           // Location of the layered window content
+            int crKey,                  // Color key (transparent color)
+            ref BLENDFUNCTION pblend,   // Transparency and alpha information
+            uint dwFlags                // Options for the layered window
+        );
+
         #region cursor
 
         [DllImport("user32.dll", SetLastError = true)]

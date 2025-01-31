@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Rev76.Windows
 {
+
     public class WindowManager
     {
+        public static Dictionary<IntPtr, OverlayWindow> Windows = new Dictionary<IntPtr, OverlayWindow>();
+        private static readonly object lockObject = new object();
+
         public static bool HandOverToGame()
         {
             IntPtr gameWindow = GetGameWindow();
@@ -26,5 +31,33 @@ namespace Rev76.Windows
             // and it may change with an update.
             return Win32.FindWindow("UnrealWindow", "AC2  ");
         }
+
+        internal static void AddWindow(OverlayWindow window)
+        {
+            lock (lockObject)
+            {
+                Windows.Add(window.HWND, window);
+            }
+
+        }
+
+        internal static void Remove(OverlayWindow window)
+        {
+            if (window == null) return;
+            if (window.HWND == IntPtr.Zero) return;
+
+            Windows.Remove(window.HWND);
+        }
+
+        internal static void CloseWindows()
+        {
+            foreach (OverlayWindow window in Windows.Values)
+            {
+                window.Dispose();
+            }
+
+            Windows.Clear();
+        }
+
     }
 }

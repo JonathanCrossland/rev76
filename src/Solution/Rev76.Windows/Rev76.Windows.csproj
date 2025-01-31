@@ -43,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SystemTrayIcon.cs" />
+    <Compile Include="OverlayWindow.cs" />
+    <Compile Include="Widgets\Rev76Widget.cs" />
     <Compile Include="[Win32]\Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="[Win32]\Win32Constants.cs" />
+    <Compile Include="[Win32]\Win32DC.cs" />
     <Compile Include="[Win32]\Win32Modules.cs" />
     <Compile Include="[Win32]\Win32Tray.cs" />
     <Compile Include="WindowManager.cs" />

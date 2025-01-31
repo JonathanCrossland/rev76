@@ -17,6 +17,7 @@
 using Rev76.Core.Logging;
 using Rev76.DataModels;
 using Rev76.Windows;
+using Rev76.Windows.Widgets;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -40,16 +41,21 @@ namespace Rev76
             Tracing.StartTracing("rev76.log", TraceEventType.Error);
             Trace.WriteLine($"Rev76.{new AppData().Version}");
 
-            CreateSystemTrayIcon();
+            Icon icon = GetIcon();
+
+            CreateSystemTrayIcon(icon);
 
             Trace.WriteLine("Handing over to game.");
 
             bool ret = WindowManager.HandOverToGame();
 
+            Rev76Widget widget = new Rev76Widget(0, 0, 84, 84, icon);
+           
+            widget.Show();
+
             if (!ret)
             {
                 Console.WriteLine("Game not found");
-                
             }
 
             while (!cts.Token.IsCancellationRequested)
@@ -58,26 +64,30 @@ namespace Rev76
             }
         }
 
-        private static void CreateSystemTrayIcon()
+        private static void CreateSystemTrayIcon(Icon icon)
         {
             Task.Run(() =>
             {
-
-                Icon icon = null;
-                ResourceManager rm = new ResourceManager("Rev76.AppResources", typeof(AppResources).Assembly);
-                byte[] iconBytes = (byte[])rm.GetObject("rev76"); 
-
-                using (MemoryStream ms = new MemoryStream(iconBytes))
-                {
-                    icon = new Icon(ms); 
-     
-                }
-
                 _SystemTrayIcon.AddIcon(icon, "Rev76", () =>
                 {
                     Environment.Exit(0);
                 });
             });
+        }
+
+        private static Icon GetIcon()
+        {
+            Icon icon = null;
+            ResourceManager rm = new ResourceManager("Rev76.AppResources", typeof(AppResources).Assembly);
+            byte[] iconBytes = (byte[])rm.GetObject("rev76");
+
+            using (MemoryStream ms = new MemoryStream(iconBytes))
+            {
+                icon = new Icon(ms);
+
+            }
+
+            return icon;
         }
     }
 }

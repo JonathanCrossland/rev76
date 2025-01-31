@@ -1,4 +1,6 @@
-﻿namespace Rev76.Windows
+﻿using System;
+
+namespace Rev76.Windows
 {
     public partial class Win32
     {
@@ -9,11 +11,30 @@
         public const int WM_CLOSE = 0x0010;
         public const int WM_COMMAND = 0x0111;
         public const uint WM_SETFOCUS = 0x0007;
+        public const uint WM_PAINT = 0x000F;
+        public const uint WM_QUIT = 0x0012;
 
         public const uint WM_MOUSEMOVE = 0x0200;
         public const uint WM_LBUTTONUP = 0x0202;
+        public const uint WM_LBUTTONDOWN = 0x0201;
         public const uint WM_RBUTTONUP = 0x0205;
+        public const uint WM_RBUTTONDOWN = 0x0204;
 
+        public const int WM_NCHITTEST = 0x84;
+        public const uint WM_WINDOWPOSCHANGED = 0x0047;
+        public const int WM_EXITSIZEMOVE = 0x0232;
+        
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+
+        public const int HTCLIENT = 1;
+        public const int HTCAPTION = 0x02;
+
+        public const uint SWP_NOACTIVATE = 0x0010; 
+        public const uint SWP_NOMOVE = 0x0002;   
+        public const uint SWP_NOSIZE = 0x0001;
+
+        
+        public const uint PM_REMOVE = 0x0001;
 
         // ShowWindow
         public const int SW_HIDE = 0;  
@@ -21,10 +42,22 @@
         public const int SW_MINIMIZE = 6;
         public const int SW_RESTORE = 9;
 
-      
+
+        // Window Styles
+        public const int WS_EX_LAYERED = 0x80000;
+        public const int WS_EX_TOPMOST = 0x00000008;
+        public const int WS_OVERLAPPEDWINDOW = 0x00CF0000;
+        public const int WS_POPUP = unchecked((int)0x80000000);
+
+        // UpdateLayeredWindow
+        public const byte AC_SRC_OVER = 0x00; // Blend source and destination based on alpha
+        public const byte AC_SRC_ALPHA = 0x01; // Use alpha channel in the source bitmap
+        public const int LWA_ALPHA = 0x2;
 
         //cursor
         public const int IDC_ARROW = 32512;
+
+        
 
         #region System Tray
 

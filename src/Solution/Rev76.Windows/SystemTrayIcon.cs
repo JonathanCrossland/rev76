@@ -16,10 +16,10 @@ namespace Rev76.Windows
         private static IntPtr _hMenu;
         private Win32.WndProcDelegate _wndProcDelegate; // Keep a reference to the delegate
 
-        
 
         public void AddIcon(Icon icon, string tooltip, Action onClick)
         {
+
             _messageId = Win32.WM_USER + 100;
 
             Trace.TraceInformation("Creating system tray.");
