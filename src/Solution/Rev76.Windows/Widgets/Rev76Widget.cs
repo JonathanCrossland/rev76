@@ -9,7 +9,7 @@ namespace Rev76.Windows.Widgets
         {
         }
         
-        protected override void OnRender(Graphics gfx)
+        protected override void OnRender(System.Drawing.Graphics gfx)
         {
             Icon resizedIcon = new Icon(Icon, new Size(64, 64));
             Bitmap bmp = resizedIcon.ToBitmap();

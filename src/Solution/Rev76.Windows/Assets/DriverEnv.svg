@@ -1,0 +1,86 @@
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	xmlns:lucid="https://www.lucidocean.com/svgui"
+     viewBox="0 0 410 230"   width="410" height="230" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+   >
+	<defs>
+		<linearGradient id="deltared" x1="0%" y1="0%" x2="100%" y2="0%">
+			<!-- Left side (opaque yellow) -->
+			<stop offset="0%" style="stop-color: #444; stop-opacity: 1" />
+			<stop offset="90%" style="stop-color: #444; stop-opacity: 0.8" />
+			<stop offset="90%" style="stop-color: #bb0000; stop-opacity: 0.05" />
+			<stop offset="100%" style="stop-color: #bb0000; stop-opacity: 1" />
+		</linearGradient>
+		<linearGradient id="deltagreen" x1="0%" y1="0%" x2="100%" y2="0%">
+			<!-- Left side (opaque yellow) -->
+			<stop offset="0%" style="stop-color: #444; stop-opacity: 1" />
+			<stop offset="90%" style="stop-color: #444; stop-opacity: 0.8" />
+			<stop offset="90%" style="stop-color: #00ff00; stop-opacity: 0.05" />
+			<stop offset="100%" style="stop-color: #00aa00; stop-opacity: 1" />
+		</linearGradient>
+		<linearGradient id="medeltared" x1="0%" y1="0%" x2="100%" y2="0%">
+			<stop offset="0%" style="stop-color: #222; stop-opacity: 1" />
+			<stop offset="92%" style="stop-color: #222; stop-opacity: 1" />
+			<stop offset="99%" style="stop-color: #bb0000; stop-opacity: 1" />
+			<stop offset="100%" style="stop-color: #bb0000; stop-opacity: 1" />
+		</linearGradient>
+		<linearGradient id="medeltagreen" x1="0%" y1="0%" x2="100%" y2="0%">
+			<stop offset="0%" style="stop-color: #222; stop-opacity: 1" />
+		
+			<stop offset="92%" style="stop-color: #222; stop-opacity: 1" />
+			<stop offset="99%" style="stop-color: #00aa00; stop-opacity: 1" />
+			<stop offset="100%" style="stop-color: #00aa00; stop-opacity: 1" />
+		</linearGradient>
+	</defs>
+	<!-- Background Rows -->
+	<rect id="PreDriverRect" lucid:interacts="click" x="10" y="10" width="340" height="40" fill="#444444" rx="5" />
+	<rect id="PreDriverRect1" x="352" y="10" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PreDriverRect2" x="362" y="10" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PreDriverRect3" x="372" y="10" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PreDriverRect4" x="382" y="10" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PreDriverRect5" x="392" y="10" width="8" height="40" fill="#333" rx="2" />
+	
+	
+
+	<rect id="MeDriverRect" x="10" y="60" width="340" height="40" fill="url(#medeltagreen)" rx="5" />
+	<rect id="MeDriverRect1" x="352" y="60" width="8" height="40" fill="#333" rx="2" />
+	<rect id="MeDriverRect2" x="362" y="60" width="8" height="40" fill="#333" rx="2" />
+	<rect id="MeDriverRect3" x="372" y="60" width="8" height="40" fill="#333" rx="2" />
+	<rect id="MeDriverRect4" x="382" y="60" width="8" height="40" fill="#333" rx="2" />
+	<rect id="MeDriverRect5" x="392" y="60" width="8" height="40" fill="#333" rx="2" />
+
+
+	<rect id="PostDriverRect" x="10" y="110" width="340" height="40" fill="#444444" rx="5" />
+	<rect id="PostDriverRect1" x="352" y="110" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PostDriverRect2" x="362" y="110" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PostDriverRect3" x="372" y="110" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PostDriverRect4" x="382" y="110" width="8" height="40" fill="#333" rx="2" />
+	<rect id="PostDriverRect5" x="392" y="110" width="8" height="40" fill="#333" rx="2" />
+
+	<rect id="preDiff" x="245" y="42" width="90" height="25" fill="#444444" rx="5" />
+	<rect id="postDiff" x="245" y="92" width="90" height="25" fill="#444444" rx="5" />
+
+	<rect x="10" y="170" width="340" height="40" fill="#9400b9" rx="5" />
+
+	<!-- Divider Line -->
+	<line x1="10" y1="160" x2="350" y2="160" stroke="#ddd" stroke-width="1" stroke-dasharray="2,2" />
+
+	<!-- Text Rows with Position, Name, and Right-Aligned Time -->
+	<text id="PreDriverPos" x="20" y="35" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PreDriver"    x="50" y="35" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PreDriverTime" x="318" y="35" fill="#ffffff" font-size="16" text-anchor="end"></text>
+ 
+	<text id="MeDriverPos" x="20" y="85" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="MeDriver" x="50" y="85" fill="#bd00ec" font-size="16" font-weight="bold"></text>
+	<text id="MeDriverTime" x="318" y="85" fill="#ffffff" font-size="16" text-anchor="end"></text>
+
+	<text id="PostDriverPos"  x="20" y="135" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PostDriver"     x="50" y="135" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PostDriverTime" x="318" y="135" fill="#ffffff" font-size="16" text-anchor="end"></text>
+
+	<text id="PurpleDriverPos" x="20" y="195" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PurpleDriver"    x="50" y="195" fill="#ffffff" font-size="16" font-weight="bold"></text>
+	<text id="PurpleDriverTime" x="318" y="195" fill="#ffffff" font-size="16" text-anchor="end"></text>
+
+	<text id="PreTimeDiff" x="290" y="60" fill="#dddddd" font-size="13" text-anchor="middle"></text>
+	<text id="PostTimeDiff" x="290" y="110" fill="#dddddd" font-size="13" text-anchor="middle"></text>
+</svg>

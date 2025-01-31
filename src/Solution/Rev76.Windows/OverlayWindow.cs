@@ -16,9 +16,9 @@ namespace Rev76.Windows
 
         public IntPtr HWND;
         private IntPtr _HDC;
-        private Graphics _Graphics;
+        private System.Drawing.Graphics _Graphics;
         private Bitmap _BufferBitmap;
-        private Graphics _BufferGraphics;
+        private System.Drawing.Graphics _BufferGraphics;
         private bool _IsRunning = true;
         private bool _NeedsRedraw = true;
         private string _ClassName;
@@ -70,13 +70,14 @@ namespace Rev76.Windows
             CreateLayeredWindow();
             InitializeGraphics();
 
-            Render();
+            //Render();
         }
 
         private void RegisterWindowClass()
         {
 
             _wndProcDelegate = WndProc;
+            IntPtr iconHandle = Icon!= null ? Icon.Handle : IntPtr.Zero;
 
             Win32.WNDCLASSEX wndClass = new Win32.WNDCLASSEX
             {
@@ -90,7 +91,7 @@ namespace Rev76.Windows
                 hbrBackground = IntPtr.Zero,
                 lpszMenuName = null,
                 lpszClassName = _ClassName,
-                hIconSm = Icon.Handle //IntPtr.Zero
+                hIconSm = iconHandle
             };
 
             if (RegisterClassEx(ref wndClass) == IntPtr.Zero)
@@ -104,7 +105,7 @@ namespace Rev76.Windows
             HWND = Win32.CreateWindowEx(
                 Win32.WS_EX_LAYERED | Win32.WS_EX_TOPMOST,
                 _ClassName,
-                string.Empty,
+                this.Title,
                 Win32.WS_POPUP,
                 X, Y, Width, Height,
                 IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
@@ -122,8 +123,8 @@ namespace Rev76.Windows
         public void Show()
         {
             _IsRunning = true;
-            Win32.ShowWindow(HWND, 5);
-            Win32.UpdateWindow(HWND);
+            //Win32.ShowWindow(HWND, 5);
+            //Win32.UpdateWindow(HWND);
 
             Render();
         }
@@ -233,14 +234,14 @@ namespace Rev76.Windows
         {
             _HDC = GetDC(HWND);
             _BufferBitmap = new Bitmap(Width * 2, Height * 2, PixelFormat.Format32bppArgb);
-            _BufferGraphics = Graphics.FromImage(_BufferBitmap);
+            _BufferGraphics = System.Drawing.Graphics.FromImage(_BufferBitmap);
 
             _BufferGraphics.SmoothingMode = SmoothingMode.AntiAlias;
             _BufferGraphics.CompositingQuality = CompositingQuality.HighQuality;
             _BufferGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             _BufferGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            _Graphics = Graphics.FromHdc(_HDC);
+            _Graphics = System.Drawing.Graphics.FromHdc(_HDC);
 
         }
 
@@ -337,12 +338,12 @@ namespace Rev76.Windows
             }
         }
 
-        protected virtual void OnGraphicsSetup(Graphics gfx)
+        protected virtual void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
             _Brushes["background"] = new SolidBrush(Color.FromArgb(60, 0, 0, 0));
         }
 
-        protected virtual void OnRender(Graphics gfx)
+        protected virtual void OnRender(System.Drawing.Graphics gfx)
         {
             DrawWindowBackground();
         }
@@ -355,7 +356,7 @@ namespace Rev76.Windows
             }
         }
 
-        protected virtual void OnGraphicsDestroyed(Graphics gfx)
+        protected virtual void OnGraphicsDestroyed(System.Drawing.Graphics gfx)
         {
             foreach (var pair in _Brushes) pair.Value.Dispose();
         }

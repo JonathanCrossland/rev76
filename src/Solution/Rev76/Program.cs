@@ -16,6 +16,7 @@
 
 using Rev76.Core.Logging;
 using Rev76.DataModels;
+using Rev76.DataModels.Listeners;
 using Rev76.Windows;
 using Rev76.Windows.Widgets;
 using System;
@@ -32,6 +33,8 @@ namespace Rev76
     {
         
         private static SystemTrayIcon _SystemTrayIcon = new SystemTrayIcon();
+        private static ACCListener _SharedMemClient = new ACCListener();
+        private static ACCBroadcastListener _ACCBroadcastListener = new ACCBroadcastListener();
 
         [STAThread]
         private static async Task Main(string[] args)
@@ -45,13 +48,21 @@ namespace Rev76
 
             CreateSystemTrayIcon(icon);
 
+
+
+            WidgetFactory.LoadWidgets(icon);
+
+
+            SharedMemory(cts);
+            Udp(cts);
+
             Trace.WriteLine("Handing over to game.");
 
             bool ret = WindowManager.HandOverToGame();
 
-            Rev76Widget widget = new Rev76Widget(0, 0, 84, 84, icon);
-           
-            widget.Show();
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
 
             if (!ret)
             {
@@ -75,6 +86,23 @@ namespace Rev76
             });
         }
 
+        private static void SharedMemory(CancellationTokenSource cts)
+        {
+            Task.Run(async () =>
+            {
+                await _SharedMemClient.Listen(cts.Token);
+            });
+        }
+
+        private static void Udp(CancellationTokenSource cts)
+        {
+            Task.Run(async () =>
+            {
+                await _ACCBroadcastListener.Listen(cts);
+
+            }).Wait();
+        }
+
         private static Icon GetIcon()
         {
             Icon icon = null;
@@ -88,6 +116,13 @@ namespace Rev76
             }
 
             return icon;
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            _ACCBroadcastListener.Dispose();
+            _SharedMemClient.Dispose();
+            SystemTrayIcon.RemoveIcon();
         }
     }
 }

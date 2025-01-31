@@ -4,3 +4,6 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Release\Rev76.Dat
 C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Release\Rev76.DataModels.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Release\Rev76.DataModels.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Release\Rev76.DataModels.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Release\Assetto.Data.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Release\Assetto.Data.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Release\Rev76.Da.CDA78642.Up2Date

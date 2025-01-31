@@ -7,3 +7,15 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Window
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Rev76.Core.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Rev76.Core.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Wi.8F474284.Up2Date
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Newtonsoft.Json.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Newtonsoft.Json.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\Cloudy.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\CloudyRain.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\CloudyRainShowers.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\DriverEnv.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\graphic.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\PartlyCloudy.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\Sunny.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\ThunderStorm.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\TyrePanel.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\TyreWidget.svg

@@ -41,8 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Listeners\ACCBroadcastListener.cs" />
+    <Compile Include="Listeners\ACCListener.cs" />
     <Compile Include="AppData.cs" />
+    <Compile Include="Car.cs" />
+    <Compile Include="FuelTank.cs" />
+    <Compile Include="GameData.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="Track.cs" />
+    <Compile Include="TrackEnvironment.cs" />
+    <Compile Include="Tyres.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Assetto.Data\Assetto.Data.csproj">
+      <Project>{187cfd7b-7130-48e4-b032-57f5e67a9c66}</Project>
+      <Name>Assetto.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

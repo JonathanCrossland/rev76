@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rev76.Windows", "Rev76.Wind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rev76.Core", "Rev76.Core\Rev76.Core.csproj", "{C81C0E3E-5040-4742-ACAE-0D5C22990601}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assetto.Data", "Assetto.Data\Assetto.Data.csproj", "{187CFD7B-7130-48E4-B032-57F5E67A9C66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C81C0E3E-5040-4742-ACAE-0D5C22990601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81C0E3E-5040-4742-ACAE-0D5C22990601}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C81C0E3E-5040-4742-ACAE-0D5C22990601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{187CFD7B-7130-48E4-B032-57F5E67A9C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187CFD7B-7130-48E4-B032-57F5E67A9C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187CFD7B-7130-48E4-B032-57F5E67A9C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187CFD7B-7130-48E4-B032-57F5E67A9C66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,67 @@
+{
+  "Widgets": [
+    {
+      "Name": "TyreWidgetEx",
+      "FPS": 10,
+      "X": 3990,
+      "Y": 916,
+      "Width": 190,
+      "Height": 265,
+      "Enable": true
+    },
+    {
+      "Name": "PurpleWidget",
+      "FPS": 2,
+      "X": 3086,
+      "Y": 929,
+      "Width": 370,
+      "Height": 230,
+      "Enable": true
+    },
+    {
+      "Name": "Rev76Widget",
+      "FPS": 10,
+      "X": 100,
+      "Y": 400,
+      "Width": 84,
+      "Height": 84,
+      "Enable": true
+    },
+    {
+      "Name": "SessionClockWidget",
+      "FPS": 10,
+      "X": 1462,
+      "Y": 70,
+      "Width": 200,
+      "Height": 100,
+      "Enable": false
+    },
+    {
+      "Name": "FuelTankWidget",
+      "FPS": 20,
+      "X": 10,
+      "Y": 10,
+      "Width": 200,
+      "Height": 240,
+      "Enable": false
+    },
+    {
+      "Name": "WeatherWidget",
+      "FPS": 30,
+      "X": 2967,
+      "Y": 868,
+      "Width": 300,
+      "Height": 500,
+      "Enable": false
+    },
+    {
+      "Name": "GameStateWidget",
+      "FPS": 40,
+      "X": 3282,
+      "Y": 869,
+      "Width": 500,
+      "Height": 300,
+      "Enable": false
+    }
+  ]
+}
