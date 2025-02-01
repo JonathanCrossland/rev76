@@ -53,13 +53,24 @@ namespace Rev76.Windows.Widgets
         {
           
 
-            if (GameData.GameState.SessionType != SessionType.RACE && GameData.GameState.SessionType != SessionType.QUALIFY) return false;
+            //if (GameData.GameState.SessionType != SessionType.RACE && GameData.GameState.SessionType != SessionType.QUALIFY) return false;
 
             Car meCar = GameData.Track.Cars.Find(c => c.CarIndex == GameData.Car.CarIndex);
 
-            if (meCar.Drivers.Count == 0) return false;
+            if (GameData.BroadcastCar !=null )
+            {
+                meCar = GameData.BroadcastCar;
+            }
+            if (meCar?.Drivers.Count == 0) return false;
 
-            var driver = meCar.Drivers[GameData.Car.DriverIndex];
+            DriverInfo driver = new DriverInfo() { FirstName = " ", LastName = " " };
+
+            if (meCar != null)
+            {
+                driver = meCar.Drivers[GameData.Car.DriverIndex];
+            }
+
+
 
 
             Car purpleCar = GameData.Track.Cars.Find(c => c.CarIndex == GameData.Session.BestSession?.CarIndex);
@@ -68,14 +79,14 @@ namespace Rev76.Windows.Widgets
             DriverInfo purpleDriver = purpleCar.Drivers[GameData.Session.BestSession.DriverIndex];
 
 
-            var preCar = GameData.Track.Cars.Find(c => c.Position == meCar.Position - 1);
+            var preCar = GameData.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
             DriverInfo preDriver = new DriverInfo() { FirstName = " ", LastName = " " };
             if (preCar != null)
             {
                 preDriver = preCar.Drivers[preCar.DriverIndex];
             }
 
-            var postCar = GameData.Track.Cars.Find(c => c.Position  == meCar.Position + 1);
+            var postCar = GameData.Track.Cars.Find(c => c.Position  == meCar?.Position + 1);
             DriverInfo postDriver = new DriverInfo() { FirstName = " ", LastName = " " };
             if (postCar != null) {
                 postDriver = postCar.Drivers[postCar.DriverIndex];
@@ -330,13 +341,18 @@ namespace Rev76.Windows.Widgets
                              el.Text = meCar?.Position.ToString();
                              break;
                          case "MeDriver":
-                             //numberText = meCar?.Number.ToString();
-                             //if (numberText.Length > 0) numberText = "#" + numberText;
-                             //el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
-                             time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
-                             formattedTime = GameData.GetFormattedLapTime(time);
-                             el.Text = formattedTime;
-                             
+                             if (GameData.Broadcasting)
+                             {
+                                 numberText = meCar?.Number.ToString();
+                                 if (numberText.Length > 0) numberText = "#" + numberText;
+                                 el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
+                             }
+                             else
+                             {
+                                 time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+                                 formattedTime = GameData.GetFormattedLapTime(time);
+                                 el.Text = formattedTime;
+                             }
 
                              break;
                          case "MeDriverTime":

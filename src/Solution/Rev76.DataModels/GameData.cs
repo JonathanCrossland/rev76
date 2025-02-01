@@ -10,7 +10,9 @@ namespace Rev76.DataModels
         public static Tyres Tyres { get; set; } = new Tyres();
         public static Track Track { get; set; } = new Track();
         public static Car Car { get; set; } = new Car();
+        public static Car BroadcastCar { get; set; } = new Car();
         public static Session Session { get; set; } = new Session();
+        public static bool Broadcasting { get; internal set; }
 
         internal static void Reset()
         {

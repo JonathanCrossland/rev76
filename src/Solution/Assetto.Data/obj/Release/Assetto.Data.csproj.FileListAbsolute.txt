@@ -1,6 +1,6 @@
-C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.csproj.AssemblyReference.cache
-C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\bin\Release\Assetto.Data.dll
 C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\bin\Release\Assetto.Data.pdb
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.dll
 C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Release\Assetto.Data.pdb

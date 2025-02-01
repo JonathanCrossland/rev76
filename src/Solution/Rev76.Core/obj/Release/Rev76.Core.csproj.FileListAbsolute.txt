@@ -1,9 +1,9 @@
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\bin\Release\Rev76.Core.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\bin\Release\Rev76.Core.pdb
-C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.csproj.AssemblyReference.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.csproj.CoreCompileInputs.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.dll
-C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\bin\Release\Newtonsoft.Json.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\bin\Release\Newtonsoft.Json.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.csproj.Up2Date
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Core\obj\Release\Rev76.Core.pdb

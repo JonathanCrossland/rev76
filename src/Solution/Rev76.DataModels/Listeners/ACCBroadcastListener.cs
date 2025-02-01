@@ -29,8 +29,16 @@ namespace Rev76.DataModels.Listeners
             _UDPClient.MessageHandler.OnRealtimeUpdate += (sender, e) =>
             {
 
-                Trace.WriteLine($"RealtimeUpdate: {e.AmbientTemp}");
+                
+                GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.FocusedCarIndex);
+               
+                if (GameData.Car.CarIndex != e.FocusedCarIndex)
+                {
+                    GameData.Broadcasting = true;
+                }
+
                 GameData.Weather.Cloudy = e.Clouds;
+                
 
             };
 
@@ -99,7 +107,9 @@ namespace Rev76.DataModels.Listeners
             _UDPClient.MessageHandler.OnBroadcastingEvent += (sender, e) =>
             {
 
-                Trace.WriteLine($"BroadcastingEvent: {e.CarId}");
+                //Trace.WriteLine($"BroadcastingEvent: {e.CarId}");
+               // GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.CarId);
+                
                 //var x = e.CarData.TrackPosition;
                 //Trace.WriteLine($"BroadcastingEvent: {e.}");
             };
