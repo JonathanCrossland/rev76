@@ -19,7 +19,7 @@ namespace Rev76.DataModels.Listeners
         }
         public async Task Listen(object token)
         {
-            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Broadcast", "asd", "", 500);
+            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Broadcast", "asd", "", 10);
 
             _UDPClient.MessageHandler.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
@@ -35,6 +35,10 @@ namespace Rev76.DataModels.Listeners
                 if (GameData.Car.CarIndex != e.FocusedCarIndex)
                 {
                     GameData.Broadcasting = true;
+                }
+                else
+                {
+                    GameData.Broadcasting = false;
                 }
 
                 GameData.Weather.Cloudy = e.Clouds;

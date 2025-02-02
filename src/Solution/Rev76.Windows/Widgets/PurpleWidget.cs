@@ -1,7 +1,10 @@
 ﻿using Assetto.Data.Broadcasting.Structs;
 using Rev76.DataModels;
+using Rev76.Windows.Helpers;
 using Svg;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -9,16 +12,29 @@ namespace Rev76.Windows.Widgets
 {
     public class PurpleWidget : OverlayWindow
     {
-        SVGOverlayWindow SVG = new SVGOverlayWindow();
+        private SVGOverlayWindow SVG = new SVGOverlayWindow();
+        private Stopwatch _Stopwatch = new Stopwatch();
+        private int _StateChangeInterval = 4500;
+        private DrawState _DrawState = DrawState.State1;
+
+       
+        private enum DrawState
+        {
+            State1 = 0,
+            State2 = 1
+        }
 
         public PurpleWidget(int x, int y, int width, int height, Icon icon=null) : base(x, y, width, height, icon)
         {
             this.FPS = 6;
+            
         }
 
         protected override string Title { get => "Purple"; }
         // protected override bool Visible { get => GameData.GameState.Status == Thomsen.AccTools.SharedMemory.Models.GameStatus.LIVE; }
         protected override bool Visible { get => true; }
+
+
 
         protected override void OnRender(System.Drawing.Graphics g)
         {
@@ -51,13 +67,10 @@ namespace Rev76.Windows.Widgets
 
         private bool DrawDriver(System.Drawing.Graphics g)
         {
-          
-
-            //if (GameData.GameState.SessionType != SessionType.RACE && GameData.GameState.SessionType != SessionType.QUALIFY) return false;
 
             Car meCar = GameData.Track.Cars.Find(c => c.CarIndex == GameData.Car.CarIndex);
 
-            if (GameData.BroadcastCar !=null )
+            if (GameData.BroadcastCar != null)
             {
                 meCar = GameData.BroadcastCar;
             }
@@ -71,22 +84,48 @@ namespace Rev76.Windows.Widgets
             }
 
 
-
-
             Car purpleCar = GameData.Track.Cars.Find(c => c.CarIndex == GameData.Session.BestSession?.CarIndex);
 
             if (purpleCar == null) return false;
             DriverInfo purpleDriver = purpleCar.Drivers[GameData.Session.BestSession.DriverIndex];
 
+            Car preCar = null;
+            if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
+            {
+                preCar = SplineUtil.GetPreCar(meCar, GameData.Track.Cars);
+                //preCar = GameData.Track.Cars
+                // .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
+                // .Where(c => c.SplinePosition > meCar.SplinePosition) // Ahead on track
+                // .OrderBy(c => c.SplinePosition) // Closest one ahead
+                // .FirstOrDefault();
+            }
+            if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position")
+            {
+                preCar = GameData.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
+            }
 
-            var preCar = GameData.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
+
             DriverInfo preDriver = new DriverInfo() { FirstName = " ", LastName = " " };
             if (preCar != null)
             {
                 preDriver = preCar.Drivers[preCar.DriverIndex];
             }
+            Car postCar = null;
+            if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
+            {
+                
+                 postCar = SplineUtil.GetPostCar(meCar, GameData.Track.Cars);
+                //postCar = GameData.Track.Cars
+                //.Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
+                //.Where(c => c.SplinePosition < meCar.SplinePosition) // Behind on track
+                //.OrderByDescending(c => c.SplinePosition) // Closest one behind
+                //.FirstOrDefault();
+            }
+            else
+            {
+                postCar = GameData.Track.Cars.Find(c => c.Position  == meCar?.Position + 1);
+            }
 
-            var postCar = GameData.Track.Cars.Find(c => c.Position  == meCar?.Position + 1);
             DriverInfo postDriver = new DriverInfo() { FirstName = " ", LastName = " " };
             if (postCar != null) {
                 postDriver = postCar.Drivers[postCar.DriverIndex];
@@ -107,13 +146,9 @@ namespace Rev76.Windows.Widgets
             {
 
                 meCarLaps = meCar.LapTimes
-                //.Where(lap => lap.LapNumber != meCar.Laps) // Exclude current lap
-                .OrderByDescending(lap => lap.LapNumber) // Sort back to ascending order
-                .Take(6) // Take the last 4 laps
-                //.OrderBy(lap => lap.LapNumber) // Sort back to ascending order
+                .OrderByDescending(lap => lap.LapNumber)
+                .Take(6)
                 .ToList();
-                
-
             }
 
             if (meCar != null && preCar != null)
@@ -122,15 +157,10 @@ namespace Rev76.Windows.Widgets
              
                 if (preCar != null)
                 {
-
                     preCarLaps = preCar.LapTimes
-                    //.Where(lap => lap.LapNumber != preCar.Laps) // Exclude current lap
-                    .OrderByDescending(lap => lap.LapNumber) // Sort back to ascending order
-                    .Take(6) // Take the last 4 laps
-                    //.OrderBy(lap => lap.LapNumber) // Sort back to ascending order
+                    .OrderByDescending(lap => lap.LapNumber)
+                    .Take(6)
                     .ToList();
-
-
                 }
             }
 
@@ -141,15 +171,14 @@ namespace Rev76.Windows.Widgets
                 if (postCar != null)
                 {
                     postCarLaps = postCar.LapTimes
-                     // .Where(lap => lap.LapNumber != postCar.Laps) // Exclude current lap
-                      .OrderByDescending(lap => lap.LapNumber) // Sort back to ascending order
-                      .Take(6) // Take the last 4 laps
-                      //.OrderBy(lap => lap.LapNumber) // Sort back to ascending order
+                      .OrderByDescending(lap => lap.LapNumber)
+                      .Take(6)
                       .ToList();
                 }
             }
 
-            
+            StateTimer();
+
             SVG.DrawSvg(
              g,
              this.SVG._SVG[0],
@@ -268,10 +297,13 @@ namespace Rev76.Windows.Widgets
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltagreen"); // new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
                              }
-                             //if (preCar?.CurrentLap.IsInvalid == true)
-                             //{
-                             //    rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
-                             //}
+                             if (preCar?.CurrentLap?.IsInvalid == true)
+                             {
+                                 rect.StrokeWidth = 2;
+                                 rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
+                             }
+
+
                              break;
 
                          case "MeDriverRect":
@@ -283,9 +315,13 @@ namespace Rev76.Windows.Widgets
                              {
                                  rect.Fill = new SvgDeferredPaintServer("medeltagreen"); //new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
                              }
-                           
+                             if (meCar?.CurrentLap?.IsInvalid == true)
+                             {
+                                 rect.StrokeWidth = 1;
+                                 rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
+                             }
                              break;
-
+                              
                          case "PostDriverRect":
                              if (postCar?.Delta > 0)
                              {
@@ -295,7 +331,11 @@ namespace Rev76.Windows.Widgets
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltagreen"); //new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
                              }
-
+                             if (postCar?.CurrentLap?.IsInvalid == true)
+                             {
+                                 rect.StrokeWidth = 2;
+                                 rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
+                             }
                              break;
 
                      }
@@ -319,11 +359,24 @@ namespace Rev76.Windows.Widgets
                              el.Text = preCar?.Position.ToString();
                              break;
                          case "PreDriver":
-                             if (preCar != null)
+                             time = float.TryParse(preCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+
+                             if (_DrawState == DrawState.State1 || time == 0)
                              {
-                                 numberText = preCar?.Number.ToString();
-                                 if (numberText.Length > 0) numberText = "#" + numberText;
-                                 el.Text = $"{preDriver.FirstName[0].ToString().ToUpper()} {preDriver.LastName} {numberText}";
+                                 if (preCar != null)
+                                 {
+                                     numberText = preCar?.Number.ToString();
+                                     if (numberText.Length > 0) numberText = "#" + numberText;
+                                     el.Text = $"{preDriver.FirstName[0].ToString().ToUpper()} {preDriver.LastName} {numberText}";
+                                     el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                                 }
+                             }
+                             else if (_DrawState == DrawState.State2)
+                             {
+
+                                formattedTime = GameData.GetFormattedLapTime(time);
+                                el.Text = formattedTime;
+                                el.Fill = new SvgColourServer(Color.FromArgb(255, 188, 100, 205));
                              }
                              break;
                          case "PreDriverTime":
@@ -341,18 +394,22 @@ namespace Rev76.Windows.Widgets
                              el.Text = meCar?.Position.ToString();
                              break;
                          case "MeDriver":
-                             if (GameData.Broadcasting)
+
+                             time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+                             if (_DrawState == DrawState.State1 || time == 0)
                              {
                                  numberText = meCar?.Number.ToString();
                                  if (numberText.Length > 0) numberText = "#" + numberText;
                                  el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
+                                 el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
                              }
-                             else
+                             else if (_DrawState == DrawState.State2)
                              {
-                                 time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
-                                 formattedTime = GameData.GetFormattedLapTime(time);
-                                 el.Text = formattedTime;
+                                formattedTime = GameData.GetFormattedLapTime(time);
+                                el.Text = formattedTime;
+                                 el.Fill = new SvgColourServer(Color.FromArgb(255, 168, 0, 195));
                              }
+                             
 
                              break;
                          case "MeDriverTime":
@@ -369,11 +426,25 @@ namespace Rev76.Windows.Widgets
                              el.Text = postCar?.Position.ToString();
                              break;
                          case "PostDriver":
-                             if (postCar != null) {
-                                 numberText = postCar?.Number.ToString();
-                                 if (numberText.Length > 0) numberText = "#" + numberText;
-                                 el.Text = $"{postDriver.FirstName[0].ToString().ToUpper()} {postDriver.LastName} {numberText}";
-                                }
+                             time = float.TryParse(postCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+                             if (_DrawState == DrawState.State1 || time == 0)
+                             {
+                                 if (postCar != null)
+                                 {
+                                     numberText = postCar?.Number.ToString();
+                                     if (numberText.Length > 0) numberText = "#" + numberText;
+                                     el.Text = $"{postDriver.FirstName[0].ToString().ToUpper()} {postDriver.LastName} {numberText}";
+                                     el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                                 }
+                             }
+                             else if (_DrawState == DrawState.State2)
+                             {
+                                
+                                formattedTime = GameData.GetFormattedLapTime(time);
+                                el.Text = formattedTime;
+                                 el.Fill = new SvgColourServer(Color.FromArgb(255, 188, 100, 205));
+
+                             }
                              break;
                          case "PostDriverTime":
                              time = 0;
@@ -430,7 +501,18 @@ namespace Rev76.Windows.Widgets
             return true;
         }
 
-     
+        private void StateTimer()
+        {
+            if (!_Stopwatch.IsRunning) _Stopwatch.Start();
+
+            long currentTime = _Stopwatch.ElapsedMilliseconds;
+
+            if (currentTime > _StateChangeInterval)
+            {
+                _DrawState = (DrawState)(((int)_DrawState + 1) % Enum.GetValues(typeof(DrawState)).Length);
+                _Stopwatch.Restart();
+            }
+        }
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics g)
         {

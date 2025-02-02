@@ -18,7 +18,40 @@ namespace Rev76.DataModels
         public float WorldPosX { get; set; }
         public float WorldPosY { get; set; }
         public float Yaw { get; set; }
-        public CarLocationEnum CarLocation { get; set; }
+       
+        private CarLocationEnum _CarLocation;
+
+        public CarLocationEnum CarLocation
+        {
+            get { return _CarLocation; }
+            set {
+                _CarLocation = value;
+
+                switch (value)
+                {
+                    case CarLocationEnum.NONE:
+                        InPits = false;
+                        break;
+                    case CarLocationEnum.Track:
+                        InPits = false;
+                        break;
+                    case CarLocationEnum.Pitlane:
+                        InPits = true;
+                        break;
+                    case CarLocationEnum.PitEntry:
+                        InPits = true;
+                        break;
+                    case CarLocationEnum.PitExit:
+                        InPits = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public bool InPits { get; set; }
+
         public int Kmh { get; set; }
         public int Position { get; set; }
         public int TrackPosition { get; set; }
@@ -45,8 +78,8 @@ namespace Rev76.DataModels
         public static float CalculateGap(Car car1,  Car car2, float trackMeters)
         {
             // Convert SplinePosition to absolute positions
-            float car1Position = (car1.SplinePosition * trackMeters) + (car1.Laps * trackMeters);
-            float car2Position = (car2.SplinePosition * trackMeters) + (car2.Laps * trackMeters);
+            float car1Position = (car1.SplinePosition * trackMeters);// + (car1.Laps * trackMeters);
+            float car2Position = (car2.SplinePosition * trackMeters);// + (car2.Laps * trackMeters);
 
             // Calculate the absolute distance gap
             return Math.Abs(car1Position - car2Position);
@@ -56,7 +89,8 @@ namespace Rev76.DataModels
         public static float CalculateTimeGap(Car car1, Car car2, float trackMeters)
         {
             float gap = CalculateGap(car1, car2, trackMeters);
-
+            if (car1.Kmh == 0) car1.Kmh = car2.Kmh;
+            if (car2.Kmh == 0) car2.Kmh = car1.Kmh;
             // Average speed in m/s (convert Kmh to m/s)
             float averageSpeed = (car1.Kmh + car2.Kmh) / 2f / 3.6f;
 

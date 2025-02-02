@@ -16,7 +16,10 @@
       "Y": 929,
       "Width": 370,
       "Height": 230,
-      "Enable": true
+      "Enable": true,
+      "Settings": {
+        "Kind":  "relative"
+      }
     },
     {
       "Name": "Rev76Widget",
@@ -25,7 +28,7 @@
       "Y": 400,
       "Width": 84,
       "Height": 84,
-      "Enable": true
+      "Enable": false
     },
     {
       "Name": "SessionClockWidget",

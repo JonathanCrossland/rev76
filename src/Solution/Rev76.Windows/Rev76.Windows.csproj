@@ -62,9 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="OverlayWindow.cs" />
-    <Compile Include="Widgets\Purple.cs" />
+    <Compile Include="Widgets\PurpleWidget.cs" />
     <Compile Include="Widgets\Rev76Widget.cs" />
     <Compile Include="Widgets\SVGOverlayWindow.cs" />
     <Compile Include="Widgets\TyreWidgetEx.cs" />

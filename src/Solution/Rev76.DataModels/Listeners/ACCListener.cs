@@ -20,7 +20,7 @@ namespace Rev76.DataModels.Listeners
         {
             _AccMemory = new AccSharedMemory();
             _AccMemory.StaticInfoUpdateInterval = 1000;
-            _AccMemory.PhysicsUpdateInterval = 100;
+            _AccMemory.PhysicsUpdateInterval = 50;
             _AccMemory.GraphicsUpdateInterval = 500;
             
             SubscribeToEvents();

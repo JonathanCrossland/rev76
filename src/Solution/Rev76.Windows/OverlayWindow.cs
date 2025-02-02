@@ -25,7 +25,7 @@ namespace Rev76.Windows
 
         protected Dictionary<string, Brush> _Brushes = new Dictionary<string, Brush>();
         protected readonly Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
-
+        public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
         public int X { get; set; }
         public int Y { get; set; }
