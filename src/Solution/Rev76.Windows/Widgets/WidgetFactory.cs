@@ -37,6 +37,8 @@ namespace Rev76.Windows.Widgets
                 //    return new SessionClockWidget(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS };
                 //case "FuelTankWidget":
                 //    return new FuelTankWidget(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS };
+                case "FlagWidget":
+                    return new FlagWidget(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS };
                 case "TyreWidgetEx":
                     return new TyreWidgetEx(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS, Settings = config.Settings };
                 case "PurpleWidget":

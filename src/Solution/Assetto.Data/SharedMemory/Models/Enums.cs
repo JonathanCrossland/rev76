@@ -50,8 +50,24 @@ public enum FlagType {
     BLACK_FLAG = 3,
     WHITE_FLAG = 4,
     CHECKERED_FLAG = 5,
-    PENALTY_FLAG = 6
+    PENALTY_FLAG = 6,
+    GREEN_FLAG = 7,
+    BLACK_FLAG_WITH_ORANGE_CIRCLE = 8
 }
+public enum AccFlagType : int
+{
+    AC_NO_FLAG,
+    AC_BLUE_FLAG,
+    AC_YELLOW_FLAG,
+    AC_BLACK_FLAG,
+    AC_WHITE_FLAG,
+    AC_CHECKERED_FLAG,
+    AC_PENALTY_FLAG,
+    AC_GREEN_FLAG,
+    AC_BLACK_FLAG_WITH_ORANGE_CIRCLE,
+
+}
+
 
 public enum GameStatus {
     OFF = 0,

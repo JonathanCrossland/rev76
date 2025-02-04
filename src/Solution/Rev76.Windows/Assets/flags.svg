@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 310 60" width="310" height="60" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+    >
+	<defs>
+		<!-- Linear gradient: black / orange / black, with the orange band covering 33% -->
+		<linearGradient id="meatballFlag" x1="0%" y1="0%" x2="100%" y2="0%">
+			<stop offset="0%" stop-color="black"/>
+			<stop offset="33%" stop-color="black"/>
+			<stop offset="33%" stop-color="orange"/>
+			<stop offset="66%" stop-color="orange"/>
+			<stop offset="66%" stop-color="black"/>
+			<stop offset="100%" stop-color="black"/>
+		</linearGradient>
+
+		<pattern id="chequeredFlag" width="20" height="20" patternUnits="userSpaceOnUse">
+			<rect x="0" y="0" width="10" height="10" fill="black"/>
+			<rect x="10" y="0" width="10" height="10" fill="white"/>
+			<rect x="0" y="10" width="10" height="10" fill="white"/>
+			<rect x="10" y="10" width="10" height="10" fill="black"/>
+		</pattern>
+	</defs>
+
+	<rect id="flagrect"  x="7" y="6" width="300" height="40" fill="#ffff00" rx="5"/>
+   <text id="flagtext" text-anchor="middle" font-size="15" font-weight="bold"  x="153" y="32.2" width="280" fill="#000000">
+    </text>
+</svg>

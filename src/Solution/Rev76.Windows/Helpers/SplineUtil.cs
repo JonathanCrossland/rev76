@@ -15,10 +15,9 @@ namespace Rev76.Windows.Helpers
         {
             if (meCar == null) return null;
             return cars
-                .Where(c => c.CarIndex != meCar.CarIndex) 
-                .Where(c => !c.InPits)
-                .Where(c => IsCarAhead(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition, GameData.Track.TrackLength)) 
-                .OrderBy(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) 
+                .Where(c => c.CarIndex != meCar.CarIndex && !c.InPits)
+                .Where(c => GlobalDiff(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition) > 0)
+                .OrderBy(c => GlobalDiff(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition))
                 .FirstOrDefault();
         }
 
@@ -29,11 +28,29 @@ namespace Rev76.Windows.Helpers
         {
             if (meCar == null) return null;
             return cars
-                .Where(c => c.CarIndex != meCar.CarIndex) 
-                .Where(c => !c.InPits) 
-                .Where(c => IsCarBehind(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition, GameData.Track.TrackLength))
-                .OrderByDescending(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) 
+                .Where(c => c.CarIndex != meCar.CarIndex && !c.InPits)
+                .Where(c => GlobalDiff(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition) < 0)
+                .OrderByDescending(c => GlobalDiff(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition))
                 .FirstOrDefault();
+        }
+
+        private static float GlobalDiff(int myLap, float myPos, int carLap, float carPos)
+        {
+            float trackLength = GameData.Track.TrackLength;
+            // Compute global positions
+            float myGlobal = myLap * trackLength + myPos;
+            float carGlobal = carLap * trackLength + carPos;
+            float diff = carGlobal - myGlobal;
+
+            // Only adjust for wrap-around if on the same lap
+            if (carLap == myLap)
+            {
+                if (diff < -trackLength / 2f)
+                    diff += trackLength;
+                else if (diff > trackLength / 2f)
+                    diff -= trackLength;
+            }
+            return diff;
         }
 
         /// <summary>

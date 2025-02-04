@@ -1,0 +1,6 @@
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\bin\Debug\Assetto.Data.dll
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\bin\Debug\Assetto.Data.pdb
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Debug\Assetto.Data.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Debug\Assetto.Data.csproj.CoreCompileInputs.cache
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Debug\Assetto.Data.dll
+C:\coding\csharpsource\rev76\src\Solution\Assetto.Data\obj\Debug\Assetto.Data.pdb

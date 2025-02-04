@@ -1,0 +1,9 @@
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Debug\Rev76.DataModels.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Debug\Rev76.DataModels.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Debug\Assetto.Data.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\bin\Debug\Assetto.Data.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Debug\Rev76.DataModels.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Debug\Rev76.DataModels.csproj.CoreCompileInputs.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Debug\Rev76.Da.CDA78642.Up2Date
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Debug\Rev76.DataModels.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76.DataModels\obj\Debug\Rev76.DataModels.pdb

@@ -18,7 +18,7 @@
       "Height": 235,
       "Enable": true,
       "Settings": {
-        "Kind":  "relative"
+        "Kind": "relative"
       }
     },
     {
@@ -29,6 +29,15 @@
       "Width": 84,
       "Height": 84,
       "Enable": false
+    },
+    {
+      "Name": "FlagWidget",
+      "FPS": 10,
+      "X": 100,
+      "Y": 400,
+      "Width": 330,
+      "Height": 70,
+      "Enable": true
     },
     {
       "Name": "SessionClockWidget",

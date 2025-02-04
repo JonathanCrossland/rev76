@@ -165,16 +165,29 @@ namespace Rev76.DataModels.Listeners
                    
                 }
 
-              
+               
 
 
-                GameData.Session.Flag = e.Data.GlobalYellow == 1 ? FlagType.YELLOW_FLAG : FlagType.NO_FLAG;
-                
+                GameData.Session.Flag = (e.Data.GlobalYellow == 1 ||
+                           e.Data.GlobalYellow1 == 1 ||
+                           e.Data.GlobalYellow2 == 1 ||
+                           e.Data.GlobalYellow3 == 1)
+                          ? FlagType.YELLOW_FLAG
+                          : FlagType.NO_FLAG;
+
+                if (GameData.Session.Flag == FlagType.NO_FLAG)
+                {
+                    GameData.Session.Flag = e.Data.Flag;
+                }
+
             };
 
             
+
         }
 
+
+       
         private float BrakeBiasAdjustment(Car car,float brakeBias)
         {
             if (string.IsNullOrEmpty(car.CarModel))

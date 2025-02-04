@@ -65,6 +65,7 @@
     <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="OverlayWindow.cs" />
+    <Compile Include="Widgets\FlagWidget.cs" />
     <Compile Include="Widgets\PurpleWidget.cs" />
     <Compile Include="Widgets\Rev76Widget.cs" />
     <Compile Include="Widgets\SVGOverlayWindow.cs" />
@@ -100,6 +101,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\CloudyRainShowers.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\flags.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Purple.svg">

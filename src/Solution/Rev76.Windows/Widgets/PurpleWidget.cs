@@ -31,8 +31,8 @@ namespace Rev76.Windows.Widgets
         }
 
         protected override string Title { get => "Purple"; }
-        // protected override bool Visible { get => GameData.GameState.Status == Thomsen.AccTools.SharedMemory.Models.GameStatus.LIVE; }
-        protected override bool Visible { get => true; }
+        protected override bool Visible { get => GameData.GameState.Status == GameStatus.LIVE; }
+        //protected override bool Visible { get => true; }
 
 
 
@@ -90,11 +90,7 @@ namespace Rev76.Windows.Widgets
 
             if (meCar != null)
             {
-
-                meCarLaps = meCar.LapTimes
-                .OrderByDescending(lap => lap.LapNumber)
-                .Take(6)
-                .ToList();
+                meCarLaps = GetLastLapTimes(meCar);
             }
 
             if (meCar != null && preCar != null)
@@ -103,10 +99,7 @@ namespace Rev76.Windows.Widgets
 
                 if (preCar != null)
                 {
-                    preCarLaps = preCar.LapTimes
-                    .OrderByDescending(lap => lap.LapNumber)
-                    .Take(6)
-                    .ToList();
+                    preCarLaps = GetLastLapTimes(preCar);
                 }
             }
 
@@ -116,10 +109,7 @@ namespace Rev76.Windows.Widgets
 
                 if (postCar != null)
                 {
-                    postCarLaps = postCar.LapTimes
-                      .OrderByDescending(lap => lap.LapNumber)
-                      .Take(6)
-                      .ToList();
+                    postCarLaps = GetLastLapTimes(postCar);
                 }
             }
 
@@ -192,6 +182,7 @@ namespace Rev76.Windows.Widgets
                                  {
                                      rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                                  }
+
                              }
 
                          }
@@ -248,7 +239,14 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                              }
-
+                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             {
+                                 if (preCar?.Kmh < 40 || preCar?.Gear <= 0)
+                                 {
+                                     rect.StrokeWidth = 2;
+                                     rect.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 0));
+                                 }
+                             }
 
                              break;
 
@@ -271,6 +269,13 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 1;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 0, 0, 255));
                              }
+                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             {
+                                 if (meCar?.Kmh < 40 || meCar?.Gear <= 0) {
+                                     rect.StrokeWidth = 2;
+                                     rect.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 0));
+                                }
+                             }
                              break;
 
                          case "PostDriverRect":
@@ -286,6 +291,14 @@ namespace Rev76.Windows.Widgets
                              {
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
+                             }
+                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             {
+                                 if (postCar?.Kmh < 40 || postCar?.Gear <= 0)
+                                 {
+                                     rect.StrokeWidth = 2;
+                                     rect.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 0));
+                                 }
                              }
                              break;
 
@@ -450,6 +463,14 @@ namespace Rev76.Windows.Widgets
              );
 
             return true;
+        }
+
+        private static List<LapInfo> GetLastLapTimes(Car car)
+        {
+            return car.LapTimes
+                    .OrderByDescending(lap => lap.LapNumber)
+                    .Take(6)
+                    .ToList();
         }
 
         //The ACC data take a long time to update. If we overtake, then our position should be the preCar position + 1.
