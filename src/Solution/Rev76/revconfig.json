@@ -11,11 +11,11 @@
     },
     {
       "Name": "PurpleWidget",
-      "FPS": 2,
+      "FPS": 4,
       "X": 3086,
       "Y": 929,
-      "Width": 370,
-      "Height": 230,
+      "Width": 435,
+      "Height": 235,
       "Enable": true,
       "Settings": {
         "Kind":  "relative"

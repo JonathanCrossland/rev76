@@ -13,11 +13,12 @@ namespace Rev76.Windows.Helpers
         /// </summary>
         public static Car GetPreCar(Car meCar, List<Car> cars)
         {
+            if (meCar == null) return null;
             return cars
-                .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
-                 .Where(c => !c.InPits)
-                .Where(c => IsCarAhead(meCar.SplinePosition, c.SplinePosition)) // Ahead on track
-                .OrderBy(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) // Closest one ahead
+                .Where(c => c.CarIndex != meCar.CarIndex) 
+                .Where(c => !c.InPits)
+                .Where(c => IsCarAhead(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition, GameData.Track.TrackLength)) 
+                .OrderBy(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) 
                 .FirstOrDefault();
         }
 
@@ -26,31 +27,61 @@ namespace Rev76.Windows.Helpers
         /// </summary>
         public static Car GetPostCar(Car meCar, List<Car> cars)
         {
+            if (meCar == null) return null;
             return cars
-                .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
+                .Where(c => c.CarIndex != meCar.CarIndex) 
                 .Where(c => !c.InPits) 
-                .Where(c => IsCarBehind(meCar.SplinePosition, c.SplinePosition)) // Behind on track
-                .OrderByDescending(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) // Closest one behind
+                .Where(c => IsCarBehind(meCar.Laps, meCar.SplinePosition, c.Laps, c.SplinePosition, GameData.Track.TrackLength))
+                .OrderByDescending(c => AdjustedSplinePosition(meCar.SplinePosition, c.SplinePosition)) 
                 .FirstOrDefault();
         }
 
         /// <summary>
         /// Determines if a car is ahead, considering track wraparound.
         /// </summary>
-        private static bool IsCarAhead(float myPos, float carPos)
+        private static bool IsCarAhead(int myLap, float myPos, int carLap, float carPos, float trackLength)
         {
-            float diff = carPos - myPos;
-            return diff > 0 && diff < (TrackLength * 0.5f);
+            if (carLap > myLap)
+                return true;
+
+            if (carLap == myLap)
+            {
+                float diff = carPos - myPos;
+
+                if (diff < -trackLength * 0.5f)
+                    diff += trackLength;
+                else if (diff > trackLength * 0.5f)
+                    diff -= trackLength;
+
+                return diff > 0;
+            }
+
+            return false;
         }
 
         /// <summary>
         /// Determines if a car is behind, considering track wraparound.
         /// </summary>
-        private static bool IsCarBehind(float myPos, float carPos)
+        private static bool IsCarBehind(int myLap, float myPos, int carLap, float carPos, float trackLength)
         {
-            float diff = carPos - myPos;
-            return diff < 0 || diff > (TrackLength * 0.5f);
+            if (carLap < myLap)
+                return true;
+
+            if (carLap == myLap)
+            {
+                float diff = carPos - myPos;
+
+                if (diff < -trackLength * 0.5f)
+                    diff += trackLength;
+                else if (diff > trackLength * 0.5f)
+                    diff -= trackLength;
+
+                return diff < 0;
+            }
+
+            return false;
         }
+
 
         /// <summary>
         /// Adjusts the spline position for proper ordering, considering wraparound.

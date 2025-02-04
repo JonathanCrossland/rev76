@@ -16,7 +16,7 @@ namespace Assetto.Data.Broadcasting
 
         REQUEST_ENTRY_LIST = 10,
         REQUEST_TRACK_DATA = 11,
-
+       
         CHANGE_HUD_PAGE = 49,
         CHANGE_FOCUS = 50,
         INSTANT_REPLAY_REQUEST = 51,
@@ -107,6 +107,7 @@ namespace Assetto.Data.Broadcasting
             switch (messageType)
             {
                 case InboundMessageTypes.MASTERBROADCASTER_EVENT:
+                    var x33 = 2;
 
                     break;
                 case InboundMessageTypes.REGISTRATION_RESULT:
@@ -118,9 +119,11 @@ namespace Assetto.Data.Broadcasting
 
                         OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
 
-                        // In case this was successful, we will request the initial data
+                        
                         RequestEntryList();
                         RequestTrackData();
+
+                        
                     }
                     break;
                 case InboundMessageTypes.ENTRY_LIST:
@@ -223,6 +226,7 @@ namespace Assetto.Data.Broadcasting
 
                         OnRealtimeUpdate?.Invoke(ConnectionIdentifier, update);
                     }
+                   
                     break;
                 case InboundMessageTypes.REALTIME_CAR_UPDATE:
                     {
@@ -467,6 +471,23 @@ namespace Assetto.Data.Broadcasting
                 br.Write((int)ConnectionId);
 
                 Send(ms.ToArray());
+            }
+        }
+        public void RequestOther()
+        {
+            using (var ms = new MemoryStream())
+            using (var br = new BinaryWriter(ms))
+            {
+                int val = 12;
+
+                for (int i = val; i < 49; i++)
+                {
+                    br.Write((byte)val); // First byte is always the command type
+                    br.Write((int)ConnectionId);
+
+                    Send(ms.ToArray());
+                }
+              
             }
         }
 

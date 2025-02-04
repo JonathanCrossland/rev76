@@ -6,6 +6,7 @@ Release notes are purely for understanding the app changes in terms of usage and
 
 ## Rev76.0.0.0.2
 
+
 This release now has an overlay window drawing the rev76 logo.
 
 - drag the window around

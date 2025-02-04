@@ -19,7 +19,7 @@ namespace Rev76.DataModels.Listeners
         }
         public async Task Listen(object token)
         {
-            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Broadcast", "asd", "", 10);
+            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Broadcast", "asd", "", 1);
 
             _UDPClient.MessageHandler.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
@@ -32,13 +32,14 @@ namespace Rev76.DataModels.Listeners
                 
                 GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.FocusedCarIndex);
                
-                if (GameData.Car.CarIndex != e.FocusedCarIndex)
+                if (GameData.PlayerCarIndex != e.FocusedCarIndex)
                 {
-                    GameData.Broadcasting = true;
+                    GameData.Session.Broadcasting = true;
                 }
                 else
                 {
-                    GameData.Broadcasting = false;
+                    GameData.Session.Broadcasting = false;
+
                 }
 
                 GameData.Weather.Cloudy = e.Clouds;
@@ -70,6 +71,7 @@ namespace Rev76.DataModels.Listeners
                     car.Yaw = e.Yaw;
                     car.CarLocation = e.CarLocation;
                     car.CupPosition = e.CupPosition;
+                    
 
                     if (!car.LapTimes.Any(lap => lap.LapNumber == e.Laps))
                     {
@@ -104,16 +106,24 @@ namespace Rev76.DataModels.Listeners
                     }
                 }
 
-
+               
 
 
             };
             _UDPClient.MessageHandler.OnBroadcastingEvent += (sender, e) =>
             {
 
-                //Trace.WriteLine($"BroadcastingEvent: {e.CarId}");
-               // GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.CarId);
-                
+                GameData.Session.EventType = e.Type;
+
+                if (e.Type == BroadcastingCarEventType.Accident)
+                {
+                    //Car car = GameData.Track.Cars.Find(c => c.CarIndex == e.CarData.CarIndex);
+                    //car.IsInAccident = true;
+                }
+
+                Trace.WriteLine($"BroadcastingEvent: {e.Type.ToString()} | {e.CarId} | {e.Msg}");
+                // GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.CarId);
+
                 //var x = e.CarData.TrackPosition;
                 //Trace.WriteLine($"BroadcastingEvent: {e.}");
             };
@@ -136,7 +146,10 @@ namespace Rev76.DataModels.Listeners
                         car.DriverIndex = c.DriverIndex;
                         car.Gear = c.Gear;
                         car.Kmh = c.Kmh;
-                        car.Position = c.Position;
+                       // if (car.CarIndex != GameData.PlayerCarIndex) {
+                            car.Position = c.Position;
+                       // }
+                       
                         car.TrackPosition = c.TrackPosition;
                         car.SplinePosition = c.SplinePosition;
                         car.WorldPosX = c.WorldPosX;
@@ -145,6 +158,7 @@ namespace Rev76.DataModels.Listeners
                         car.CarLocation = c.CarLocation;
                         car.CupPosition = c.CupPosition;
                         car.Number = c.RaceNumber;
+                       
 
                         car.Drivers.Clear();
                         foreach (var driver in c.Drivers)
@@ -157,7 +171,8 @@ namespace Rev76.DataModels.Listeners
                     {
                         car = new Car();
                         car.CarIndex = c.CarIndex;
-                        car.Number = c.RaceNumber;
+                        
+                   
 
                         GameData.Track.Cars.Add(car);
                     }

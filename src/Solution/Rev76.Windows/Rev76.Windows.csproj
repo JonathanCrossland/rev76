@@ -102,7 +102,7 @@
     <Content Include="Assets\CloudyRainShowers.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\DriverEnv.svg">
+    <Content Include="Assets\Purple.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\graphic.svg">

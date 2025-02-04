@@ -1,6 +1,7 @@
 ﻿using Svg;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Xml;
@@ -61,73 +62,84 @@ namespace Rev76.Windows.Widgets
         public void DrawSvg(System.Drawing.Graphics graphics, string svgString, float x, float y, float width, float height,
                     Action<SvgElement> modifyAction, Action<SvgElement> clickHandler = null)
         {
-            if (graphics == null) throw new ArgumentNullException(nameof(graphics));
-            if (string.IsNullOrWhiteSpace(svgString)) throw new ArgumentException("SVG string cannot be null or empty.", nameof(svgString));
 
-            svgClickHandler = clickHandler;
-
-            // Load SVG string into an XmlDocument to preserve namespaces
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(svgString);
-
-            // Create and register XmlNamespaceManager
-            var xmlnsManager = new XmlNamespaceManager(xmlDoc.NameTable);
-
-            foreach (XmlAttribute attr in xmlDoc.DocumentElement.Attributes)
+            try
             {
-                if (attr.Prefix == "xmlns")
+
+           
+                if (graphics == null) throw new ArgumentNullException(nameof(graphics));
+                if (string.IsNullOrWhiteSpace(svgString)) throw new ArgumentException("SVG string cannot be null or empty.", nameof(svgString));
+
+                svgClickHandler = clickHandler;
+
+                // Load SVG string into an XmlDocument to preserve namespaces
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(svgString);
+
+                // Create and register XmlNamespaceManager
+                var xmlnsManager = new XmlNamespaceManager(xmlDoc.NameTable);
+
+                foreach (XmlAttribute attr in xmlDoc.DocumentElement.Attributes)
                 {
-                    xmlnsManager.AddNamespace(attr.LocalName, attr.Value);
-                }
-            }
-
-            // Convert XmlDocument to MemoryStream for SVG.NET
-            using (var stream = new MemoryStream())
-            using (var writer = new StreamWriter(stream))
-            {
-                xmlDoc.Save(writer);
-                writer.Flush();
-                stream.Position = 0;
-
-                // Load SVG document with preserved namespaces
-                svgDocument = SvgDocument.Open<SvgDocument>(stream);
-
-                interactiveElements.Clear();
-
-                // Apply modifications and detect interactable elements
-                foreach (var element in svgDocument.Descendants())
-                {
-                    modifyAction?.Invoke(element); // Modify the element
-
-                    if (element is SvgRectangle rect)
+                    if (attr.Prefix == "xmlns")
                     {
-                        // Look for lucid:interacts="click"
-                        if (element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:interacts", out var interactValue) && interactValue == "click")
-                        {
-                            interactiveElements[element] = rect.Bounds; // Store its bounds for hit-testing
-                        }
+                        xmlnsManager.AddNamespace(attr.LocalName, attr.Value);
                     }
                 }
 
-                // Scale and translate the SVG to fit within the given dimensions
-                var originalSize = svgDocument.GetDimensions();
-                var scaleX = width / originalSize.Width;
-                var scaleY = height / originalSize.Height;
+                // Convert XmlDocument to MemoryStream for SVG.NET
+                using (var stream = new MemoryStream())
+                using (var writer = new StreamWriter(stream))
+                {
+                    xmlDoc.Save(writer);
+                    writer.Flush();
+                    stream.Position = 0;
 
-                // Save the current graphics state
-                var state = graphics.Save();
+                    // Load SVG document with preserved namespaces
+                    svgDocument = SvgDocument.Open<SvgDocument>(stream);
 
-                // Apply transformations for scaling and positioning
-                graphics.TranslateTransform(x, y);
-                graphics.ScaleTransform(scaleX, scaleY);
+                    interactiveElements.Clear();
 
-                // Render the modified SVG
-                svgDocument.Draw(graphics);
+                    // Apply modifications and detect interactable elements
+                    foreach (var element in svgDocument.Descendants())
+                    {
+                        modifyAction?.Invoke(element); // Modify the element
 
-                // Restore the graphics state
-                graphics.Restore(state);
+                        if (element is SvgRectangle rect)
+                        {
+                            // Look for lucid:interacts="click"
+                            if (element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:interacts", out var interactValue) && interactValue == "click")
+                            {
+                                interactiveElements[element] = rect.Bounds; // Store its bounds for hit-testing
+                            }
+                        }
+                    }
+
+                    // Scale and translate the SVG to fit within the given dimensions
+                    var originalSize = svgDocument.GetDimensions();
+                    var scaleX = width / originalSize.Width;
+                    var scaleY = height / originalSize.Height;
+
+                    // Save the current graphics state
+                    var state = graphics.Save();
+
+                    // Apply transformations for scaling and positioning
+                    graphics.TranslateTransform(x, y);
+                    graphics.ScaleTransform(scaleX, scaleY);
+
+                    // Render the modified SVG
+                    svgDocument.Draw(graphics);
+
+                    // Restore the graphics state
+                    graphics.Restore(state);
 
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                throw ex;
             }
         }
 

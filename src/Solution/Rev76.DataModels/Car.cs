@@ -34,6 +34,7 @@ namespace Rev76.DataModels
                         break;
                     case CarLocationEnum.Track:
                         InPits = false;
+                        IsInAccident = false;
                         break;
                     case CarLocationEnum.Pitlane:
                         InPits = true;
@@ -73,7 +74,9 @@ namespace Rev76.DataModels
         public int GapBehind { get; internal set; }
 
         public List<LapInfo> LapTimes = new List<LapInfo>();
-        
+
+        public bool IsInAccident { get; set; }
+        public FlagType Flag { get; internal set; }
 
         public static float CalculateGap(Car car1,  Car car2, float trackMeters)
         {

@@ -9,10 +9,11 @@ namespace Rev76.DataModels
         public static GameState GameState { get; set; } = new GameState();
         public static Tyres Tyres { get; set; } = new Tyres();
         public static Track Track { get; set; } = new Track();
-        public static Car Car { get; set; } = new Car();
+        public static int PlayerCarIndex { get; set; }
         public static Car BroadcastCar { get; set; } = new Car();
         public static Session Session { get; set; } = new Session();
-        public static bool Broadcasting { get; internal set; }
+       
+      
 
         internal static void Reset()
         {
@@ -41,22 +42,21 @@ namespace Rev76.DataModels
 
             TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
 
-           
-
             if (timeSpan.TotalMinutes >= 1)
             {
-                return string.Format("{0:D}:{1:D2}.{2:D2}",
+                return string.Format("{0}:{1:D2}.{2}",
                     (int)timeSpan.TotalMinutes,
                     timeSpan.Seconds,
-                     timeSpan.Milliseconds);
+                    (int)Math.Round(timeSpan.Milliseconds / 100.0));
             }
             else
             {
-                return string.Format("{0:D2}.{1:D2}",
+                return string.Format("{0}.{1}",
                     timeSpan.Seconds,
-                     timeSpan.Milliseconds);
+                    (int)Math.Round(timeSpan.Milliseconds / 100.0));
             }
         }
+
 
 
         public static string GetFormattedClockTime(float milliseconds)
