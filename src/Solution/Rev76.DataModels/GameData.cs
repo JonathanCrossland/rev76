@@ -3,19 +3,26 @@ using System;
 
 namespace Rev76.DataModels
 {
-    public static class GameData
+    public sealed class GameData
     {
-        public static TrackEnvironment Weather { get; set; } = new TrackEnvironment();
-        public static GameState GameState { get; set; } = new GameState();
-        public static Tyres Tyres { get; set; } = new Tyres();
-        public static Track Track { get; set; } = new Track();
-        public static int PlayerCarIndex { get; set; }
-        public static Car BroadcastCar { get; set; } = new Car();
-        public static Session Session { get; set; } = new Session();
-       
-      
+        private static readonly Lazy<GameData> _instance = new Lazy<GameData>(() => new GameData());
+        public static GameData Instance => _instance.Value;
 
-        internal static void Reset()
+        public TrackEnvironment Weather { get; set; } = new TrackEnvironment();
+        public GameState GameState { get; set; } = new GameState();
+        public Tyres Tyres { get; set; } = new Tyres();
+        public Track Track { get; set; } = new Track();
+        public int PlayerCarIndex { get; set; }
+        public Car BroadcastCar { get; set; } = new Car();
+        public Session Session { get; set; } = new Session();
+
+
+        public GameData()
+        {
+            Reset();
+        }
+
+        public void Reset()
         {
             TrackEnvironment Weather = new TrackEnvironment();
             GameState GameState = new GameState();

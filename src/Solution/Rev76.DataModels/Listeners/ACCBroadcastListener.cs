@@ -14,44 +14,58 @@ namespace Rev76.DataModels.Listeners
 
         public ACCBroadcastListener()
         {
-           
 
         }
         public async Task Listen(object token)
         {
-            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Broadcast", "asd", "", 1);
+            
+            _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Rev76", "asd", "", 1);
 
-            _UDPClient.MessageHandler.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
+            _UDPClient.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
-                Trace.WriteLine($"ConnectionStateChanged: {error}");
-
-            };
-            _UDPClient.MessageHandler.OnRealtimeUpdate += (sender, e) =>
-            {
-
-                
-                GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.FocusedCarIndex);
-               
-                if (GameData.PlayerCarIndex != e.FocusedCarIndex)
+                if (connectionSuccess)
                 {
-                    GameData.Session.Broadcasting = true;
+                    _UDPClient.RequestEntryList();
                 }
                 else
                 {
-                    GameData.Session.Broadcasting = false;
+                    GameData.Instance.Reset(); 
+                }
+                Trace.WriteLine($"ConnectionStateChanged: {error}");
+
+            };
+            _UDPClient.OnRealtimeUpdate += (sender, e) =>
+            {
+                if (GameData.Instance.Session.Phase != e.Phase)
+                {
+                    GameData.Instance.Session.Phase = e.Phase;
+                    GameData.Instance.Reset();
+                    _UDPClient.RequestEntryList();
+                }
+
+
+               GameData.Instance.BroadcastCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == e.FocusedCarIndex);
+               
+                if (GameData.Instance.PlayerCarIndex != e.FocusedCarIndex)
+                {
+                    GameData.Instance.GameState.Broadcasting = true;
+                }
+                else
+                {
+                    GameData.Instance.GameState.Broadcasting = false;
 
                 }
 
-                GameData.Weather.Cloudy = e.Clouds;
+                GameData.Instance.Weather.Cloudy = e.Clouds;
                 
 
             };
 
-            _UDPClient.MessageHandler.OnRealtimeCarUpdate += (sender, e) =>
+            _UDPClient.OnRealtimeCarUpdate += (sender, e) =>
             {
 
-               
-                Car car = GameData.Track.Cars.Find(carindex => carindex.CarIndex == e.CarIndex);
+              
+                Car car = GameData.Instance.Track.Cars.Find(carindex => carindex.CarIndex == e.CarIndex);
                 if (car != null)
                 {
                     car.BestSessionLap = e.BestSessionLap;
@@ -86,21 +100,21 @@ namespace Rev76.DataModels.Listeners
                 }
 
 
-                if (GameData.Session.BestSession != null)
+                if (GameData.Instance.Session.BestSession != null)
                 {
                     if (e.BestSessionLap != null)
                     {
-                        if (e.BestSessionLap.LaptimeMS < GameData.Session.BestSession.LaptimeMS || GameData.Session.BestSession.LaptimeMS == null)
+                        if (e.BestSessionLap.LaptimeMS < GameData.Instance.Session.BestSession.LaptimeMS || GameData.Instance.Session.BestSession.LaptimeMS == null)
                         {
-                            GameData.Session.BestSession = e.BestSessionLap;
+                            GameData.Instance.Session.BestSession = e.BestSessionLap;
                         }
                     }
                 }
                 else
                 {
-                    GameData.Session.BestSession = e.BestSessionLap;
+                    GameData.Instance.Session.BestSession = e.BestSessionLap;
                     
-                    if (GameData.Track.TrackLength == 0)
+                    if (GameData.Instance.Track.TrackLength == 0)
                     {
                         _UDPClient.RequestTrackData();
                     }
@@ -110,30 +124,30 @@ namespace Rev76.DataModels.Listeners
 
 
             };
-            _UDPClient.MessageHandler.OnBroadcastingEvent += (sender, e) =>
+            _UDPClient.OnBroadcastingEvent += (sender, e) =>
             {
 
-                GameData.Session.EventType = e.Type;
+                GameData.Instance.Session.EventType = e.Type;
 
                 if (e.Type == BroadcastingCarEventType.Accident)
                 {
-                    //Car car = GameData.Track.Cars.Find(c => c.CarIndex == e.CarData.CarIndex);
+                    //Car car = GameData.Instance.Track.Cars.Find(c => c.CarIndex == e.CarData.CarIndex);
                     //car.IsInAccident = true;
                 }
 
                 Trace.WriteLine($"BroadcastingEvent: {e.Type.ToString()} | {e.CarId} | {e.Msg}");
-                // GameData.BroadcastCar = GameData.Track.Cars.Find(c => c.CarIndex == e.CarId);
+                // GameData.Instance.BroadcastCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == e.CarId);
 
                 //var x = e.CarData.TrackPosition;
                 //Trace.WriteLine($"BroadcastingEvent: {e.}");
             };
 
-            _UDPClient.MessageHandler.OnEntrylistUpdate += (sender, e) =>
+            _UDPClient.OnEntrylistUpdate += (sender, e) =>
             {
 
                 foreach (var c in _UDPClient.MessageHandler._entryListCars)
                 {
-                    Car car = GameData.Track.Cars.Find(carindex => carindex?.CarIndex == c.CarIndex);
+                    Car car = GameData.Instance.Track.Cars.Find(carindex => carindex?.CarIndex == c.CarIndex);
                     if (car != null)
                     {
                         car.CarIndex = c.CarIndex;
@@ -146,7 +160,7 @@ namespace Rev76.DataModels.Listeners
                         car.DriverIndex = c.DriverIndex;
                         car.Gear = c.Gear;
                         car.Kmh = c.Kmh;
-                       // if (car.CarIndex != GameData.PlayerCarIndex) {
+                       // if (car.CarIndex != GameData.Instance.PlayerCarIndex) {
                             car.Position = c.Position;
                        // }
                        
@@ -174,19 +188,19 @@ namespace Rev76.DataModels.Listeners
                         
                    
 
-                        GameData.Track.Cars.Add(car);
+                        GameData.Instance.Track.Cars.Add(car);
                     }
 
-                    if (GameData.Session.BestSession != null && c.BestSessionLap == null)
+                    if (GameData.Instance.Session.BestSession != null && c.BestSessionLap == null)
                     {
-                        GameData.Reset();
+                        GameData.Instance.Reset();
                     }
 
-                    if (GameData.Session.BestSession != null && c.BestSessionLap != null)
+                    if (GameData.Instance.Session.BestSession != null && c.BestSessionLap != null)
                     {
-                        if (GameData.Session.BestSession.LaptimeMS == 0 || c.BestSessionLap.LaptimeMS < GameData.Session.BestSession.LaptimeMS)
+                        if (GameData.Instance.Session.BestSession.LaptimeMS == 0 || c.BestSessionLap.LaptimeMS < GameData.Instance.Session.BestSession.LaptimeMS)
                         {
-                            GameData.Session.BestSession = c.BestSessionLap;
+                            GameData.Instance.Session.BestSession = c.BestSessionLap;
                         }
                     }
 
@@ -194,12 +208,12 @@ namespace Rev76.DataModels.Listeners
 
             };
 
-            _UDPClient.MessageHandler.OnTrackDataUpdate += (sender, e) =>
+            _UDPClient.OnTrackDataUpdate += (sender, e) =>
             {
 
                 Trace.WriteLine($"TrackDataUpdate: {e.TrackName} ");
-                GameData.Track.TrackLength = e.TrackMeters;
-                GameData.Track.Name = e.TrackName;
+                GameData.Instance.Track.TrackLength = e.TrackMeters;
+                GameData.Instance.Track.Name = e.TrackName;
 
             };
 
@@ -211,7 +225,7 @@ namespace Rev76.DataModels.Listeners
         public void Dispose()
         {
 
-            _UDPClient.Shutdown();
+            //_UDPClient.ShutdownAsync();
             _UDPClient.Dispose();
             
         }

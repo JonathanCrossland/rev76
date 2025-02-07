@@ -22,9 +22,9 @@ namespace Rev76.Windows.Widgets
         protected override string Title => "Flags";
 
         protected override bool Visible { get =>
-                GameData.GameState.Status == GameStatus.LIVE
+                GameData.Instance.GameState.Status == GameStatus.LIVE
                 && 
-                GameData.Session.Flag != FlagType.NO_FLAG; 
+                GameData.Instance.Session.Flag != FlagType.NO_FLAG; 
         }
 
 
@@ -43,7 +43,7 @@ namespace Rev76.Windows.Widgets
 
         public SvgPaintServer GetFlagColor()
         {
-            switch (GameData.Session.Flag)
+            switch (GameData.Instance.Session.Flag)
             {
                 case FlagType.NO_FLAG:
                     return new SvgColourServer(Color.Transparent);

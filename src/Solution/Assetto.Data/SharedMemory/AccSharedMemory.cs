@@ -19,7 +19,8 @@ public sealed class AccSharedMemory : IDisposable {
     private readonly PeriodicSharedMemoryPoller<Physics> _physics;
     private readonly PeriodicSharedMemoryPoller<Graphics> _graphics;
     private readonly PeriodicSharedMemoryPoller<StaticInfo> _staticInfo;
-    
+    private readonly PeriodicSharedMemoryPoller<CrewInfo> _crewInfo;
+
 
     public ConnectionState Status { get; private set; } = ConnectionState.Disconnected;
 
@@ -39,6 +40,12 @@ public sealed class AccSharedMemory : IDisposable {
         get => _staticInfo.Interval;
         set => _staticInfo.Interval = value;
     }
+    public double CrewInfoUpdateInterval
+    {
+        get => _crewInfo.Interval;
+        set => _crewInfo.Interval = value;
+    }
+
 
 
     public event UpdatedHandler<Physics> PhysicsUpdated {
@@ -57,19 +64,27 @@ public sealed class AccSharedMemory : IDisposable {
         remove => _staticInfo.Updated -= value;
     }
 
+    public event UpdatedHandler<CrewInfo> CrewInfoUpdated
+    {
+        add => _crewInfo.Updated += value;
+        remove => _crewInfo.Updated -= value;
+    }
+
     public AccSharedMemory() {
         _physics = new PeriodicSharedMemoryPoller<Physics>("Local\\acpmf_physics");
         _graphics = new PeriodicSharedMemoryPoller<Graphics>("Local\\acpmf_graphics");
         _staticInfo = new PeriodicSharedMemoryPoller<StaticInfo>("Local\\acpmf_static");
-        
-        
+
+        _crewInfo = new PeriodicSharedMemoryPoller<CrewInfo>("Local\\acpmf_crewchief");
     }
 
 
-    public AccSharedMemory(double physicsUpdateInterval, double graphicsUpdateInterval, double staticInfoUpdateInterval) : this() {
+    public AccSharedMemory(double physicsUpdateInterval, double graphicsUpdateInterval, double staticInfoUpdateInterval, double crewInfoUpdateInterval) : this()
+    {
         PhysicsUpdateInterval = physicsUpdateInterval;
         GraphicsUpdateInterval = graphicsUpdateInterval;
         StaticInfoUpdateInterval = staticInfoUpdateInterval;
+        CrewInfoUpdateInterval = crewInfoUpdateInterval;
     }
 
     public async Task ConnectAsync(CancellationToken token) {
@@ -92,6 +107,7 @@ public sealed class AccSharedMemory : IDisposable {
                 _physics.Connect();
                 _graphics.Connect();
                 _staticInfo.Connect();
+                _crewInfo.Connect();
 
                 Status = ConnectionState.Connected;
             } catch (FileNotFoundException) {
@@ -123,6 +139,7 @@ public sealed class AccSharedMemory : IDisposable {
         _physics.Disconnect();
         _graphics.Disconnect();
         _staticInfo.Disconnect();
+        _crewInfo.Disconnect();
     }
 
 

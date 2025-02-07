@@ -13,6 +13,7 @@ namespace Rev76.Windows.Helpers
         /// </summary>
         public static Car GetPreCar(Car meCar, List<Car> cars)
         {
+            if (cars.Count == 0) return null;
             if (meCar == null) return null;
             return cars
                 .Where(c => c.CarIndex != meCar.CarIndex && !c.InPits)
@@ -26,6 +27,7 @@ namespace Rev76.Windows.Helpers
         /// </summary>
         public static Car GetPostCar(Car meCar, List<Car> cars)
         {
+            if (cars.Count == 0) return null;
             if (meCar == null) return null;
             return cars
                 .Where(c => c.CarIndex != meCar.CarIndex && !c.InPits)
@@ -36,7 +38,7 @@ namespace Rev76.Windows.Helpers
 
         private static float GlobalDiff(int myLap, float myPos, int carLap, float carPos)
         {
-            float trackLength = GameData.Track.TrackLength;
+            float trackLength = GameData.Instance.Track.TrackLength;
             // Compute global positions
             float myGlobal = myLap * trackLength + myPos;
             float carGlobal = carLap * trackLength + carPos;

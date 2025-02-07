@@ -102,6 +102,7 @@ namespace Assetto.Data.Broadcasting
 
         internal void ProcessMessage(BinaryReader br)
         {
+            
             // Any message starts with an 1-byte command type
             var messageType = (InboundMessageTypes)br.ReadByte();
             switch (messageType)
@@ -450,7 +451,7 @@ namespace Assetto.Data.Broadcasting
         /// The client will send this automatically when something changes; however if you detect a carIndex or driverIndex, this may cure the 
         /// problem for future updates
         /// </summary>
-        private void RequestEntryList()
+        public void RequestEntryList()
         {
             using (var ms = new MemoryStream())
             using (var br = new BinaryWriter(ms))

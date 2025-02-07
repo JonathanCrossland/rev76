@@ -17,11 +17,11 @@ namespace Rev76.Windows.Widgets
 
         protected override string Title => "Tyres";
 
-        protected override bool Visible { get => GameData.GameState.Status == GameStatus.LIVE; }
+        protected override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
 
         protected override void OnRender(System.Drawing.Graphics gfx)
         {
-            if (GameData.Tyres.BrakeTemp.FrontLeft == 0 && GameData.Tyres.TC == 0)
+            if (GameData.Instance.Tyres.BrakeTemp.FrontLeft == 0 && GameData.Instance.Tyres.TC == 0)
             {
                 //base.DrawNoDataMessage();
 
@@ -60,7 +60,7 @@ namespace Rev76.Windows.Widgets
                         switch (rect.ID)
                         {
                             case "tc1rect":
-                                if (GameData.Tyres.TCInAction > 0)
+                                if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
@@ -68,7 +68,7 @@ namespace Rev76.Windows.Widgets
                             case "bbrect":
                                 break;
                             case "absrect":
-                                if (GameData.Tyres.AbsVibrations > 0)
+                                if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
@@ -86,13 +86,13 @@ namespace Rev76.Windows.Widgets
                         switch (el.ID)
                         { 
                             case "tc1":
-                                el.Text = GameData.Tyres.TC.ToString();
+                                el.Text = GameData.Instance.Tyres.TC.ToString();
                                 break;
                             case "bb":
-                                el.Text = $"{(GameData.Tyres.BrakeBias * 100).ToString("0.0")}";
+                                el.Text = $"{(GameData.Instance.Tyres.BrakeBias * 100).ToString("0.0")}";
                                 break;
                             case "abs":
-                                el.Text = GameData.Tyres.ABS.ToString();
+                                el.Text = GameData.Instance.Tyres.ABS.ToString();
                                 break;
 
                             default:
@@ -131,95 +131,95 @@ namespace Rev76.Windows.Widgets
                         switch (rect.ID)
                         {
                             case "brakebiasdefault":
-                                if (GameData.Tyres.BrakeBiasDefault <= 0)
+                                if (GameData.Instance.Tyres.BrakeBiasDefault <= 0)
                                 {
                                     break;
                                 }
 
-                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Tyres.BrakeBiasDefault) + offset;
+                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Instance.Tyres.BrakeBiasDefault) + offset;
                                 
 
                                 break;
                             case "brakebiasrect":
-                                if (GameData.Tyres.BrakeBias <= 0)
+                                if (GameData.Instance.Tyres.BrakeBias <= 0)
                                 {
                                     break;
                                 }
-                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Tyres.BrakeBias) + offset;
+                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Instance.Tyres.BrakeBias) + offset;
                                 
                                 break;
                             case "leftfronttyre":
-                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Tyres.TyreTemp.FrontLeft));
-                                if (GameData.Tyres.TCInAction > 0)
+                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Instance.Tyres.TyreTemp.FrontLeft));
+                                if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
 
-                                if (GameData.Tyres.WheelSlip.FrontLeft == 0)
+                                if (GameData.Instance.Tyres.WheelSlip.FrontLeft == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
                                 break;
                             case "rightfronttyre":
-                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Tyres.TyreTemp.FrontRight));
-                                if (GameData.Tyres.TCInAction > 0)
+                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Instance.Tyres.TyreTemp.FrontRight));
+                                if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
 
-                                if (GameData.Tyres.WheelSlip.FrontRight == 0)
+                                if (GameData.Instance.Tyres.WheelSlip.FrontRight == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
                                 break;
                             case "leftreartyre":
-                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Tyres.TyreTemp.RearLeft));
-                                if (GameData.Tyres.TCInAction > 0)
+                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Instance.Tyres.TyreTemp.RearLeft));
+                                if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                if (GameData.Tyres.WheelSlip.RearLeft == 0)
+                                if (GameData.Instance.Tyres.WheelSlip.RearLeft == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
                                 break;
                             case "rightreartyre":
-                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Tyres.TyreTemp.RearRight));
-                                if (GameData.Tyres.TCInAction > 0)
+                                rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Instance.Tyres.TyreTemp.RearRight));
+                                if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                if (GameData.Tyres.WheelSlip.RearRight == 0)
+                                if (GameData.Instance.Tyres.WheelSlip.RearRight == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
                                 break;
                          
                             case "leftfrontbrake":
-                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Tyres.BrakeTemp.FrontLeft));
+                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Instance.Tyres.BrakeTemp.FrontLeft));
                                 
-                                if (GameData.Tyres.AbsVibrations > 0)
+                                if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
                                 break;
                             case "rightfrontbrake":
-                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Tyres.BrakeTemp.FrontRight));
-                                if (GameData.Tyres.AbsVibrations > 0)
+                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Instance.Tyres.BrakeTemp.FrontRight));
+                                if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
                                 break;
                             case "leftrearbrake":
-                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Tyres.BrakeTemp.RearLeft));
-                                if (GameData.Tyres.AbsVibrations > 0)
+                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Instance.Tyres.BrakeTemp.RearLeft));
+                                if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
                                 break; 
                             case "rightrearbrake":
-                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Tyres.BrakeTemp.RearRight));
-                                if (GameData.Tyres.AbsVibrations > 0)
+                                rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Instance.Tyres.BrakeTemp.RearRight));
+                                if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
@@ -237,61 +237,61 @@ namespace Rev76.Windows.Widgets
                         switch (el.ID)
                         {
                             case "brakeset":
-                                el.Text = GameData.Tyres.GetBrakeString();;
+                                el.Text = GameData.Instance.Tyres.GetBrakeString();;
                                 break;
                             case "tyreset":
-                                el.Text = GameData.Tyres.GetTyreString(); ;
+                                el.Text = GameData.Instance.Tyres.GetTyreString(); ;
                                 break;
                             case "leftfrontpsi":
-                                el.Text = $"{Math.Round(GameData.Tyres.WheelsPressure.FrontLeft, 1).ToString("0.0")}";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.WheelsPressure.FrontLeft, 1).ToString("0.0")}";
                                 break;
                             case "rightfrontpsi":
-                                el.Text = $"{Math.Round(GameData.Tyres.WheelsPressure.FrontRight, 1).ToString("0.0")}";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.WheelsPressure.FrontRight, 1).ToString("0.0")}";
                                 break;
                             case "leftrearpsi":
-                                el.Text = $"{Math.Round(GameData.Tyres.WheelsPressure.RearLeft, 1).ToString("0.0")}";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.WheelsPressure.RearLeft, 1).ToString("0.0")}";
                                 break;
                             case "rightrearpsi":
-                                el.Text = $"{Math.Round(GameData.Tyres.WheelsPressure.RearRight, 1).ToString("0.0")}";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.WheelsPressure.RearRight, 1).ToString("0.0")}";
                                 break;
                             case "leftfronttemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.TyreTemp.FrontLeft, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.TyreTemp.FrontLeft, 0)}°";
                                 break;
                             case "rightfronttemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.TyreTemp.FrontRight, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.TyreTemp.FrontRight, 0)}°";
                                 break;
                             case "leftreartemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.TyreTemp.RearLeft, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.TyreTemp.RearLeft, 0)}°";
                                 break;
                             case "rightreartemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.TyreTemp.RearRight, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.TyreTemp.RearRight, 0)}°";
                                 break;
                             case "leftfrontbraketemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.BrakeTemp.FrontLeft, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.BrakeTemp.FrontLeft, 0)}°";
                                 break;
                             case "rightfrontbraketemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.BrakeTemp.FrontRight, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.BrakeTemp.FrontRight, 0)}°";
                                 break;
                             case "leftrearbraketemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.BrakeTemp.RearLeft, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.BrakeTemp.RearLeft, 0)}°";
                                 break;
                             case "rightrearbraketemp":
-                                el.Text = $"{Math.Round(GameData.Tyres.BrakeTemp.RearRight, 0)}°";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.BrakeTemp.RearRight, 0)}°";
                                 break;
                             case "leftfrontbrakewear":
-                                el.Text = $"{Math.Round(GameData.Tyres.GetPadLifePercentage(Tyres.Position.FrontLeft), 0)}%";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.GetPadLifePercentage(Tyres.Position.FrontLeft), 0)}%";
                                 break;
                             case "rightfrontbrakewear":
-                                el.Text = $"{Math.Round(GameData.Tyres.GetPadLifePercentage(Tyres.Position.FrontRight), 0)}%";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.GetPadLifePercentage(Tyres.Position.FrontRight), 0)}%";
                                 break;
                             case "leftrearbrakewear":
-                                el.Text = $"{Math.Round(GameData.Tyres.GetPadLifePercentage(Tyres.Position.RearLeft), 0)}%";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.GetPadLifePercentage(Tyres.Position.RearLeft), 0)}%";
                                 break;
                             case "rightrearbrakewear":
-                                el.Text = $"{Math.Round(GameData.Tyres.GetPadLifePercentage(Tyres.Position.RearRight), 0)}%";
+                                el.Text = $"{Math.Round(GameData.Instance.Tyres.GetPadLifePercentage(Tyres.Position.RearRight), 0)}%";
                                 break;
                             case "brakebias":
-                                el.Text = "";//$"{(GameData.Tyres.BrakeBias * 100).ToString("0.0")}%";
+                                el.Text = "";//$"{(GameData.Instance.Tyres.BrakeBias * 100).ToString("0.0")}%";
                                 break;
                             default:
                                 break;

@@ -3,7 +3,6 @@
 namespace Rev76.DataModels
 {
 
-
     public class Track
     {
         public List<Car> Cars { get; set; } = new List<Car>();

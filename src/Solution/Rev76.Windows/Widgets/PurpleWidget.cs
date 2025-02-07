@@ -31,7 +31,7 @@ namespace Rev76.Windows.Widgets
         }
 
         protected override string Title { get => "Purple"; }
-        protected override bool Visible { get => GameData.GameState.Status == GameStatus.LIVE; }
+        protected override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
         //protected override bool Visible { get => true; }
 
 
@@ -47,8 +47,8 @@ namespace Rev76.Windows.Widgets
                 return;
             }
 
-            if (GameData.Track.Cars.Count == 0) return;
-            if (GameData.PlayerCarIndex == 0) return;
+            if (GameData.Instance.Track.Cars.Count == 0) return;
+            if (GameData.Instance.PlayerCarIndex == 0) return;
 
 
             bool rendered = DrawDriver(g);
@@ -95,7 +95,7 @@ namespace Rev76.Windows.Widgets
 
             if (meCar != null && preCar != null)
             {
-                preCarGap = Car.CalculateTimeGap(preCar, meCar, GameData.Track.TrackLength);
+                preCarGap = Car.CalculateTimeGap(preCar, meCar, GameData.Instance.Track.TrackLength);
 
                 if (preCar != null)
                 {
@@ -105,7 +105,7 @@ namespace Rev76.Windows.Widgets
 
             if (meCar != null && postCar != null)
             {
-                postCarGap = Car.CalculateTimeGap(meCar, postCar, GameData.Track.TrackLength);
+                postCarGap = Car.CalculateTimeGap(meCar, postCar, GameData.Instance.Track.TrackLength);
 
                 if (postCar != null)
                 {
@@ -239,7 +239,7 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                              }
-                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (preCar?.Kmh < 40 || preCar?.Gear <= 0)
                                  {
@@ -269,7 +269,7 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 1;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 0, 0, 255));
                              }
-                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (meCar?.Kmh < 40 || meCar?.Gear <= 0) {
                                      rect.StrokeWidth = 2;
@@ -292,7 +292,7 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                              }
-                             if (GameData.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (postCar?.Kmh < 40 || postCar?.Gear <= 0)
                                  {
@@ -497,12 +497,12 @@ namespace Rev76.Windows.Widgets
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                preCar = SplineUtil.GetPreCar(meCar, GameData.Track.Cars);
+                preCar = SplineUtil.GetPreCar(meCar, GameData.Instance.Track.Cars);
             }
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position")
             {
-                preCar = GameData.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
+                preCar = GameData.Instance.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
             }
 
             return preCar;
@@ -510,11 +510,11 @@ namespace Rev76.Windows.Widgets
 
         private static Car GetMeCar()
         {
-            Car meCar = GameData.Track.Cars.Find(c => c.CarIndex == GameData.PlayerCarIndex);
+            Car meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
 
-            if (GameData.BroadcastCar != null)
+            if (GameData.Instance.BroadcastCar != null)
             {
-                meCar = GameData.BroadcastCar;
+                meCar = GameData.Instance.BroadcastCar;
             }
 
             return meCar;
@@ -526,11 +526,11 @@ namespace Rev76.Windows.Widgets
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                postCar = SplineUtil.GetPostCar(meCar, GameData.Track.Cars);
+                postCar = SplineUtil.GetPostCar(meCar, GameData.Instance.Track.Cars);
             }
             else
             {
-                postCar = GameData.Track.Cars.Find(c => c.Position == meCar?.Position + 1);
+                postCar = GameData.Instance.Track.Cars.Find(c => c.Position == meCar?.Position + 1);
             }
 
             return postCar;
@@ -538,7 +538,7 @@ namespace Rev76.Windows.Widgets
 
         private static Car GetPurpleCar()
         {
-            return GameData.Track.Cars.Find(c => c.CarIndex == GameData.Session.BestSession?.CarIndex);
+            return GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.Session.BestSession?.CarIndex);
         }
 
 
