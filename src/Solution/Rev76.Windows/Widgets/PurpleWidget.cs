@@ -76,7 +76,11 @@ namespace Rev76.Windows.Widgets
             Car postCar = GetPostCar(meCar);
             DriverInfo postDriver = GetPostDriver(postCar);
 
-            AdjustMeCarPositionBasedOnPreCar(meCar, preCar);
+
+            Trace.WriteLine($"PreCar: {preCar?.Number}");
+            Trace.WriteLine($"PostCar: {preCar?.Number}");
+
+            AdjustMeCarPositionBasedOnPreCar(meCar, preCar, postCar);
 
             float time = 0;
             string formattedTime = string.Empty;
@@ -329,7 +333,7 @@ namespace Rev76.Windows.Widgets
                              {
                                  if (preCar != null)
                                  {
-                                     numberText = preCar?.Number.ToString();
+                                     numberText = preCar?.Number.ToString() + "";
                                      if (numberText.Length > 0) numberText = "#" + numberText;
                                      el.Text = $"{preDriver.FirstName[0].ToString().ToUpper()} {preDriver.LastName} {numberText}";
                                      el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
@@ -362,7 +366,7 @@ namespace Rev76.Windows.Widgets
                              time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
                              if (_DrawState == DrawState.State1 || time == 0)
                              {
-                                 numberText = meCar?.Number.ToString();
+                                 numberText = meCar?.Number.ToString() + "";
                                  if (numberText.Length > 0) numberText = "#" + numberText;
                                  el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
                                  el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
@@ -395,7 +399,7 @@ namespace Rev76.Windows.Widgets
                              {
                                  if (postCar != null)
                                  {
-                                     numberText = postCar?.Number.ToString();
+                                     numberText = postCar?.Number.ToString() + "";
                                      if (numberText.Length > 0) numberText = "#" + numberText;
                                      el.Text = $"{postDriver.FirstName[0].ToString().ToUpper()} {postDriver.LastName} {numberText}";
                                      el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
@@ -475,18 +479,19 @@ namespace Rev76.Windows.Widgets
 
         //The ACC data take a long time to update. If we overtake, then our position should be the preCar position + 1.
         //If we do this ourselves, we are going to speeed this up
-        private void AdjustMeCarPositionBasedOnPreCar(Car mecar, Car preCar)
+        private void AdjustMeCarPositionBasedOnPreCar(Car meCar, Car preCar, Car postCar)
         {
             // we cant try this if its based on position, because are sorting on position and if its wrong , its wrong
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position") return;
 
-            if (mecar == null) return;
+            if (meCar == null) return;
             if (preCar == null) return;
 
             //if the laps are not the same, we cannot fudge this
-            if (preCar.Laps == mecar.Laps)
+            if (preCar.Laps == meCar.Laps)
             {
-                mecar.Position = preCar.Position + 1;
+                meCar.Position = preCar.Position + 1;
+                postCar.Position = meCar.Position + 1;
             }
 
         }

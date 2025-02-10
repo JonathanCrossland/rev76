@@ -6,6 +6,7 @@ namespace Rev76.DataModels
     public sealed class GameData
     {
         private static readonly Lazy<GameData> _instance = new Lazy<GameData>(() => new GameData());
+        private readonly object _lock = new object();
         public static GameData Instance => _instance.Value;
 
         public TrackEnvironment Weather { get; set; } = new TrackEnvironment();
@@ -24,12 +25,16 @@ namespace Rev76.DataModels
 
         public void Reset()
         {
-            TrackEnvironment Weather = new TrackEnvironment();
-            GameState GameState = new GameState();
-            Tyres Tyres = new Tyres();
-            Track Track = new Track();
-            Car Car = new Car();
-            Session Session = new Session();
+
+            lock (_lock)
+            {
+                Weather = new TrackEnvironment();
+                GameState = new GameState();
+                Tyres = new Tyres();
+                Track = new Track();
+                BroadcastCar = new Car();
+                Session = new Session();
+            }
 
         }
 

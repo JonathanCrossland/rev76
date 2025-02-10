@@ -33,6 +33,8 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.Track.Name != e.Data.Track)
                 {
+                    Trace.WriteLine($"{GameData.Instance.Track.Name} <- {e.Data.Track}");
+                    GameData.Instance.Track.Name = e.Data.Track;
                     //GameData.Instance.GameState.IsSetupMenuVisible 
                 }
 
@@ -118,10 +120,11 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.Session.SessionType != e.Data.Session )
                 {
+                    Trace.WriteLine($"{GameData.Instance.Session.SessionType} <- {e.Data.Session}");
+                    //GameData.Instance.Reset();
                     GameData.Instance.Session.SessionType = e.Data.Session;
-                    GameData.Instance.Reset();
-                    Thread.Sleep(100);
-                    return;
+                    //Thread.Sleep(100);
+                    //return;
                 }
                 
                 GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;

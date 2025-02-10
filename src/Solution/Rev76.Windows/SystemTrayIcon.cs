@@ -12,12 +12,12 @@ namespace Rev76.Windows
         private static IntPtr _hwnd;
         private static int _messageId;
         private static Win32.NOTIFYICONDATA _nid;
-        private static Action _onClickAction;
+        private static Action<string> _onClickAction;
         private static IntPtr _hMenu;
         private Win32.WndProcDelegate _wndProcDelegate; // Keep a reference to the delegate
 
 
-        public void AddIcon(Icon icon, string tooltip, Action onClick)
+        public void AddIcon(Icon icon, string tooltip, Action<string> onClick)
         {
 
             _messageId = Win32.WM_USER + 100;
@@ -117,6 +117,7 @@ namespace Rev76.Windows
         {
             _hMenu = Win32.CreatePopupMenu();
             Win32.AppendMenu(_hMenu, Win32.MF_STRING, Win32.IDM_QUIT, "Quit");
+            Win32.AppendMenu(_hMenu, Win32.MF_STRING, Win32.IDM_WIDGET, "Show");
 
             Win32.POINT pt;
             Win32.GetCursorPos(out pt);
@@ -133,16 +134,20 @@ namespace Rev76.Windows
 
             Win32.PostMessage(_hwnd, Win32.WM_NULL, IntPtr.Zero, IntPtr.Zero); // Prevent menu lockup
 
-            if (selected == Win32.IDM_QUIT)
+            switch (selected)
             {
-                RemoveIcon();
+                case Win32.IDM_QUIT:
+                    RemoveIcon();
+                    Environment.Exit(0);
+                    break;
+                case Win32.IDM_WIDGET:
+                    _onClickAction?.Invoke("Widget");
+                    break;
+                default:
+                    break;
+            }
 
-                Environment.Exit(0);
-            }
-            else
-            {
-                _onClickAction?.Invoke();
-            }
+
 
 
         }

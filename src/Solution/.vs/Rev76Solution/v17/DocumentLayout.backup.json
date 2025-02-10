@@ -3,23 +3,39 @@
   "WorkspaceRootPath": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\assetto.data\\broadcasting\\accudpremoteclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\systemtrayicon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\systemtrayicon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\[win32]\\win32constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\[win32]\\win32constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\assetto.data\\broadcasting\\accudpremoteclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\broadcasting\\accudpremoteclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\assetto.data\\broadcasting\\broadcastingnetworkprotocol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\assetto.data\\broadcasting\\broadcastingnetworkprotocol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\broadcasting\\broadcastingnetworkprotocol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\assetto.data\\sharedmemory\\accsharedmemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\sharedmemory\\accsharedmemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\listeners\\accbroadcastlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\listeners\\accbroadcastlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.datamodels\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.windows\\widgets\\purplewidget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\widgets\\purplewidget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.windows\\helpers\\splineutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\helpers\\splineutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -27,32 +43,28 @@
       "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\widgets\\flagwidget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.windows\\helpers\\splineutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\helpers\\splineutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\listeners\\acclistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\listeners\\acclistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\track.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\track.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\tyres.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\tyres.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\assetto.data\\sharedmemory\\accsharedmemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\sharedmemory\\accsharedmemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.windows\\widgets\\tyrewidgetex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\widgets\\tyrewidgetex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.windows\\widgets\\purplewidget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\widgets\\purplewidget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.datamodels\\listeners\\acclistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\listeners\\acclistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\assetto.data\\sharedmemory\\periodicsharedmemorypoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\sharedmemory\\periodicsharedmemorypoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\assetto.data\\sharedmemory\\models\\staticinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\assetto.data\\sharedmemory\\models\\staticinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{187CFD7B-7130-48E4-B032-57F5E67A9C66}|Assetto.Data\\Assetto.Data.csproj|solutionrelative:assetto.data\\sharedmemory\\models\\staticinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76\\bin\\debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{407104B3-462B-4D3F-BAF2-4A6CC11AC146}|Rev76\\Rev76.csproj|solutionrelative:rev76\\bin\\debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -61,14 +73,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.datamodels\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.datamodels\\tyres.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\tyres.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|c:\\coding\\csharpsource\\rev76\\src\\solution\\rev76.datamodels\\track.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B53EF2B7-1205-4A14-961E-515FA1037F2B}|Rev76.DataModels\\Rev76.DataModels.csproj|solutionrelative:rev76.datamodels\\track.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C81C0E3E-5040-4742-ACAE-0D5C22990601}|Rev76.Core\\Rev76.Core.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.core\\config\\revconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -89,6 +93,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|C:\\coding\\csharpsource\\rev76\\src\\Solution\\rev76.windows\\widgets\\widgetfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DE0441F-87C2-4B91-86DE-53200A2B345D}|Rev76.Windows\\Rev76.Windows.csproj|solutionrelative:rev76.windows\\widgets\\widgetfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\bin\\Debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Rev76\\bin\\Debug\\rev76.log||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -98,71 +106,91 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BroadcastingNetworkProtocol.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
-              "RelativeDocumentMoniker": "Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
-              "RelativeToolTip": "Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAMwLYAAAB/AAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Win32Constants.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "RelativeToolTip": "Rev76.Windows\\[Win32]\\Win32Constants.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAYwEcAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T13:46:40.758Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GameData.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\GameData.cs",
-              "RelativeDocumentMoniker": "Rev76.DataModels\\GameData.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\GameData.cs",
-              "RelativeToolTip": "Rev76.DataModels\\GameData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T13:34:24.788Z",
+              "WhenOpened": "2025-02-10T15:57:32.609Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
+              "RelativeDocumentMoniker": "Rev76\\Program.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\Program.cs",
+              "RelativeToolTip": "Rev76\\Program.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAAwFIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T15:56:06.003Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SystemTrayIcon.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\SystemTrayIcon.cs",
+              "RelativeDocumentMoniker": "Rev76.Windows\\SystemTrayIcon.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\SystemTrayIcon.cs",
+              "RelativeToolTip": "Rev76.Windows\\SystemTrayIcon.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAIwI8AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T15:55:43.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BroadcastingNetworkProtocol.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
+              "RelativeDocumentMoniker": "Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
+              "RelativeToolTip": "Assetto.Data\\Broadcasting\\BroadcastingNetworkProtocol.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAApwCsAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T12:45:40.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GameData.cs",
+              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\GameData.cs",
+              "RelativeDocumentMoniker": "Rev76.DataModels\\GameData.cs",
+              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\GameData.cs",
+              "RelativeToolTip": "Rev76.DataModels\\GameData.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwB4AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T13:34:24.788Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ACCUdpRemoteClient.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\ACCUdpRemoteClient.cs",
               "RelativeDocumentMoniker": "Assetto.Data\\Broadcasting\\ACCUdpRemoteClient.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\Broadcasting\\ACCUdpRemoteClient.cs",
               "RelativeToolTip": "Assetto.Data\\Broadcasting\\ACCUdpRemoteClient.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAlwHAAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAFAAAAAAAAAAAIAwwGkAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-06T12:24:41.055Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "PeriodicSharedMemoryPoller.cs",
-              "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\SharedMemory\\PeriodicSharedMemoryPoller.cs",
-              "RelativeDocumentMoniker": "Assetto.Data\\SharedMemory\\PeriodicSharedMemoryPoller.cs",
-              "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\SharedMemory\\PeriodicSharedMemoryPoller.cs",
-              "RelativeToolTip": "Assetto.Data\\SharedMemory\\PeriodicSharedMemoryPoller.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAMwD4AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T11:38:32.882Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "StaticInfo.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\SharedMemory\\Models\\StaticInfo.cs",
               "RelativeDocumentMoniker": "Assetto.Data\\SharedMemory\\Models\\StaticInfo.cs",
@@ -170,64 +198,59 @@
               "RelativeToolTip": "Assetto.Data\\SharedMemory\\Models\\StaticInfo.cs",
               "ViewState": "AgIAADoAAAAAAAAAAAAgwEgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T11:35:29.309Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T11:35:29.309Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "ACCListener.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Listeners\\ACCListener.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\Listeners\\ACCListener.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Listeners\\ACCListener.cs",
               "RelativeToolTip": "Rev76.DataModels\\Listeners\\ACCListener.cs",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAtwHsAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAewCUAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T11:21:32.039Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T11:21:32.039Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 23,
               "Title": "rev76.log",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\bin\\Debug\\rev76.log",
               "RelativeDocumentMoniker": "Rev76\\bin\\Debug\\rev76.log",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\bin\\Debug\\rev76.log",
               "RelativeToolTip": "Rev76\\bin\\Debug\\rev76.log",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAALQBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAANgBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-02-07T11:17:37.176Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T11:17:37.176Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 12,
               "Title": "Tyres.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Tyres.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\Tyres.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Tyres.cs",
               "RelativeToolTip": "Rev76.DataModels\\Tyres.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAA8wAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAnwE8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T11:09:38.355Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T11:09:38.355Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 11,
               "Title": "Track.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Track.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\Track.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Track.cs",
               "RelativeToolTip": "Rev76.DataModels\\Track.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T11:09:30.345Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T11:09:30.345Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "RevConfig.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Core\\Config\\RevConfig.cs",
               "RelativeDocumentMoniker": "Rev76.Core\\Config\\RevConfig.cs",
@@ -239,7 +262,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "GameState.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\GameState.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\GameState.cs",
@@ -247,12 +270,11 @@
               "RelativeToolTip": "Rev76.DataModels\\GameState.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T12:07:54.383Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T12:07:54.383Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "Session.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Session.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\Session.cs",
@@ -260,51 +282,47 @@
               "RelativeToolTip": "Rev76.DataModels\\Session.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T12:06:11.006Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T12:06:11.006Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 13,
               "Title": "AccSharedMemory.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\SharedMemory\\AccSharedMemory.cs",
               "RelativeDocumentMoniker": "Assetto.Data\\SharedMemory\\AccSharedMemory.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Assetto.Data\\SharedMemory\\AccSharedMemory.cs",
               "RelativeToolTip": "Assetto.Data\\SharedMemory\\AccSharedMemory.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAIA3wFAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAnwGoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T11:59:56.581Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T11:59:56.581Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "ACCBroadcastListener.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Listeners\\ACCBroadcastListener.cs",
               "RelativeDocumentMoniker": "Rev76.DataModels\\Listeners\\ACCBroadcastListener.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.DataModels\\Listeners\\ACCBroadcastListener.cs",
               "RelativeToolTip": "Rev76.DataModels\\Listeners\\ACCBroadcastListener.cs",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAowB8AAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAnwIMAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T16:50:54.061Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T16:50:54.061Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "SplineUtil.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Helpers\\SplineUtil.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\Helpers\\SplineUtil.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Helpers\\SplineUtil.cs",
               "RelativeToolTip": "Rev76.Windows\\Helpers\\SplineUtil.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAjwDEAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADgAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T16:16:12.298Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T16:16:12.298Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "flags.svg",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Assets\\flags.svg",
               "RelativeDocumentMoniker": "Rev76.Windows\\Assets\\flags.svg",
@@ -316,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "TyrePanel.svg",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Assets\\TyrePanel.svg",
               "RelativeDocumentMoniker": "Rev76.Windows\\Assets\\TyrePanel.svg",
@@ -328,7 +346,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "revconfig.json",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76\\revconfig.json",
               "RelativeDocumentMoniker": "Rev76\\revconfig.json",
@@ -340,7 +358,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "WidgetFactory.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Widgets\\WidgetFactory.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\Widgets\\WidgetFactory.cs",
@@ -352,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "TyreWidgetEx.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Widgets\\TyreWidgetEx.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\Widgets\\TyreWidgetEx.cs",
@@ -360,25 +378,23 @@
               "RelativeToolTip": "Rev76.Windows\\Widgets\\TyreWidgetEx.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAtwBQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T15:10:16.737Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T15:10:16.737Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
               "Title": "PurpleWidget.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Widgets\\PurpleWidget.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\Widgets\\PurpleWidget.cs",
               "ToolTip": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Widgets\\PurpleWidget.cs",
               "RelativeToolTip": "Rev76.Windows\\Widgets\\PurpleWidget.cs",
-              "ViewState": "AgIAAKQBAAAAAAAAAAAtwLwBAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAANIBAAAAAAAAAAAQwOoBAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T15:10:10.53Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T15:10:10.53Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "FlagWidget.cs",
               "DocumentMoniker": "C:\\coding\\csharpsource\\rev76\\src\\Solution\\Rev76.Windows\\Widgets\\FlagWidget.cs",
               "RelativeDocumentMoniker": "Rev76.Windows\\Widgets\\FlagWidget.cs",
@@ -386,8 +402,7 @@
               "RelativeToolTip": "Rev76.Windows\\Widgets\\FlagWidget.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAvwB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T15:08:48.814Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T15:08:48.814Z"
             }
           ]
         }

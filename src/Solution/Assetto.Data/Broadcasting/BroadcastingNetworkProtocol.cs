@@ -118,13 +118,12 @@ namespace Assetto.Data.Broadcasting
                         var isReadonly = br.ReadByte() == 0;
                         var errMsg = ReadString(br);
 
-                        OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
+                        Trace.WriteLine($"UDP: {ConnectionId} {connectionSuccess} {isReadonly} {errMsg}");
 
+                        OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
                         
                         RequestEntryList();
                         RequestTrackData();
-
-                        
                     }
                     break;
                 case InboundMessageTypes.ENTRY_LIST:
@@ -133,10 +132,13 @@ namespace Assetto.Data.Broadcasting
 
                         var connectionId = br.ReadInt32();
                         var carEntryCount = br.ReadUInt16();
+
                         for (int i = 0; i < carEntryCount; i++)
                         {
                             _entryListCars.Add(new CarInfo(br.ReadUInt16()));
                         }
+
+                        Trace.WriteLine($"UDP: entryCarList cleared: {carEntryCount} cars added");
                     }
                     break;
                 case InboundMessageTypes.ENTRY_LIST_CAR:
@@ -230,9 +232,7 @@ namespace Assetto.Data.Broadcasting
                    
                     break;
                 case InboundMessageTypes.REALTIME_CAR_UPDATE:
-                    {
-
-
+                {
 
                         RealtimeCarUpdate carUpdate = new RealtimeCarUpdate();
 
@@ -343,6 +343,7 @@ namespace Assetto.Data.Broadcasting
                         };
 
                         evt.CarData = _entryListCars.FirstOrDefault(x => x.CarIndex == evt.CarId);
+
                         OnBroadcastingEvent?.Invoke(ConnectionIdentifier, evt);
                     }
                     break;

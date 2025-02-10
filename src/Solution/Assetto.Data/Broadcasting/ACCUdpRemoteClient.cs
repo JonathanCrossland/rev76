@@ -45,11 +45,7 @@ namespace Assetto.Data.Broadcasting
             MsRealtimeUpdateInterval = msRealtimeUpdateInterval;
 
             InitializeMessageHandler();
-            _client = new UdpClient();
-            _client.EnableBroadcast = true;
-            _client.ExclusiveAddressUse = false;
-            _client.Connect(ip, port);
-
+          
             _listenerTask = Task.Run(ConnectAndRunAsync);
         }
 
@@ -78,7 +74,7 @@ namespace Assetto.Data.Broadcasting
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                Trace.TraceError(e.Message);
             }
         }
 
@@ -92,18 +88,21 @@ namespace Assetto.Data.Broadcasting
             }
         }
 
-        public struct UdpState
-        {
-            public UdpClient u;
-            public IPEndPoint e;
-        }
+        //public struct UdpState
+        //{
+        //    public UdpClient u;
+        //    public IPEndPoint e;
+        //}
 
         private async Task ConnectAndRunAsync()
         {
             while (true)
             {
+                Trace.TraceWarning("UDP Loop Start");
                 try
                 {
+                    //var udpState = new UdpState { u = _client, e = new IPEndPoint(IPAddress.Any, 0) };
+
                     if (_client == null)
                     {
                         // When resetting, reinitialize the MessageHandler so its events get wired.
@@ -112,24 +111,27 @@ namespace Assetto.Data.Broadcasting
                         _client.EnableBroadcast = true;
                         _client.ExclusiveAddressUse = false;
                         _client.Connect(_ip, _port);
+                        Trace.TraceWarning("Client is set");
                     }
 
                     var name = $"{DisplayName}. {DateTime.Now.Second}";
+
                     MessageHandler.RequestConnection(name, ConnectionPassword, MsRealtimeUpdateInterval, CommandPassword);
 
-                    var udpState = new UdpState { u = _client, e = new IPEndPoint(IPAddress.Any, 0) };
+                   
                     while (_client != null)
                     {
                         // Wait up to 5 seconds for a message.
+                  
                         var receiveTask = _client.ReceiveAsync();
-                        var timeoutTask = Task.Delay(5000);
+                        var timeoutTask = Task.Delay(15000);
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
 
                         if (completedTask == timeoutTask)
                         {
                             throw new TimeoutException("Receive timeout after 5 seconds.");
                         }
-
+                       
                         var result = await receiveTask;
                         using (var ms = new System.IO.MemoryStream(result.Buffer))
                         using (var reader = new System.IO.BinaryReader(ms))
@@ -140,20 +142,27 @@ namespace Assetto.Data.Broadcasting
                 }
                 catch (TimeoutException ex)
                 {
+                    Trace.TraceError("Timeout on UDP Connection");
                     LastError = ex.Message;
                 }
                 catch (ObjectDisposedException ex)
                 {
+                    Trace.TraceError("Disposed Object on UDP Connection");
                     LastError = ex.Message;
-                    break; // Shutdown occurred.
+                    break;
                 }
                 catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionRefused)
                 {
+                    Trace.TraceError("Socket Exception on UDP Connection");
+                    Trace.TraceError(ex.Message);
                     LastError = ex.Message;
+                    OnConnectionStateChanged?.Invoke(0, false, true, "Connection refused");
                     await Task.Delay(5000); // wait before retrying
                 }
                 catch (Exception ex)
                 {
+                    Trace.TraceError("Generic Exception on UDP Connection");
+                    Trace.TraceError(ex.Message);
                     LastError = ex.Message;
                     await Task.Delay(5000);
                 }
@@ -165,10 +174,12 @@ namespace Assetto.Data.Broadcasting
                         MessageHandler?.Disconnect();
                         _client.Close();
                         _client = null;
+                        Trace.TraceWarning("UDP Client reset");
                     }
                 }
             }
-            var x = 1;
+
+            Trace.TraceWarning("UDP Loop End");
         }
 
         public void RequestTrackData() => MessageHandler.RequestTrackData();
@@ -184,6 +195,8 @@ namespace Assetto.Data.Broadcasting
                 {
                     try
                     {
+                        Trace.TraceWarning("Client Dispose");
+                        MessageHandler?.Disconnect();
                         _client?.Close();
                         _client?.Dispose();
                     }
@@ -198,6 +211,7 @@ namespace Assetto.Data.Broadcasting
 
         public void Dispose()
         {
+            Trace.TraceWarning("Client Dispose");
             MessageHandler?.Disconnect();
             _client?.Close();
             Dispose(true);

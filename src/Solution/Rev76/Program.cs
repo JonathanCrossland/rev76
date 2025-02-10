@@ -48,8 +48,6 @@ namespace Rev76
 
             CreateSystemTrayIcon(icon);
 
-
-
             WidgetFactory.LoadWidgets(icon);
 
 
@@ -79,9 +77,14 @@ namespace Rev76
         {
             Task.Run(() =>
             {
-                _SystemTrayIcon.AddIcon(icon, "Rev76", () =>
+                _SystemTrayIcon.AddIcon(icon, "Rev76", (m) =>
                 {
-                    Environment.Exit(0);
+                    if (m == "Widget")
+                    {
+
+                        WidgetFactory.LoadWidgets(icon);
+                    }
+                   
                 });
             });
         }

@@ -69,6 +69,7 @@ namespace Rev76.Windows
 
         //menu
         public const int IDM_QUIT = 1000;
+        public const int IDM_WIDGET = 1001;
 
         #endregion
 
