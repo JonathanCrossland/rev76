@@ -121,7 +121,7 @@ namespace Assetto.Data.Broadcasting
                             var isReadonly = br.ReadByte() == 0;
                             var errMsg = ReadString(br);
 
-                            Trace.WriteLine($"UDP: {ConnectionId} {connectionSuccess} {isReadonly} {errMsg}");
+                            Trace.WriteLine($"Udp: {ConnectionId} {connectionSuccess} {isReadonly} {errMsg}");
 
                             OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
 
@@ -140,7 +140,7 @@ namespace Assetto.Data.Broadcasting
                                 _entryListCars.Add(new CarInfo(br.ReadUInt16()));
                             }
 
-                            Trace.WriteLine($"UDP: entryCarList cleared: {carEntryCount} cars added");
+                            Trace.WriteLine($"Udp: entryCarList cleared: {carEntryCount} cars added");
                         }
                         break;
 
@@ -152,7 +152,7 @@ namespace Assetto.Data.Broadcasting
                             var carInfo = _entryListCars.SingleOrDefault(x => x.CarIndex == carId);
                             if(carInfo == null)
                             {
-                                Debug.WriteLine($"Entry list update for unknown carIndex {carId}");
+                                Debug.WriteLine($"Udp: Entry list update for unknown carIndex {carId}");
                                 break;
                             }
 
@@ -291,7 +291,7 @@ namespace Assetto.Data.Broadcasting
                             
                                 OnRealtimeCarUpdate?.Invoke(ConnectionIdentifier, carUpdate);
 
-                                Trace.WriteLine($"UDP: realtime car: {carEntry.CarLocation} updated");
+                                Trace.WriteLine($"Udp: realtime car: {carEntry.CarLocation} updated");
                             }
                         }
                         break;
@@ -355,11 +355,11 @@ namespace Assetto.Data.Broadcasting
             }
             catch (EndOfStreamException)
             {
-                Trace.TraceError("Incomplete UDP packet received. Message may be corrupted.");
+                Trace.TraceError("Udp: Incomplete UDP packet received. Message may be corrupted.");
             }
             catch (Exception ex)
             {
-                Trace.TraceError($"Exception processing UDP message: {ex.Message}");
+                Trace.TraceError($"Udp: Exception processing UDP message: {ex.Message}");
             }
         }
 
@@ -490,7 +490,7 @@ namespace Assetto.Data.Broadcasting
         {
             if (ConnectionId <= 0)
             {
-                Trace.TraceError("Attempted to send message before connection was established.");
+                Trace.TraceError("Udp: Attempted to send message before connection was established.");
                 return;
             }
 
@@ -513,7 +513,7 @@ namespace Assetto.Data.Broadcasting
                     Send(ms.ToArray());
                 }
             }
-            Trace.TraceWarning($"Usp: Requesting new entry list.");
+            Trace.TraceWarning($"Udp: Requesting new entry list.");
 
             lastEntrylistRequest = DateTime.Now;
         }
@@ -522,7 +522,7 @@ namespace Assetto.Data.Broadcasting
         {
             if (ConnectionId <= 0)
             {
-                Trace.TraceError("Attempted to send message before connection was established.");
+                Trace.TraceError("Udp: Attempted to send message before connection was established.");
                 return;
             }
 
@@ -574,7 +574,7 @@ namespace Assetto.Data.Broadcasting
         {
             if (ConnectionId <= 0)
             {
-                Trace.TraceError("Attempted to send message before connection was established.");
+                Trace.TraceError("Udp: Attempted to send message before connection was established.");
                 return;
             }
 
@@ -616,7 +616,7 @@ namespace Assetto.Data.Broadcasting
         {
             if (ConnectionId <= 0)
             {
-                Trace.TraceError("Attempted to send message before connection was established.");
+                Trace.TraceError("Udp: Attempted to send message before connection was established.");
                 return;
             }
 
@@ -644,7 +644,7 @@ namespace Assetto.Data.Broadcasting
         {
             if (ConnectionId <= 0)
             {
-                Trace.TraceError("Attempted to send message before connection was established.");
+                Trace.TraceError("Udp: Attempted to send message before connection was established.");
                 return;
             }
 

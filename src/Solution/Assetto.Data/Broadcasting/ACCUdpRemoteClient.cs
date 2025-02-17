@@ -70,15 +70,15 @@ namespace Assetto.Data.Broadcasting
             }
             catch (ObjectDisposedException)
             {
-                Trace.TraceError("Send failed: UDP client was disposed.");
+                Trace.TraceError("Udp: Send failed: UDP client was disposed.");
             }
             catch (SocketException ex)
             {
-                Trace.TraceError($"Send failed: {ex.SocketErrorCode}");
+                Trace.TraceError($"Udp: Send failed: {ex.SocketErrorCode}");
             }
             catch (Exception e)
             {
-                Trace.TraceError($"Unexpected Send error: {e.Message}");
+                Trace.TraceError($"Udp: Unexpected Send error: {e.Message}");
             }
         }
         private async Task ConnectAndRunAsync()
@@ -89,7 +89,7 @@ namespace Assetto.Data.Broadcasting
              
             while (!disposedValue)
             {
-                Trace.TraceWarning("UDP Loop Start");
+                Trace.TraceWarning("Udp:  Loop Start");
                 try
                 {
                     lock (_lock)
@@ -101,7 +101,7 @@ namespace Assetto.Data.Broadcasting
                             _client.EnableBroadcast = true;
                             _client.ExclusiveAddressUse = false;
                             _client.Connect(_ip, _port);
-                            Trace.TraceWarning("Client is set");
+                            Trace.TraceWarning("Udp: Client is set");
                         }
                     }
 
@@ -121,7 +121,7 @@ namespace Assetto.Data.Broadcasting
 
                         if (completedTask == timeoutTask)
                         {
-                            throw new TimeoutException("Receive timeout after 10 seconds.");
+                            throw new TimeoutException("Udp: Receive timeout after 10 seconds.");
                         }
 
                         var result = await receiveTask;
@@ -155,18 +155,18 @@ namespace Assetto.Data.Broadcasting
                 }
                 catch (TimeoutException ex)
                 {
-                    Trace.TraceError("Timeout on UDP Connection");
+                    Trace.TraceError("Udp: Timeout on UDP Connection");
                     LastError = ex.Message;
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    Trace.TraceError("Disposed Object on UDP Connection");
+                    Trace.TraceError("Udp: Disposed Object on UDP Connection");
                     LastError = ex.Message;
                     break;
                 }
                 catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionRefused)
                 {
-                    Trace.TraceError("Socket Exception on UDP Connection");
+                    Trace.TraceError("Udp: Socket Exception on UDP Connection");
                     Trace.TraceError(ex.Message);
                     LastError = ex.Message;
                     OnConnectionStateChanged?.Invoke(0, false, true, "Connection refused");
@@ -174,7 +174,7 @@ namespace Assetto.Data.Broadcasting
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("Generic Exception on UDP Connection");
+                    Trace.TraceError("Udp: Generic Exception on UDP Connection");
                     Trace.TraceError(ex.Message);
                     LastError = ex.Message;
                     await Task.Delay(5000);
@@ -189,13 +189,13 @@ namespace Assetto.Data.Broadcasting
                             MessageHandler?.Disconnect();
                          
                             OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
-                            Trace.TraceWarning("UDP Client reset");
+                            Trace.TraceWarning("Udp: Client reset");
                         }
                     }
                 }
             }
 
-            Trace.TraceWarning("UDP Loop End");
+            Trace.TraceWarning("Udp: Loop End");
         }
 
 
@@ -240,7 +240,7 @@ namespace Assetto.Data.Broadcasting
             }
             catch (AggregateException ex)
             {
-               Trace.TraceError($"Dispose of UDP {ex.Message}");
+               Trace.TraceError($"Udp: Dispose {ex.Message}");
             }
 
         }
