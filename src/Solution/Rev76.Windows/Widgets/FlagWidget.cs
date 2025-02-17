@@ -22,9 +22,9 @@ namespace Rev76.Windows.Widgets
         protected override string Title => "Flags";
 
         protected override bool Visible { get =>
-                GameData.Instance.GameState.Status == GameStatus.LIVE
-                && 
-                GameData.Instance.Session.Flag != FlagType.NO_FLAG; 
+                GameData.Instance.GameState.Status == GameStatus.LIVE;
+                //&& 
+                //GameData.Instance.Session.Flag != FlagType.NO_FLAG; 
         }
 
 

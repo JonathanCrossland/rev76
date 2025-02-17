@@ -85,10 +85,10 @@
 		</linearGradient>
 
 		<pattern id="stripedPattern" width="10" height="8" patternUnits="userSpaceOnUse">
-		<rect x="0" y="0" width="10" height="4" fill="#fd00e8" />
+		<rect x="0" y="0" width="10" height="5" fill="#fd00e8" />
 		</pattern>
-		<pattern id="tyreBlowOut" width="10" height="50" patternUnits="userSpaceOnUse">
-			<rect x="0" y="0" width="10" height="25" fill="#ff0000" />
+		<pattern id="tyreBlowOut" width="10" height="10" patternUnits="userSpaceOnUse">
+			<rect x="0" y="0" width="10" height="5" fill="#ff0000" />
 		</pattern>
 	</defs>
 

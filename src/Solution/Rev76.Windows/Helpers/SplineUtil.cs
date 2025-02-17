@@ -1,4 +1,5 @@
 ﻿using Rev76.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,64 +9,92 @@ namespace Rev76.Windows.Helpers
     {
         private const float TrackLength = 1.0f; // Normalized track range (0.0 to 1.0)
 
-        /// <summary>
-        /// Gets the car positioned ahead of the given car on the track.
-        /// </summary>
-        public static Car GetPreCar(Car meCar, List<Car> cars)
+        public static Car GetPreCar(Car meCar, List<Car> cars, float trackLength)
         {
-            return cars
+            var validCars = cars
                 .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
-                .Where(c => !c.InPits)
-                .Where(c => IsCarAhead(meCar.SplinePosition, c.SplinePosition)) // Ahead on track
-                .OrderBy(c => GetSplineDistance(meCar.SplinePosition, c.SplinePosition)) // Closest one ahead
-                .FirstOrDefault();
+                .Where(c => !c.InPits) // Ignore cars in pits
+                .ToList();
+
+            if (validCars.Count == 0) return null; // No other cars on track
+            if (validCars.Count == 1) // Only one other car, use SplinePosition
+            {
+                return validCars.First().SplinePosition > meCar.SplinePosition ? validCars.First() : null;
+            }
+
+            // Sort cars by LapNumber first, then by SplinePosition
+            var sortedCars = validCars
+                .OrderByDescending(c => c.Laps)
+                .ThenBy(c => c.SplinePosition)
+                .ToList();
+
+            // Find the closest car ahead, considering wrap-around
+            Car nextCar = null;
+            float minDistance = float.MaxValue;
+
+            foreach (var car in sortedCars)
+            {
+                float distance = (car.SplinePosition - meCar.SplinePosition + trackLength) % trackLength;
+                if (distance > 0 && distance < minDistance)
+                {
+                    minDistance = distance;
+                    nextCar = car;
+                }
+            }
+
+            return nextCar;
         }
 
-        /// <summary>
-        /// Gets the car positioned behind the given car on the track.
-        /// </summary>
-        public static Car GetPostCar(Car meCar, List<Car> cars)
+        public static Car GetPostCar(Car meCar, List<Car> cars, float trackLength)
         {
-            return cars
+            var validCars = cars
                 .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
-                .Where(c => !c.InPits)
-                .Where(c => IsCarBehind(meCar.SplinePosition, c.SplinePosition)) // Behind on track
-                .OrderByDescending(c => GetSplineDistance(meCar.SplinePosition, c.SplinePosition)) // Closest one behind
-                .FirstOrDefault();
+                .Where(c => !c.InPits) // Ignore cars in pits
+                .ToList();
+
+            if (validCars.Count == 0) return null; // No other cars on track
+            if (validCars.Count == 1) // Only one other car, use SplinePosition
+            {
+                return validCars.First().SplinePosition < meCar.SplinePosition ? validCars.First() : null;
+            }
+
+            // Sort cars by LapNumber first, then by SplinePosition
+            var sortedCars = validCars
+                .OrderByDescending(c => c.Laps)
+                .ThenBy(c => c.SplinePosition)
+                .ToList();
+
+            // Find the closest car behind, considering wrap-around
+            Car previousCar = null;
+            float minDistance = float.MaxValue;
+
+            foreach (var car in sortedCars)
+            {
+                float distance = (meCar.SplinePosition - car.SplinePosition + trackLength) % trackLength;
+                if (distance > 0 && distance < minDistance)
+                {
+                    minDistance = distance;
+                    previousCar = car;
+                }
+            }
+
+            return previousCar;
         }
+
+
+
 
         /// <summary>
-        /// Determines if a car is ahead, considering track wraparound.
+        /// Computes absolute distance between two spline positions, handling wraparound naturally.
         /// </summary>
-        private static bool IsCarAhead(float myPos, float carPos)
+        private static float GetAbsoluteDistance(float myPos, float carPos)
         {
-            float diff = GetSplineDistance(myPos, carPos);
-            return diff > 0;
+            float directDist = Math.Abs(carPos - myPos);
+            float wrapDist = 1.0f - directDist; // Distance when crossing 0
+
+            return Math.Min(directDist, wrapDist); // Take the shortest possible distance
         }
 
-        /// <summary>
-        /// Determines if a car is behind, considering track wraparound.
-        /// </summary>
-        private static bool IsCarBehind(float myPos, float carPos)
-        {
-            float diff = GetSplineDistance(myPos, carPos);
-            return diff < 0;
-        }
 
-        /// <summary>
-        /// Computes the correct spline distance, considering track wraparound.
-        /// </summary>
-        private static float GetSplineDistance(float myPos, float carPos)
-        {
-            float diff = carPos - myPos;
-
-            // Correct wrap-around: Ensures closest distance is always chosen
-            if (diff > 0.5f)
-                diff -= 1.0f;
-            else if (diff < -0.5f)
-                diff += 1.0f;
-
-            return diff;
-        }
     }
 }

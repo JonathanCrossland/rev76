@@ -4,12 +4,14 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 
 
-internal class PeriodicSharedMemoryPoller<T> : IDisposable where T : struct {
+internal class PeriodicSharedMemoryPoller<T> : IDisposable where T : struct 
+{
   
     private bool _disposed;
 
     private MemoryMappedFile _memory;
     private readonly System.Timers.Timer _timer = new System.Timers.Timer(1000);
+    private readonly object _lock = new object();
 
     private readonly string _mapName;
 
@@ -26,37 +28,56 @@ internal class PeriodicSharedMemoryPoller<T> : IDisposable where T : struct {
         (_mapName, Interval) = (mapName, interval);
 
     public void Connect() {
-        if (_disposed) {
-            throw new ObjectDisposedException(nameof(AccSharedMemory));
+        lock (_lock)
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(AccSharedMemory));
+            }
+
+            _memory = MemoryMappedFile.OpenExisting(_mapName);
+
+            T data = ReadMemory(_memory);
+            OnUpdated(data);
+
+            _timer.Elapsed += Timer_Elapsed;
+            _timer.Start();
         }
-
-        _memory = MemoryMappedFile.OpenExisting(_mapName);
-
-        T data = ReadMemory(_memory);
-        OnUpdated(data);
-
-        _timer.Elapsed += Timer_Elapsed;
-        _timer.Start();
     }
 
     public void Disconnect() {
-        if (_disposed) {
-            throw new ObjectDisposedException(nameof(AccSharedMemory));
+        lock (_lock)
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(AccSharedMemory));
+            }
+            _timer.Stop();
+            _timer.Elapsed -= Timer_Elapsed;
+           
+
+            _memory?.Dispose();
         }
-
-        _timer.Elapsed -= Timer_Elapsed;
-        _timer.Stop();
-
-        _memory?.Dispose();
     }
 
     private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-        if (_memory is null) {
-            return;
-        }
 
-        T data = ReadMemory(_memory);
-        OnUpdated(data);
+        lock (_lock)
+        {
+            if (_memory is null)
+            {
+                return;
+            }
+            if (_memory.SafeMemoryMappedFileHandle.IsClosed)
+            {
+                return;
+            }
+            else
+            {
+                T data = ReadMemory(_memory);
+                OnUpdated(data);
+            }
+        }
     }
 
     private void OnUpdated(T data) {
@@ -64,6 +85,8 @@ internal class PeriodicSharedMemoryPoller<T> : IDisposable where T : struct {
     }
 
     private static T ReadMemory(MemoryMappedFile memory) {
+
+       
         using (MemoryMappedViewStream stream = memory.CreateViewStream())
         {
             using (BinaryReader reader = new BinaryReader(stream))
@@ -92,13 +115,17 @@ internal class PeriodicSharedMemoryPoller<T> : IDisposable where T : struct {
     }
 
     public void Dispose() {
-        if (!_disposed) {
-            _timer.Dispose();
-            _memory?.Dispose();
+        lock (_lock)
+        {
+            if (!_disposed)
+            {
+                _timer.Dispose();
+                _memory?.Dispose();
+            }
+
+            _disposed = true;
+
         }
-
-        _disposed = true;
-
         GC.SuppressFinalize(this);
     }
 }

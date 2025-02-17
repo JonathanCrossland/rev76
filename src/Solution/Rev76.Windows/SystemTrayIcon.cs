@@ -138,10 +138,18 @@ namespace Rev76.Windows
             {
                 case Win32.IDM_QUIT:
                     RemoveIcon();
-                    Environment.Exit(0);
+                    _onClickAction?.Invoke("Quit");
                     break;
                 case Win32.IDM_WIDGET:
-                    _onClickAction?.Invoke("Widget");
+                    try
+                    {
+                        _onClickAction?.Invoke("Widget");
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError($"{ex.Message}");
+                        throw;
+                    }
                     break;
                 default:
                     break;

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Diagnostics;
 
 namespace Rev76.DataModels
 {
@@ -34,6 +35,7 @@ namespace Rev76.DataModels
                 Track = new Track();
                 BroadcastCar = new Car();
                 Session = new Session();
+                Trace.WriteLine($"GameData Reset.");
             }
 
         }
@@ -50,7 +52,7 @@ namespace Rev76.DataModels
         public static string GetFormattedGap(float seconds)
         {
             if (seconds > 3600 || seconds < 0)
-                return "N/A";
+                return "";
 
             TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
 

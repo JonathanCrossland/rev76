@@ -12,9 +12,9 @@ namespace Assetto.Data.Broadcasting
     {
         private UdpClient _client;
         private Task _listenerTask;
-        // Expose an event at the client level rather than via MessageHandler.
-        //public event Action<int, bool, bool, string> OnConnectionStateChanged;
-        
+        private readonly object _lock = new object();
+        private bool disposedValue = false;
+
         public event ConnectionStateChangedDelegate OnConnectionStateChanged;
         public event TrackDataUpdateDelegate OnTrackDataUpdate;
         public event EntryListUpdateDelegate OnEntrylistUpdate;
@@ -22,7 +22,6 @@ namespace Assetto.Data.Broadcasting
         public event RealtimeCarUpdateDelegate OnRealtimeCarUpdate;
         public event BroadcastingEventDelegate OnBroadcastingEvent;
 
-        // Now MessageHandler is read-only externally.
         public BroadcastingNetworkProtocol MessageHandler { get; private set; }
         public string IpPort { get; }
         public string DisplayName { get; }
@@ -44,99 +43,119 @@ namespace Assetto.Data.Broadcasting
             CommandPassword = commandPassword;
             MsRealtimeUpdateInterval = msRealtimeUpdateInterval;
 
-            InitializeMessageHandler();
-          
+           // InitializeMessageHandler();
             _listenerTask = Task.Run(ConnectAndRunAsync);
         }
 
-        // Creates a new MessageHandler instance and attaches the event.
         private void InitializeMessageHandler()
         {
             MessageHandler = new BroadcastingNetworkProtocol(IpPort, Send);
-
             MessageHandler.OnConnectionStateChanged += (id, success, readOnly, error) =>
                 OnConnectionStateChanged?.Invoke(id, success, readOnly, error);
-            MessageHandler.OnTrackDataUpdate += (sender, e) => OnTrackDataUpdate?.Invoke(sender, e);    
+            MessageHandler.OnTrackDataUpdate += (sender, e) => OnTrackDataUpdate?.Invoke(sender, e);
             MessageHandler.OnEntrylistUpdate += (sender, e) => OnEntrylistUpdate?.Invoke(sender, e);
             MessageHandler.OnBroadcastingEvent += (sender, e) => OnBroadcastingEvent?.Invoke(sender, e);
             MessageHandler.OnRealtimeUpdate += (sender, e) => OnRealtimeUpdate?.Invoke(sender, e);
             MessageHandler.OnRealtimeCarUpdate += (sender, e) => OnRealtimeCarUpdate?.Invoke(sender, e);
-            
-
+           
         }
 
         private void Send(byte[] payload)
         {
             try
             {
-                if (payload != null && _client != null)
+                if (payload != null && _client?.Client != null && _client.Client.Connected)
                     _client.Send(payload, payload.Length);
+            }
+            catch (ObjectDisposedException)
+            {
+                Trace.TraceError("Send failed: UDP client was disposed.");
+            }
+            catch (SocketException ex)
+            {
+                Trace.TraceError($"Send failed: {ex.SocketErrorCode}");
             }
             catch (Exception e)
             {
-                Trace.TraceError(e.Message);
+                Trace.TraceError($"Unexpected Send error: {e.Message}");
             }
         }
 
-        public async Task ShutdownAsync()
-        {
-            if (_listenerTask != null && !_listenerTask.IsCompleted)
-            {
-                MessageHandler.Disconnect();
-                _client?.Close();
-                await _listenerTask;
-            }
-        }
 
-        //public struct UdpState
-        //{
-        //    public UdpClient u;
-        //    public IPEndPoint e;
-        //}
+       
 
         private async Task ConnectAndRunAsync()
         {
-            while (true)
+            int adaptiveUpdateInterval = MsRealtimeUpdateInterval; // Start with provided interval
+            Stopwatch stopwatch = new Stopwatch();
+            DateTime lastReRegisterTime = DateTime.Now;
+             
+            while (!disposedValue)
             {
                 Trace.TraceWarning("UDP Loop Start");
                 try
                 {
-                    //var udpState = new UdpState { u = _client, e = new IPEndPoint(IPAddress.Any, 0) };
-
-                    if (_client == null)
+                    lock (_lock)
                     {
-                        // When resetting, reinitialize the MessageHandler so its events get wired.
-                        InitializeMessageHandler();
-                        _client = new UdpClient();
-                        _client.EnableBroadcast = true;
-                        _client.ExclusiveAddressUse = false;
-                        _client.Connect(_ip, _port);
-                        Trace.TraceWarning("Client is set");
+                        if (_client == null)
+                        {
+                            InitializeMessageHandler();
+                            _client = new UdpClient();
+                            _client.EnableBroadcast = true;
+                            _client.ExclusiveAddressUse = false;
+                            _client.Connect(_ip, _port);
+                            Trace.TraceWarning("Client is set");
+                        }
                     }
 
-                    var name = $"{DisplayName}. {DateTime.Now.Second}";
+                    
+                    // **Register with ACC using the current adaptive interval**
+                    MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
 
-                    MessageHandler.RequestConnection(name, ConnectionPassword, MsRealtimeUpdateInterval, CommandPassword);
-
-                   
-                    while (_client != null)
+                    while (!disposedValue)
                     {
-                        // Wait up to 5 seconds for a message.
-                  
+                        stopwatch.Restart();
+                        var timeoutTask = Task.Delay(4000);
                         var receiveTask = _client.ReceiveAsync();
-                        var timeoutTask = Task.Delay(15000);
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
+                        stopwatch.Stop();
+
+                        if (disposedValue) break; 
 
                         if (completedTask == timeoutTask)
                         {
-                            throw new TimeoutException("Receive timeout after 5 seconds.");
+                            throw new TimeoutException("Receive timeout after 10 seconds.");
                         }
-                       
+
                         var result = await receiveTask;
                         using (var ms = new System.IO.MemoryStream(result.Buffer))
                         using (var reader = new System.IO.BinaryReader(ms))
                         {
                             MessageHandler.ProcessMessage(reader);
+                        }
+
+                       
+                        int elapsedTime = (int)stopwatch.ElapsedMilliseconds;
+
+                        if (elapsedTime > 250) 
+                        {
+                            adaptiveUpdateInterval = Math.Min(adaptiveUpdateInterval + 5, 250); 
+                        }
+                        else if (elapsedTime < 250)
+                        {
+                            adaptiveUpdateInterval = Math.Max(adaptiveUpdateInterval - 5, 20); 
+                        }
+
+                        //Trace.TraceWarning($"Message processing time: {elapsedTime} ms");
+
+                        if (adaptiveUpdateInterval >= 350 && (DateTime.Now - lastReRegisterTime).TotalSeconds >= 30)
+                        {
+                           
+                            MessageHandler.Disconnect();
+                            MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
+                            adaptiveUpdateInterval = 200;
+                            lastReRegisterTime = DateTime.Now;
+                            Trace.TraceWarning($"Re-registering with ACC using update interval: {adaptiveUpdateInterval}ms");
                         }
                     }
                 }
@@ -168,13 +187,20 @@ namespace Assetto.Data.Broadcasting
                 }
                 finally
                 {
-                    if (_client != null)
+                    lock (_lock)
                     {
-                        OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
-                        MessageHandler?.Disconnect();
-                        _client.Close();
-                        _client = null;
-                        Trace.TraceWarning("UDP Client reset");
+                        if (_client != null)
+                        {
+                           
+                            MessageHandler?.Disconnect();
+                            //_client?.Close();
+                            //Task.Delay(1000);
+                            //_client?.Dispose();
+                            //_client = null;
+
+                            OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
+                            Trace.TraceWarning("UDP Client reset");
+                        }
                     }
                 }
             }
@@ -182,40 +208,66 @@ namespace Assetto.Data.Broadcasting
             Trace.TraceWarning("UDP Loop End");
         }
 
+
         public void RequestTrackData() => MessageHandler.RequestTrackData();
         public void RequestEntryList() => MessageHandler.RequestEntryList();
 
         #region IDisposable Support
-        private bool disposedValue = false;
-        protected virtual void Dispose(bool disposing)
+        public async Task ShutdownAsync()
         {
-            if (!disposedValue)
+
+
+            
+            if (_listenerTask != null && !_listenerTask.IsCompleted)
             {
-                if (disposing)
+                await _listenerTask; // Wait for the loop to exit
+            }
+
+
+            MessageHandler.OnConnectionStateChanged -= OnConnectionStateChanged;
+            MessageHandler.OnTrackDataUpdate -= OnTrackDataUpdate;
+            MessageHandler.OnEntrylistUpdate -= OnEntrylistUpdate;
+            MessageHandler.OnBroadcastingEvent -= OnBroadcastingEvent;
+            MessageHandler.OnRealtimeUpdate -= OnRealtimeUpdate;
+            MessageHandler.OnRealtimeCarUpdate -= OnRealtimeCarUpdate;
+
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+
+
+
+            lock (_lock)
+            {
+                if (_client != null)
                 {
-                    try
-                    {
-                        Trace.TraceWarning("Client Dispose");
-                        MessageHandler?.Disconnect();
-                        _client?.Close();
-                        _client?.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
+                    _client?.Close();
+                    Task.Delay(1000);
+                    _client?.Dispose();
+                    _client = null;
                 }
-                disposedValue = true;
             }
         }
 
         public void Dispose()
         {
-            Trace.TraceWarning("Client Dispose");
-            MessageHandler?.Disconnect();
-            _client?.Close();
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            disposedValue = true; // Signal loop to stop
+
+            try
+            {
+                Task.Run(async () => await ShutdownAsync()).Wait(TimeSpan.FromSeconds(30)); // Example timeout
+            }
+            catch (AggregateException ex)
+            {
+               Trace.TraceError($"Dispose of UDP {ex.Message}");
+            }
+           // GC.Collect();
+           // GC.WaitForPendingFinalizers();
         }
         #endregion
     }

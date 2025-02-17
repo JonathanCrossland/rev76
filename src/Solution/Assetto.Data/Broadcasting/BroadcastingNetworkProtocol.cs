@@ -37,7 +37,7 @@ namespace Assetto.Data.Broadcasting
         MASTERBROADCASTER_EVENT = 8
     }
 
-    public class BroadcastingNetworkProtocol
+    public class BroadcastingNetworkProtocol : IDisposable
     {
         public const int BROADCASTING_PROTOCOL_VERSION = 4;
         private string ConnectionIdentifier { get; }
@@ -46,6 +46,7 @@ namespace Assetto.Data.Broadcasting
         public float TrackMeters { get; private set; }
 
         public List<byte> carModels = new List<byte>();
+
         
 
         internal delegate void SendMessageDelegate(byte[] payload);
@@ -69,8 +70,8 @@ namespace Assetto.Data.Broadcasting
 
         public delegate void BroadcastingEventDelegate(string sender, BroadcastingEvent evt);
         public event BroadcastingEventDelegate OnBroadcastingEvent;
-        
 
+        private bool disposedValue = false;
 
         #endregion
 
@@ -84,7 +85,8 @@ namespace Assetto.Data.Broadcasting
 
         #region optional failsafety - detect when we have a desync and need a new entry list
 
-        DateTime lastEntrylistRequest = DateTime.Now;
+        private DateTime lastEntrylistRequest = DateTime.Now;
+        private DateTime lastTrackDataRequest = DateTime.Now;
 
         #endregion
 
@@ -102,253 +104,263 @@ namespace Assetto.Data.Broadcasting
 
         internal void ProcessMessage(BinaryReader br)
         {
-            
-            // Any message starts with an 1-byte command type
-            var messageType = (InboundMessageTypes)br.ReadByte();
-            switch (messageType)
+            try
             {
-                case InboundMessageTypes.MASTERBROADCASTER_EVENT:
-                    var x33 = 2;
 
-                    break;
-                case InboundMessageTypes.REGISTRATION_RESULT:
-                    {
-                        ConnectionId = br.ReadInt32();
-                        var connectionSuccess = br.ReadByte() > 0;
-                        var isReadonly = br.ReadByte() == 0;
-                        var errMsg = ReadString(br);
-
-                        Trace.WriteLine($"UDP: {ConnectionId} {connectionSuccess} {isReadonly} {errMsg}");
-
-                        OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
-                        
-                        RequestEntryList();
-                        RequestTrackData();
-                    }
-                    break;
-                case InboundMessageTypes.ENTRY_LIST:
-                    {
-                        _entryListCars.Clear();
-
-                        var connectionId = br.ReadInt32();
-                        var carEntryCount = br.ReadUInt16();
-
-                        for (int i = 0; i < carEntryCount; i++)
-                        {
-                            _entryListCars.Add(new CarInfo(br.ReadUInt16()));
-                        }
-
-                        Trace.WriteLine($"UDP: entryCarList cleared: {carEntryCount} cars added");
-                    }
-                    break;
-                case InboundMessageTypes.ENTRY_LIST_CAR:
-                    {
-                        
-                        var carId = br.ReadUInt16();
-
-                        var carInfo = _entryListCars.SingleOrDefault(x => x.CarIndex == carId);
-                        if(carInfo == null)
-                        {
-                            Debug.WriteLine($"Entry list update for unknown carIndex {carId}");
-                            break;
-                        }
-
-                        carInfo.CarModelType = br.ReadByte(); // Byte sized car model
-                        if(carInfo.CarModelType >= 50)
-                        {
-                            carInfo.CarClass = CarClass.GT4;
-                        }
-                        if(carInfo.CarModelType == 9)
-                        {
-                            carInfo.CarClass = CarClass.CUP;
-                        }
-                        if (carInfo.CarModelType == 18)
-                        {
-                            carInfo.CarClass = CarClass.ST;
-                        }
-
-                        carInfo.TeamName = ReadString(br);
-                        carInfo.RaceNumber = br.ReadInt32();
-                        carInfo.CupCategory = br.ReadByte(); // Cup: Overall/Pro = 0, ProAm = 1, Am = 2, Silver = 3, National = 4
-                        carInfo.CurrentDriverIndex = br.ReadByte();
-                        carInfo.Nationality = (NationalityEnum)br.ReadUInt16();
-
-                        // Now the drivers on this car:
-                        var driversOnCarCount = br.ReadByte();
-                        for (int di = 0; di < driversOnCarCount; di++)
-                        {
-                            var driverInfo = new DriverInfo();
-
-                            driverInfo.FirstName = ReadString(br);
-                            driverInfo.LastName = ReadString(br);
-                            driverInfo.ShortName = ReadString(br);
-                            driverInfo.Category = (DriverCategory)br.ReadByte(); // Platinum = 3, Gold = 2, Silver = 1, Bronze = 0
-
-                            // new in 1.13.11:
-                            driverInfo.Nationality = (NationalityEnum)br.ReadUInt16();
-
-                            carInfo.AddDriver(driverInfo);
-                        }
-
-                        OnEntrylistUpdate?.Invoke(ConnectionIdentifier, carInfo);
-                    }
-                    break;
-                case InboundMessageTypes.REALTIME_UPDATE:
-                    {
-                        RealtimeUpdate update = new RealtimeUpdate();
-                        update.EventIndex = (int)br.ReadUInt16();
-                        update.SessionIndex = (int)br.ReadUInt16();
-                        update.SessionType = (RaceSessionType)br.ReadByte();
-                        update.Phase = (SessionPhase)br.ReadByte();
-                        var sessionTime = br.ReadSingle();
-                        update.SessionTime = TimeSpan.FromMilliseconds(sessionTime);
-                        var sessionEndTime = br.ReadSingle();
-                        update.SessionEndTime = TimeSpan.FromMilliseconds(sessionEndTime);
-
-                        update.FocusedCarIndex = br.ReadInt32();
-                        update.ActiveCameraSet = ReadString(br);
-                        update.ActiveCamera = ReadString(br);
-                        update.CurrentHudPage = ReadString(br);
-
-                        update.IsReplayPlaying = br.ReadByte() > 0;
-                        if (update.IsReplayPlaying)
-                        {
-                            update.ReplaySessionTime = br.ReadSingle();
-                            update.ReplayRemainingTime = br.ReadSingle();
-                        }
-
-                        update.TimeOfDay = TimeSpan.FromMilliseconds(br.ReadSingle());
-                        update.AmbientTemp = br.ReadByte();
-                        update.TrackTemp = br.ReadByte();
-                    
-                        update.Clouds = br.ReadByte() / 10.0f;
-                        update.RainLevel = br.ReadByte() / 10.0f;
-                        update.Wetness = br.ReadByte() / 10.0f;
-
-                        update.BestSessionLap = ReadLap(br);
-
-                        OnRealtimeUpdate?.Invoke(ConnectionIdentifier, update);
-                    }
-                   
-                    break;
-                case InboundMessageTypes.REALTIME_CAR_UPDATE:
+           
+                // Any message starts with an 1-byte command type
+                var messageType = (InboundMessageTypes)br.ReadByte();
+                switch (messageType)
                 {
+                    case InboundMessageTypes.MASTERBROADCASTER_EVENT:
+                        var x33 = 2;
 
-                        RealtimeCarUpdate carUpdate = new RealtimeCarUpdate();
-
-                        carUpdate.CarIndex = br.ReadUInt16();
-                        carUpdate.DriverIndex = br.ReadUInt16(); // Driver swap will make this change
-                        carUpdate.DriverCount = br.ReadByte();
-                        carUpdate.Gear = br.ReadByte() - 2; // -2 makes the R -1, N 0 and the rest as-is
-                        carUpdate.WorldPosX = br.ReadSingle();
-                        carUpdate.WorldPosY = br.ReadSingle();
-                        carUpdate.Yaw = br.ReadSingle();
-                        carUpdate.CarLocation = (CarLocationEnum)br.ReadByte(); // - , Track, Pitlane, PitEntry, PitExit = 4
-                        carUpdate.Kmh = br.ReadUInt16();
-                        carUpdate.Position = br.ReadUInt16(); // official P/Q/R position (1 based)
-                        carUpdate.CupPosition = br.ReadUInt16(); // official P/Q/R position (1 based)
-                        carUpdate.TrackPosition = br.ReadUInt16(); // position on track (1 based)
-                        carUpdate.SplinePosition = br.ReadSingle(); // track position between 0.0 and 1.0
-                        carUpdate.Laps = br.ReadUInt16();
-
-                        carUpdate.Delta = br.ReadInt32(); // Realtime delta to best session lap
-                        carUpdate.BestSessionLap = ReadLap(br);
-                        carUpdate.LastLap = ReadLap(br);
-                        carUpdate.CurrentLap = ReadLap(br);
-
-                        // the concept is: "don't know a car or driver? ask for an entry list update"
-                        var carEntry = _entryListCars.FirstOrDefault(x => x.CarIndex == carUpdate.CarIndex);
-
-                        if (carEntry == null || carEntry.Drivers.Count != carUpdate.DriverCount)
+                        break;
+                    case InboundMessageTypes.REGISTRATION_RESULT:
                         {
-                            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds > 1)
-                            {
-                                lastEntrylistRequest = DateTime.Now;
-                                RequestEntryList();
-                                System.Diagnostics.Debug.WriteLine($"CarUpdate {carUpdate.CarIndex}|{carUpdate.DriverIndex} not know, will ask for new EntryList");
-                            }
+                            ConnectionId = br.ReadInt32();
+                            var connectionSuccess = br.ReadByte() > 0;
+                            var isReadonly = br.ReadByte() == 0;
+                            var errMsg = ReadString(br);
+
+                            Trace.WriteLine($"UDP: {ConnectionId} {connectionSuccess} {isReadonly} {errMsg}");
+
+                            OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
+
+                            //RequestEntryList();
+                            //RequestTrackData();
                         }
-                        else
+                        break;
+                    case InboundMessageTypes.ENTRY_LIST:
                         {
-                            carEntry.TrackPosition = carUpdate.TrackPosition;
-                            carEntry.Position = carUpdate.Position;
-                            carEntry.CupPosition = carUpdate.CupPosition;
-                            carEntry.CurrentDriverIndex = carUpdate.DriverIndex;    
-                            carEntry.Laps = carUpdate.Laps;
-                            carEntry.BestSessionLap = carUpdate.BestSessionLap; 
-                            carEntry.LastLap = carUpdate.LastLap;
-                            carEntry.CurrentLap = carUpdate.CurrentLap;
-                            carEntry.Delta = carUpdate.Delta;
-                            carEntry.Kmh = carUpdate.Kmh;
-                            carEntry.Gear = carUpdate.Gear;
-                            carEntry.WorldPosX = carUpdate.WorldPosX;
-                            carEntry.WorldPosY = carUpdate.WorldPosY;
-                            carEntry.Yaw = carUpdate.Yaw;
-                            carEntry.CarLocation = carUpdate.CarLocation;
-                            carEntry.SplinePosition = carUpdate.SplinePosition;
-                            carEntry.DriverIndex = carUpdate.DriverIndex;
-                            carEntry.DriverCount = carUpdate.DriverCount;
+                            _entryListCars.Clear();
+
+                            var connectionId = br.ReadInt32();
+                            var carEntryCount = br.ReadUInt16();
+
+                            for (int i = 0; i < carEntryCount; i++)
+                            {
+                                _entryListCars.Add(new CarInfo(br.ReadUInt16()));
+                            }
+
+                            Trace.WriteLine($"UDP: entryCarList cleared: {carEntryCount} cars added");
+                        }
+                        break;
+                    case InboundMessageTypes.ENTRY_LIST_CAR:
+                        {
+                        
+                            var carId = br.ReadUInt16();
+
+                            var carInfo = _entryListCars.SingleOrDefault(x => x.CarIndex == carId);
+                            if(carInfo == null)
+                            {
+                                Debug.WriteLine($"Entry list update for unknown carIndex {carId}");
+                                break;
+                            }
+
+                            carInfo.CarModelType = br.ReadByte(); // Byte sized car model
+                            if(carInfo.CarModelType >= 50)
+                            {
+                                carInfo.CarClass = CarClass.GT4;
+                            }
+                            if(carInfo.CarModelType == 9)
+                            {
+                                carInfo.CarClass = CarClass.CUP;
+                            }
+                            if (carInfo.CarModelType == 18)
+                            {
+                                carInfo.CarClass = CarClass.ST;
+                            }
+
+                            carInfo.TeamName = ReadString(br);
+                            carInfo.RaceNumber = br.ReadInt32();
+                            carInfo.CupCategory = br.ReadByte(); // Cup: Overall/Pro = 0, ProAm = 1, Am = 2, Silver = 3, National = 4
+                            carInfo.CurrentDriverIndex = br.ReadByte();
+                            carInfo.Nationality = (NationalityEnum)br.ReadUInt16();
+
+                            // Now the drivers on this car:
+                            var driversOnCarCount = br.ReadByte();
+                            for (int di = 0; di < driversOnCarCount; di++)
+                            {
+                                var driverInfo = new DriverInfo();
+
+                                driverInfo.FirstName = ReadString(br);
+                                driverInfo.LastName = ReadString(br);
+                                driverInfo.ShortName = ReadString(br);
+                                driverInfo.Category = (DriverCategory)br.ReadByte(); // Platinum = 3, Gold = 2, Silver = 1, Bronze = 0
+
+                                // new in 1.13.11:
+                                driverInfo.Nationality = (NationalityEnum)br.ReadUInt16();
+
+                                carInfo.AddDriver(driverInfo);
+                            }
+
+                            OnEntrylistUpdate?.Invoke(ConnectionIdentifier, carInfo);
+                        }
+                        break;
+                    case InboundMessageTypes.REALTIME_UPDATE:
+                        {
+                            RealtimeUpdate update = new RealtimeUpdate();
+                            update.EventIndex = (int)br.ReadUInt16();
+                            update.SessionIndex = (int)br.ReadUInt16();
+                            update.SessionType = (RaceSessionType)br.ReadByte();
+                            update.Phase = (SessionPhase)br.ReadByte();
+                            var sessionTime = br.ReadSingle();
+                            update.SessionTime = TimeSpan.FromMilliseconds(sessionTime);
+                            var sessionEndTime = br.ReadSingle();
+                            update.SessionEndTime = TimeSpan.FromMilliseconds(sessionEndTime);
+
+                            update.FocusedCarIndex = br.ReadInt32();
+                            update.ActiveCameraSet = ReadString(br);
+                            update.ActiveCamera = ReadString(br);
+                            update.CurrentHudPage = ReadString(br);
+
+                            update.IsReplayPlaying = br.ReadByte() > 0;
+                            if (update.IsReplayPlaying)
+                            {
+                                update.ReplaySessionTime = br.ReadSingle();
+                                update.ReplayRemainingTime = br.ReadSingle();
+                            }
+
+                            update.TimeOfDay = TimeSpan.FromMilliseconds(br.ReadSingle());
+                            update.AmbientTemp = br.ReadByte();
+                            update.TrackTemp = br.ReadByte();
+                    
+                            update.Clouds = br.ReadByte() / 10.0f;
+                            update.RainLevel = br.ReadByte() / 10.0f;
+                            update.Wetness = br.ReadByte() / 10.0f;
+
+                            update.BestSessionLap = ReadLap(br);
+
+                            OnRealtimeUpdate?.Invoke(ConnectionIdentifier, update);
+                        }
+                   
+                        break;
+                    case InboundMessageTypes.REALTIME_CAR_UPDATE:
+                    {
+
+                            RealtimeCarUpdate carUpdate = new RealtimeCarUpdate();
+
+                            carUpdate.CarIndex = br.ReadUInt16();
+                            carUpdate.DriverIndex = br.ReadUInt16(); // Driver swap will make this change
+                            carUpdate.DriverCount = br.ReadByte();
+                            carUpdate.Gear = br.ReadByte() - 2; // -2 makes the R -1, N 0 and the rest as-is
+                            carUpdate.WorldPosX = br.ReadSingle();
+                            carUpdate.WorldPosY = br.ReadSingle();
+                            carUpdate.Yaw = br.ReadSingle();
+                            carUpdate.CarLocation = (CarLocationEnum)br.ReadByte(); // - , Track, Pitlane, PitEntry, PitExit = 4
+                            carUpdate.Kmh = br.ReadUInt16();
+                            carUpdate.Position = br.ReadUInt16(); // official P/Q/R position (1 based)
+                            carUpdate.CupPosition = br.ReadUInt16(); // official P/Q/R position (1 based)
+                            carUpdate.TrackPosition = br.ReadUInt16(); // position on track (1 based)
+                            carUpdate.SplinePosition = br.ReadSingle(); // track position between 0.0 and 1.0
+                            carUpdate.Laps = br.ReadUInt16();
+
+                            carUpdate.Delta = br.ReadInt32(); // Realtime delta to best session lap
+                            carUpdate.BestSessionLap = ReadLap(br);
+                            carUpdate.LastLap = ReadLap(br);
+                            carUpdate.CurrentLap = ReadLap(br);
+
+                            // the concept is: "don't know a car or driver? ask for an entry list update"
+                            var carEntry = _entryListCars.FirstOrDefault(x => x.CarIndex == carUpdate.CarIndex);
+
+                            if (carEntry == null || carEntry.Drivers.Count != carUpdate.DriverCount)
+                            {
+                               // RequestEntryList();
+                               
+                            }
+                            else
+                            {
+                                carEntry.TrackPosition = carUpdate.TrackPosition;
+                                carEntry.Position = carUpdate.Position;
+                                carEntry.CupPosition = carUpdate.CupPosition;
+                                carEntry.CurrentDriverIndex = carUpdate.DriverIndex;    
+                                carEntry.Laps = carUpdate.Laps;
+                                carEntry.BestSessionLap = carUpdate.BestSessionLap; 
+                                carEntry.LastLap = carUpdate.LastLap;
+                                carEntry.CurrentLap = carUpdate.CurrentLap;
+                                carEntry.Delta = carUpdate.Delta;
+                                carEntry.Kmh = carUpdate.Kmh;
+                                carEntry.Gear = carUpdate.Gear;
+                                carEntry.WorldPosX = carUpdate.WorldPosX;
+                                carEntry.WorldPosY = carUpdate.WorldPosY;
+                                carEntry.Yaw = carUpdate.Yaw;
+                                carEntry.CarLocation = carUpdate.CarLocation;
+                                carEntry.SplinePosition = carUpdate.SplinePosition;
+                                carEntry.DriverIndex = carUpdate.DriverIndex;
+                                carEntry.DriverCount = carUpdate.DriverCount;
                             
                             
 
-                            OnRealtimeCarUpdate?.Invoke(ConnectionIdentifier, carUpdate);
-                        }
-                    }
-                    break;
-                case InboundMessageTypes.TRACK_DATA:
-                    {
-                        var connectionId = br.ReadInt32();
-                        var trackData = new TrackData();
+                                OnRealtimeCarUpdate?.Invoke(ConnectionIdentifier, carUpdate);
 
-                        trackData.TrackName = ReadString(br);
-                        trackData.TrackId = br.ReadInt32();
-                        trackData.TrackMeters = br.ReadInt32();
-                        TrackMeters = trackData.TrackMeters > 0 ? trackData.TrackMeters : -1;
-
-                        trackData.CameraSets = new Dictionary<string, List<string>>();
-
-                        var cameraSetCount = br.ReadByte();
-                        for (int camSet = 0; camSet < cameraSetCount; camSet++)
-                        {
-                            var camSetName = ReadString(br);
-                            trackData.CameraSets.Add(camSetName, new List<string>());
-
-                            var cameraCount = br.ReadByte();
-                            for (int cam = 0; cam < cameraCount; cam++)
-                            {
-                                var cameraName = ReadString(br);
-                                trackData.CameraSets[camSetName].Add(cameraName);
+                                Trace.WriteLine($"UDP: realtime car: {carEntry.CarLocation} updated");
                             }
                         }
-
-                        var hudPages = new List<string>();
-                        var hudPagesCount = br.ReadByte();
-                        for (int i = 0; i < hudPagesCount; i++)
+                        break;
+                    case InboundMessageTypes.TRACK_DATA:
                         {
-                            hudPages.Add(ReadString(br));
+                            var connectionId = br.ReadInt32();
+                            var trackData = new TrackData();
+
+                            trackData.TrackName = ReadString(br);
+                            trackData.TrackId = br.ReadInt32();
+                            trackData.TrackMeters = br.ReadInt32();
+                            TrackMeters = trackData.TrackMeters > 0 ? trackData.TrackMeters : -1;
+
+                            trackData.CameraSets = new Dictionary<string, List<string>>();
+
+                            var cameraSetCount = br.ReadByte();
+                            for (int camSet = 0; camSet < cameraSetCount; camSet++)
+                            {
+                                var camSetName = ReadString(br);
+                                trackData.CameraSets.Add(camSetName, new List<string>());
+
+                                var cameraCount = br.ReadByte();
+                                for (int cam = 0; cam < cameraCount; cam++)
+                                {
+                                    var cameraName = ReadString(br);
+                                    trackData.CameraSets[camSetName].Add(cameraName);
+                                }
+                            }
+
+                            var hudPages = new List<string>();
+                            var hudPagesCount = br.ReadByte();
+                            for (int i = 0; i < hudPagesCount; i++)
+                            {
+                                hudPages.Add(ReadString(br));
+                            }
+                            trackData.HUDPages = hudPages;
+
+                            OnTrackDataUpdate?.Invoke(ConnectionIdentifier, trackData);
                         }
-                        trackData.HUDPages = hudPages;
-
-                        OnTrackDataUpdate?.Invoke(ConnectionIdentifier, trackData);
-                    }
-                    break;
-                case InboundMessageTypes.BROADCASTING_EVENT:
-                    {
-                        BroadcastingEvent evt = new BroadcastingEvent()
+                        break;
+                    case InboundMessageTypes.BROADCASTING_EVENT:
                         {
-                            Type = (BroadcastingCarEventType)br.ReadByte(),
-                            Msg = ReadString(br),
-                            TimeMs = br.ReadInt32(),
-                            CarId = br.ReadInt32(),
-                        };
+                            BroadcastingEvent evt = new BroadcastingEvent()
+                            {
+                                Type = (BroadcastingCarEventType)br.ReadByte(),
+                                Msg = ReadString(br),
+                                TimeMs = br.ReadInt32(),
+                                CarId = br.ReadInt32(),
+                            };
 
-                        evt.CarData = _entryListCars.FirstOrDefault(x => x.CarIndex == evt.CarId);
+                            evt.CarData = _entryListCars.FirstOrDefault(x => x.CarIndex == evt.CarId);
 
-                        OnBroadcastingEvent?.Invoke(ConnectionIdentifier, evt);
-                    }
-                    break;
-                default:
-                    break;
+                            OnBroadcastingEvent?.Invoke(ConnectionIdentifier, evt);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (EndOfStreamException)
+            {
+                Trace.TraceError("Incomplete UDP packet received. Message may be corrupted.");
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError($"Exception processing UDP message: {ex.Message}");
             }
         }
 
@@ -422,28 +434,52 @@ namespace Assetto.Data.Broadcasting
         internal void RequestConnection(string displayName, string connectionPassword, int msRealtimeUpdateInterval, string commandPassword)
         {
             using (var ms = new MemoryStream())
-            using (var br = new BinaryWriter(ms))
             {
-                br.Write((byte)OutboundMessageTypes.REGISTER_COMMAND_APPLICATION); // First byte is always the command type
-                br.Write((byte)BROADCASTING_PROTOCOL_VERSION);
+                using (var br = new BinaryWriter(ms))
+                {
+                    br.Write((byte)OutboundMessageTypes.REGISTER_COMMAND_APPLICATION); // First byte is always the command type
+                    br.Write((byte)BROADCASTING_PROTOCOL_VERSION);
 
-                WriteString(br, displayName);
-                WriteString(br, connectionPassword);
-                br.Write(msRealtimeUpdateInterval);
-                WriteString(br, commandPassword);
+                    WriteString(br, displayName);
+                    WriteString(br, connectionPassword);
+                    br.Write(msRealtimeUpdateInterval);
+                    WriteString(br, commandPassword);
 
-                Send(ms.ToArray());
+                    Send(ms.ToArray());
+                }
             }
+            Trace.WriteLine($"Udp: Request Connection");
         }
 
         internal void Disconnect()
         {
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryWriter(ms))
+            if (ConnectionId <= 0)
             {
-                br.Write((byte)OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION); // First byte is always the command type
-                Send(ms.ToArray());
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
             }
+
+
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    using (var br = new BinaryWriter(ms))
+                    {
+                        br.Write((byte)OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION); // First byte is always the command type
+                        br.Write((int)ConnectionId);
+                        Send(ms.ToArray());
+                    }
+                }
+
+                Trace.WriteLine($"Udp: Request Disconnect");
+            }
+            catch (Exception ex)
+            {
+
+                Trace.TraceError(ex.Message);
+            }
+           
         }
 
 
@@ -454,44 +490,64 @@ namespace Assetto.Data.Broadcasting
         /// </summary>
         public void RequestEntryList()
         {
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryWriter(ms))
+            if (ConnectionId <= 0)
             {
-                br.Write((byte)OutboundMessageTypes.REQUEST_ENTRY_LIST); // First byte is always the command type
-                br.Write((int)ConnectionId);
-
-                Send(ms.ToArray());
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
             }
-        }
 
-        public void RequestTrackData()
-        {
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryWriter(ms))
+            if (_entryListCars != null && _entryListCars.Count > 0) return;
+
+            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds > 2)
             {
-                br.Write((byte)OutboundMessageTypes.REQUEST_TRACK_DATA); // First byte is always the command type
-                br.Write((int)ConnectionId);
-
-                Send(ms.ToArray());
+                lastEntrylistRequest = DateTime.Now;
+                   
             }
-        }
-        public void RequestOther()
-        {
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryWriter(ms))
-            {
-                int val = 12;
+            
 
-                for (int i = val; i < 49; i++)
+            using (var ms = new MemoryStream())
+            {
+                using (var br = new BinaryWriter(ms))
                 {
-                    br.Write((byte)val); // First byte is always the command type
+                    br.Write((byte)OutboundMessageTypes.REQUEST_ENTRY_LIST); // First byte is always the command type
                     br.Write((int)ConnectionId);
 
                     Send(ms.ToArray());
                 }
-              
             }
+            Trace.TraceWarning($"Usp: Requesting new entry list.");
+
+            lastEntrylistRequest = DateTime.Now;
         }
+
+        public void RequestTrackData()
+        {
+            if (ConnectionId <= 0)
+            {
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
+            }
+
+            if ((DateTime.Now - lastTrackDataRequest).TotalSeconds > 2)
+            {
+                lastTrackDataRequest = DateTime.Now;
+
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var br = new BinaryWriter(ms))
+                {
+                    br.Write((byte)OutboundMessageTypes.REQUEST_TRACK_DATA); // First byte is always the command type
+                    br.Write((int)ConnectionId);
+
+                    Send(ms.ToArray());
+                }
+            }
+
+            Trace.TraceWarning($"Udp: Requesting Track Data.");
+        }
+     
 
         public void SetFocus(UInt16 carIndex)
         {
@@ -518,69 +574,119 @@ namespace Assetto.Data.Broadcasting
         /// </summary>
         private void SetFocusInternal(UInt16? carIndex, string cameraSet, string camera)
         {
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            if (ConnectionId <= 0)
             {
-                bw.Write((byte)OutboundMessageTypes.CHANGE_FOCUS); // First byte is always the command type
-                bw.Write((int)ConnectionId);
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
+            }
 
-                if (!carIndex.HasValue)
-                {
-                    bw.Write((byte)0); // No change of focused car
-                }
-                else
-                {
-                    bw.Write((byte)1);
-                    bw.Write((UInt16)(carIndex.Value));
-                }
 
-                if (string.IsNullOrEmpty(cameraSet) || string.IsNullOrEmpty(camera))
+            using (var ms = new MemoryStream())
+            {
+                using (var bw = new BinaryWriter(ms))
                 {
-                    bw.Write((byte)0); // No change of camera set or camera
-                }
-                else
-                {
-                    bw.Write((byte)1);
-                    WriteString(bw, cameraSet);
-                    WriteString(bw, camera);
-                }
+                    bw.Write((byte)OutboundMessageTypes.CHANGE_FOCUS); // First byte is always the command type
+                    bw.Write((int)ConnectionId);
 
-                Send(ms.ToArray());
+                    if (!carIndex.HasValue)
+                    {
+                        bw.Write((byte)0); // No change of focused car
+                    }
+                    else
+                    {
+                        bw.Write((byte)1);
+                        bw.Write((UInt16)(carIndex.Value));
+                    }
+
+                    if (string.IsNullOrEmpty(cameraSet) || string.IsNullOrEmpty(camera))
+                    {
+                        bw.Write((byte)0); // No change of camera set or camera
+                    }
+                    else
+                    {
+                        bw.Write((byte)1);
+                        WriteString(bw, cameraSet);
+                        WriteString(bw, camera);
+                    }
+
+                    Send(ms.ToArray());
+                }
             }
         }
 
         public void RequestInstantReplay(float startSessionTime, float durationMS, int initialFocusedCarIndex = -1, string initialCameraSet = "", string initialCamera = "")
         {
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            if (ConnectionId <= 0)
             {
-                bw.Write((byte)OutboundMessageTypes.INSTANT_REPLAY_REQUEST); // First byte is always the command type
-                bw.Write((int)ConnectionId);
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
+            }
 
-                bw.Write((float)startSessionTime);
-                bw.Write((float)durationMS);
-                bw.Write((int)initialFocusedCarIndex);
 
-                WriteString(bw, initialCameraSet);
-                WriteString(bw, initialCamera);
+            using (var ms = new MemoryStream()) { 
+                using (var bw = new BinaryWriter(ms))
+                {
+                    bw.Write((byte)OutboundMessageTypes.INSTANT_REPLAY_REQUEST); // First byte is always the command type
+                    bw.Write((int)ConnectionId);
 
-                Send(ms.ToArray());
+                    bw.Write((float)startSessionTime);
+                    bw.Write((float)durationMS);
+                    bw.Write((int)initialFocusedCarIndex);
+
+                    WriteString(bw, initialCameraSet);
+                    WriteString(bw, initialCamera);
+
+                    Send(ms.ToArray());
+                }
             }
         }
         
 
         public void RequestHUDPage(string hudPage)
         {
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            if (ConnectionId <= 0)
             {
-                bw.Write((byte)OutboundMessageTypes.CHANGE_HUD_PAGE); // First byte is always the command type
-                bw.Write((int)ConnectionId);
-
-                WriteString(bw, hudPage);
-
-                Send(ms.ToArray());
+                Trace.TraceError("Attempted to send message before connection was established.");
+                return;
             }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var bw = new BinaryWriter(ms))
+                {
+                    bw.Write((byte)OutboundMessageTypes.CHANGE_HUD_PAGE); // First byte is always the command type
+                    bw.Write((int)ConnectionId);
+
+                    WriteString(bw, hudPage);
+
+                    Send(ms.ToArray());
+                }
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // Unsubscribe from events
+                    OnConnectionStateChanged = null;
+                    OnTrackDataUpdate = null;
+                    OnEntrylistUpdate = null;
+                    OnRealtimeUpdate = null;
+                    OnRealtimeCarUpdate = null;
+                    OnBroadcastingEvent = null;
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

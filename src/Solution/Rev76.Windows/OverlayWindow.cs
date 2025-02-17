@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rev86.Core.Config;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -6,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using static Rev76.Windows.Win32;
 
 namespace Rev76.Windows
@@ -56,6 +58,10 @@ namespace Rev76.Windows
 
         protected abstract string Title { get; }
         protected abstract bool Visible { get; }
+
+        protected virtual void OnMouseClick(PointF position) { }
+        protected virtual bool HitTest(PointF position) => false;
+
 
         public OverlayWindow(int x, int y, int width, int height, Icon icon)
         {
@@ -205,10 +211,20 @@ namespace Rev76.Windows
 
                         return IntPtr.Zero;
 
-                    case Win32.WM_NCHITTEST:
-                        instance.DrawWindowOutline();
-                        return (IntPtr)Win32.HTCAPTION;
+                
 
+                    case Win32.WM_NCHITTEST:
+                        mouseX = lParam.ToInt32() & 0xFFFF;
+                        mouseY = (lParam.ToInt32() >> 16) & 0xFFFF;
+                        svgPoint = new PointF(mouseX - instance.X, mouseY - instance.Y);
+
+                        // Use a new method in OverlayWindow to determine if we should block dragging
+                        if (instance.HitTest(svgPoint))
+                        {
+                            return (IntPtr)Win32.HTCLIENT; // Allow clicks through
+                        }
+
+                        return (IntPtr)Win32.HTCAPTION; // Otherwise, allow dragging
 
                     case WM_WINDOWPOSCHANGED:
                         Win32.WINDOWPOS pos = Marshal.PtrToStructure<Win32.WINDOWPOS>(lParam);
@@ -218,11 +234,25 @@ namespace Rev76.Windows
                         instance.Height = pos.cy;
 
                         Win32.SetWindowPos(hwnd, Win32.HWND_TOPMOST, 0, 0, 0, 0, Win32.SWP_NOACTIVATE | Win32.SWP_NOMOVE | Win32.SWP_NOSIZE);
+                       
                         return IntPtr.Zero;
 
                     case WM_EXITSIZEMOVE:
                         instance.OnHandOverToGame();
+                        RevConfig.Instance.UpdateWidgetPosition(instance.GetType().Name, instance.X, instance.Y);
                         return IntPtr.Zero;
+                    case WM_LBUTTONDOWN:
+                        mouseX = lParam.ToInt32() & 0xFFFF; // Extract X from lParam
+                        mouseY = (lParam.ToInt32() >> 16) & 0xFFFF; // Extract Y from lParam
+
+                        // Convert to local window coordinates
+                        //svgPoint = new PointF(mouseX - instance.X, mouseY - instance.Y);
+                        svgPoint = new PointF(mouseX, mouseY );
+                        // Trigger event instead of calling a specific method
+                        instance.OnMouseClick(svgPoint);
+
+                        return IntPtr.Zero;
+
 
                 }
             }
@@ -261,7 +291,8 @@ namespace Rev76.Windows
                 long currentTime = stopwatch.ElapsedMilliseconds;
                 long timeDiff = currentTime - lastFrameTime;
 
-                System.Threading.Thread.Sleep(1000 / FPS);
+                Task.Delay(1000 / FPS);
+                //System.Threading.Thread.Sleep(1000 / FPS);
 
                 if (timeDiff >= frameTime)
                 {
@@ -297,7 +328,7 @@ namespace Rev76.Windows
                     }
                     else
                     {
-                        Thread.Sleep(100);
+                        Task.Delay(100);
                     }
 
                     UpdateTheLayeredWindow();

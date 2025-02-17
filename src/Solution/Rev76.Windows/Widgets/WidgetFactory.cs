@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 
+
 namespace Rev76.Windows.Widgets
 {
     public static class WidgetFactory
@@ -17,6 +18,7 @@ namespace Rev76.Windows.Widgets
                 {
                     Task.Run(() =>
                     {
+                       
                         var widget = CreateWidget(widgetConfig, icon);
                         widget.FPS = widgetConfig.FPS; // Set FPS for the widget
                         widget.Show();

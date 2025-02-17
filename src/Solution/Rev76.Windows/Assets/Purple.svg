@@ -35,7 +35,7 @@
 		</linearGradient>
 	</defs>
 	<!-- Background Rows -->
-	<rect id="PreDriverRect"  x="10" y="10" width="340" height="40" fill="url(#deltagreen)" rx="5" stroke="#222222" />
+	<rect id="PreDriverRect" lucid:interacts="click" x="10" y="10" width="340" height="40" fill="url(#deltagreen)" rx="5" stroke="#222222" />
 	<rect id="PreDriverRect1" x="356" y="10" width="8" height="40" fill="#666" rx="2" />
 	<rect id="PreDriverRect2" x="369" y="10" width="8" height="40" fill="#666" rx="2" />
 	<rect id="PreDriverRect3" x="382" y="10" width="8" height="40" fill="#666" rx="2" />

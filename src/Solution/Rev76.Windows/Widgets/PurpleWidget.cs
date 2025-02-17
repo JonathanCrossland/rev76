@@ -27,6 +27,10 @@ namespace Rev76.Windows.Widgets
         public PurpleWidget(int x, int y, int width, int height, Icon icon=null) : base(x, y, width, height, icon)
         {
             this.FPS = 6;
+            SVG.Width = width;
+            SVG.Height = height;
+            SVG.X = x;
+            SVG.Y= y;
             
         }
 
@@ -97,6 +101,9 @@ namespace Rev76.Windows.Widgets
                 meCarLaps = GetLastLapTimes(meCar);
             }
 
+            StateTimer();
+
+
             if (meCar != null && preCar != null)
             {
                 preCarGap = Car.CalculateTimeGap(preCar, meCar, GameData.Instance.Track.TrackLength);
@@ -117,7 +124,7 @@ namespace Rev76.Windows.Widgets
                 }
             }
 
-            StateTimer();
+           
 
             SVG.DrawSvg(
              g,
@@ -129,100 +136,9 @@ namespace Rev76.Windows.Widgets
 
                  if (element is SvgRectangle rect)
                  {
-                     for (int i = 0; i < preCarLaps.Count; i++)
-                     {
-
-                         string preDriverRect = "PreDriverRect" + (i + 1).ToString();
-
-
-                         if (rect.ID == preDriverRect)
-                         {
-                             if (preCarLaps.Count() >= i + 2)
-                             {
-                                 if (preCarLaps[i].LaptimeMS > preCarLaps[i + 1].LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
-                                 }
-                                 else
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
-                                 }
-
-                                 if (preCarLaps[i].LaptimeMS == preCar.BestSessionLap?.LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185));
-                                 }
-                                 if (preCarLaps[i].IsInvalid)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
-                                 }
-                             }
-
-                         }
-                     }
-                     for (int i = 0; i < meCarLaps.Count; i++)
-                     {
-
-                         string meDriverRect = "MeDriverRect" + (i + 1).ToString();
-
-
-                         if (rect.ID == meDriverRect)
-                         {
-                             if (meCarLaps.Count() >= i + 2)
-                             {
-                                 if (meCarLaps[i].LaptimeMS > meCarLaps[i + 1].LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
-                                 }
-                                 else
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
-                                 }
-                                 if (meCarLaps[i].LaptimeMS == meCar.BestSessionLap?.LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185));
-                                 }
-                                 if (meCarLaps[i].IsInvalid)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
-                                 }
-
-                             }
-
-                         }
-                     }
-
-
-                     for (int i = 0; i < postCarLaps.Count; i++)
-                     {
-
-                         string postDriverRect = "PostDriverRect" + (i + 1).ToString();
-
-
-                         if (rect.ID == postDriverRect)
-                         {
-                             if (postCarLaps.Count() >= i + 2)
-                             {
-                                 if (postCarLaps[i].LaptimeMS > postCarLaps[i + 1].LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
-                                 }
-                                 else
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
-                                 }
-                                 if (postCarLaps[i].LaptimeMS == postCar.BestSessionLap?.LaptimeMS)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185));
-                                 }
-                                 if (postCarLaps[i].IsInvalid)
-                                 {
-                                     rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
-                                 }
-                             }
-
-                         }
-                     }
+                     DrawLaps(preCar, preCarLaps, rect, "PreDriverRect");
+                     DrawLaps(meCar, meCarLaps, rect, "MeDriverRect");
+                     DrawLaps(postCar, postCarLaps, rect, "PostDriverRect");
 
 
                      switch (rect.ID)
@@ -238,7 +154,7 @@ namespace Rev76.Windows.Widgets
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltagreen"); // new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
                              }
-                             if (preCar?.CurrentLap?.IsInvalid == true) 
+                             if (preCar?.CurrentLap?.IsInvalid == true)
                              {
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
@@ -275,10 +191,11 @@ namespace Rev76.Windows.Widgets
                              }
                              if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
                              {
-                                 if (meCar?.Kmh < 40 || meCar?.Gear <= 0) {
+                                 if (meCar?.Kmh < 40 || meCar?.Gear <= 0)
+                                 {
                                      rect.StrokeWidth = 2;
                                      rect.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 0));
-                                }
+                                 }
                              }
                              break;
 
@@ -331,6 +248,7 @@ namespace Rev76.Windows.Widgets
 
                              if (_DrawState == DrawState.State1 || time == 0)
                              {
+                                
                                  if (preCar != null)
                                  {
                                      numberText = preCar?.Number.ToString() + "";
@@ -349,7 +267,7 @@ namespace Rev76.Windows.Widgets
                              break;
                          case "PreDriverTime":
                              time = 0;
-                             if (preCar?.LastLap != null)
+                             if (preCar?.LastLap != null && preCar?.LastLap.LaptimeMS > 0)
                              {
                                  time = float.TryParse(preCar?.LastLap.LaptimeMS.ToString(), out time) ? time : 0;
                                  formattedTime = GameData.GetFormattedLapTime(time);
@@ -366,6 +284,7 @@ namespace Rev76.Windows.Widgets
                              time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
                              if (_DrawState == DrawState.State1 || time == 0)
                              {
+                                
                                  numberText = meCar?.Number.ToString() + "";
                                  if (numberText.Length > 0) numberText = "#" + numberText;
                                  el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
@@ -381,7 +300,7 @@ namespace Rev76.Windows.Widgets
 
                              break;
                          case "MeDriverTime":
-                             if (meCar?.LastLap != null)
+                             if (meCar?.LastLap != null && meCar?.LastLap.LaptimeMS > 0)
                              {
                                  time = float.TryParse(meCar.LastLap.LaptimeMS.ToString(), out time) ? time : 0;
                                  formattedTime = GameData.GetFormattedLapTime(time);
@@ -416,7 +335,7 @@ namespace Rev76.Windows.Widgets
                              break;
                          case "PostDriverTime":
                              time = 0;
-                             if (postCar?.LastLap != null)
+                             if (postCar?.LastLap != null && postCar?.LastLap.LaptimeMS > 0)
                              {
                                  time = float.TryParse(postCar.LastLap.LaptimeMS.ToString(), out time) ? time : 0;
                                  formattedTime = GameData.GetFormattedLapTime(time);
@@ -461,6 +380,7 @@ namespace Rev76.Windows.Widgets
 
                      click.StrokeWidth = new SvgUnit(2);
                      click.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                     Environment.Exit(0);
                  }
 
 
@@ -468,6 +388,43 @@ namespace Rev76.Windows.Widgets
 
             return true;
         }
+
+        private static void DrawLaps(Car meCar, List<LapInfo> meCarLaps, SvgRectangle rect, string rectName)
+        {
+            for (int i = 0; i < meCarLaps.Count; i++)
+            {
+
+                string meDriverRect = rectName + (i + 1).ToString();
+
+
+                if (rect.ID == meDriverRect)
+                {
+                    if (meCarLaps.Count() >= i + 2)
+                    {
+                        if (meCarLaps[i].LaptimeMS > meCarLaps[i + 1].LaptimeMS)
+                        {
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
+                        }
+                        else
+                        {
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
+                        }
+                        if (meCarLaps[i].LaptimeMS == meCar.BestSessionLap?.LaptimeMS)
+                        {
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185));
+                        }
+                        if (meCarLaps[i].IsInvalid)
+                        {
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+      
 
         private static List<LapInfo> GetLastLapTimes(Car car)
         {
@@ -481,17 +438,35 @@ namespace Rev76.Windows.Widgets
         //If we do this ourselves, we are going to speeed this up
         private void AdjustMeCarPositionBasedOnPreCar(Car meCar, Car preCar, Car postCar)
         {
-            // we cant try this if its based on position, because are sorting on position and if its wrong , its wrong
-            if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position") return;
-
-            if (meCar == null) return;
-            if (preCar == null) return;
-
-            //if the laps are not the same, we cannot fudge this
-            if (preCar.Laps == meCar.Laps)
+            try
             {
-                meCar.Position = preCar.Position + 1;
-                postCar.Position = meCar.Position + 1;
+
+          
+                // we cant try this if its based on position, because are sorting on position and if its wrong , its wrong
+                if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position") return;
+
+                if (meCar == null) return;
+                if (preCar == null) return;
+
+                //if the laps are not the same, we cannot fudge this
+                if (preCar.Laps == meCar.Laps)
+                {
+                    //meCar.Position = preCar.Position + 1;
+                    //if (postCar != null && postCar.Position == meCar.Position)
+                    //{
+                    //    postCar.Position = meCar.Position + 1;
+                    //}
+                    //else
+                    //{
+                    //    meCar.Position = preCar.Position;
+                    //}
+
+                }
+            }
+            catch (Exception ex )
+            {
+                Trace.TraceError(ex.Message);
+                //throw;
             }
 
         }
@@ -502,7 +477,7 @@ namespace Rev76.Windows.Widgets
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                preCar = SplineUtil.GetPreCar(meCar, GameData.Instance.Track.Cars);
+                preCar = SplineUtil.GetPreCar(meCar, GameData.Instance.Track.Cars, GameData.Instance.Track.TrackLength);
             }
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position")
@@ -531,7 +506,7 @@ namespace Rev76.Windows.Widgets
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                postCar = SplineUtil.GetPostCar(meCar, GameData.Instance.Track.Cars);
+                postCar = SplineUtil.GetPostCar(meCar, GameData.Instance.Track.Cars, GameData.Instance.Track.TrackLength);
             }
             else
             {
@@ -638,6 +613,22 @@ namespace Rev76.Windows.Widgets
         {
             base.OnGraphicsDestroyed(g);
         }
+
+
+        protected override bool HitTest(PointF position)
+        {
+            return SVG.IsMouseOverInteractiveElement(position);
+        
+        }
+        protected override void OnMouseClick(PointF clickPoint)
+        {
+            // Convert click to SVG space
+            PointF svgCoords = SVG.ConvertToSvgSpace((int)clickPoint.X, (int)clickPoint.Y);
+
+            // Handle the click on the SVG
+            SVG.HandleSvgClick(clickPoint);
+        }
+
 
     }
 }

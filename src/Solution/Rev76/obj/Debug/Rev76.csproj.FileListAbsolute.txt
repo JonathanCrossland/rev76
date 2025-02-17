@@ -1,7 +1,3 @@
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.AssemblyReference.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.AppResources.resources
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.GenerateResource.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Cloudy.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\CloudyRain.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\CloudyRainShowers.svg
@@ -38,6 +34,10 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Memory.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Numerics.Vectors.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Buffers.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.AppResources.resources
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.GenerateResource.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.exe
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.pdb

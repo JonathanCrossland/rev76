@@ -18,8 +18,7 @@ namespace Rev76.DataModels.Listeners
             _AccMemory.StaticInfoUpdateInterval = 1000;
             _AccMemory.PhysicsUpdateInterval = 50;
             _AccMemory.GraphicsUpdateInterval = 200;
-            _AccMemory.CrewInfoUpdateInterval = 200;
-
+       
             SubscribeToEvents();
 
         }
@@ -33,7 +32,7 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.Track.Name != e.Data.Track)
                 {
-                    Trace.WriteLine($"{GameData.Instance.Track.Name} <- {e.Data.Track}");
+                    Trace.WriteLine($"Mem: {GameData.Instance.Track.Name} <- {e.Data.Track}");
                     GameData.Instance.Track.Name = e.Data.Track;
                     //GameData.Instance.GameState.IsSetupMenuVisible 
                 }
@@ -120,7 +119,7 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.Session.SessionType != e.Data.Session )
                 {
-                    Trace.WriteLine($"{GameData.Instance.Session.SessionType} <- {e.Data.Session}");
+                    Trace.WriteLine($"Mem: {GameData.Instance.Session.SessionType} <- {e.Data.Session}");
                     //GameData.Instance.Reset();
                     GameData.Instance.Session.SessionType = e.Data.Session;
                     //Thread.Sleep(100);
@@ -187,11 +186,6 @@ namespace Rev76.DataModels.Listeners
 
             };
 
-            _AccMemory.CrewInfoUpdated += (sender, e) => 
-            { 
-                
-            
-            };
         }
 
        
@@ -291,7 +285,7 @@ namespace Rev76.DataModels.Listeners
 
         public async Task Listen(CancellationToken token)
         {
-            Trace.WriteLine("ACCListener ...");
+            Trace.WriteLine("Mem: ACCListener ...");
             await _AccMemory.ConnectAsync(token);
         }
 

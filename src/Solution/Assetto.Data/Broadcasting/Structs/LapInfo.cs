@@ -5,7 +5,7 @@ namespace Assetto.Data.Broadcasting.Structs
 {
     public class LapInfo
     {
-        public int? LaptimeMS { get; internal set; }
+        public int? LaptimeMS { get; set; }
         public List<int?> Splits { get; } = new List<int?>();
         public ushort CarIndex { get; internal set; }
         public ushort DriverIndex { get; internal set; }

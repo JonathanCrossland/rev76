@@ -3,11 +3,12 @@
     {
       "Name": "TyreWidgetEx",
       "FPS": 10,
-      "X": 3990,
-      "Y": 916,
+      "X": 2852,
+      "Y": 941,
       "Width": 190,
       "Height": 265,
-      "Enable": true
+      "Enable": true,
+      "Settings": {}
     },
     {
       "Name": "PurpleWidget",
@@ -28,16 +29,18 @@
       "Y": 400,
       "Width": 84,
       "Height": 84,
-      "Enable": false
+      "Enable": false,
+      "Settings": {}
     },
     {
       "Name": "FlagWidget",
       "FPS": 10,
-      "X": 100,
-      "Y": 400,
+      "X": 2348,
+      "Y": 132,
       "Width": 330,
       "Height": 70,
-      "Enable": true
+      "Enable": true,
+      "Settings": {}
     },
     {
       "Name": "SessionClockWidget",
@@ -46,7 +49,8 @@
       "Y": 70,
       "Width": 200,
       "Height": 100,
-      "Enable": false
+      "Enable": false,
+      "Settings": {}
     },
     {
       "Name": "FuelTankWidget",
@@ -55,7 +59,8 @@
       "Y": 10,
       "Width": 200,
       "Height": 240,
-      "Enable": false
+      "Enable": false,
+      "Settings": {}
     },
     {
       "Name": "WeatherWidget",
@@ -64,7 +69,8 @@
       "Y": 868,
       "Width": 300,
       "Height": 500,
-      "Enable": false
+      "Enable": false,
+      "Settings": {}
     },
     {
       "Name": "GameStateWidget",
@@ -73,7 +79,8 @@
       "Y": 869,
       "Width": 500,
       "Height": 300,
-      "Enable": false
+      "Enable": false,
+      "Settings": {}
     }
   ]
 }
