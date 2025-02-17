@@ -53,6 +53,7 @@ namespace Rev76.DataModels
                 Track = new Track();
                 BroadcastCar = new Car();
                 Session = new Session();
+                _meCar = null;
                 Trace.WriteLine($"GameData Reset.");
             }
 
