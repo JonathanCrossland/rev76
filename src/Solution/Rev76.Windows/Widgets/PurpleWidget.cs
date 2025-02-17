@@ -420,15 +420,12 @@ namespace Rev76.Windows.Widgets
                 //if the laps are not the same, we cannot fudge this
                 if (preCar.Laps == meCar.Laps)
                 {
-                    //meCar.Position = preCar.Position + 1;
-                    //if (postCar != null && postCar.Position == meCar.Position)
-                    //{
-                    //    postCar.Position = meCar.Position + 1;
-                    //}
-                    //else
-                    //{
-                    //    meCar.Position = preCar.Position;
-                    //}
+                    meCar.Position = preCar.Position + 1;
+                    if (postCar != null && postCar.Position == meCar.Position)
+                    {
+                        postCar.Position = meCar.Position + 1;
+                    }
+                  
 
                 }
             }
