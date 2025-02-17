@@ -7,7 +7,9 @@ namespace Rev76.DataModels
     {
         public LapInfo BestSession { get; set; }
         public BroadcastingCarEventType EventType { get; internal set; }
-        public FlagType Flag { get; internal set; }
+      
+
+
         public SessionPhase Phase { get; internal set; }
 
         public SessionType SessionType { get; internal set; }
@@ -29,5 +31,16 @@ namespace Rev76.DataModels
 
         public string TrackStatus { get; set; }
 
+
+        public FlagType Flag { get; set; }
+
+        public int GlobalYellow { get; set; }
+        public int FlagSector1 { get; internal set; }
+        public int FlagSector3 { get; internal set; }
+        public int FlagSector2 { get; internal set; }
+        public int GlobalGreen { get; internal set; }
+        public int GlobalRed { get; internal set; }
+        public int GlobalWhite { get; internal set; }
+        public int GlobalChequered { get; internal set; }
     }
 }
