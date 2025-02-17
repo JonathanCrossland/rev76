@@ -568,7 +568,7 @@ namespace Rev76.Windows.Widgets
 
             if (GameData.Instance.Track.Cars.Count == 0) return;
             if (GameData.Instance.PlayerCarIndex == 0) return;
-
+            if (GameData.Instance.GameState.Status == GameStatus.PAUSE) return;
 
             bool rendered = DrawDriver(g);
 
