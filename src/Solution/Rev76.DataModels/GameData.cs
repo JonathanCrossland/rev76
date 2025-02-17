@@ -1,51 +1,43 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace Rev76.DataModels
 {
     public sealed class GameData
     {
-        private static readonly Lazy<GameData> _instance = new Lazy<GameData>(() => new GameData());
-        private readonly object _lock = new object();
-        public static GameData Instance => _instance.Value;
+        private static readonly Lazy<GameData> _Instance = new Lazy<GameData>(() => new GameData());
 
+        private readonly object _Lock = new object();
+        public static GameData Instance => _Instance.Value;
+        public Session Session { get; set; } = new Session();
         public TrackEnvironment Weather { get; set; } = new TrackEnvironment();
         public GameState GameState { get; set; } = new GameState();
         public Tyres Tyres { get; set; } = new Tyres();
         public Track Track { get; set; } = new Track();
+        public Car BroadcastCar { get; set; } = new Car();
         public int PlayerCarIndex { get; set; }
 
-        private Car _meCar;
+        private Car _MeCar;
 
         public Car MeCar
         {
             get { 
 
-                if (_meCar == null && PlayerCarIndex > 0 && Track.Cars.Count>0)
+                if (_MeCar == null && PlayerCarIndex > 0 && Track.Cars.Count>0)
                 {
-                    _meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                    _MeCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
                 }
-                return _meCar; 
-            
+                return _MeCar; 
             }
-            
         }
 
-
-        public Car BroadcastCar { get; set; } = new Car();
-        public Session Session { get; set; } = new Session();
-
-
         public GameData()
-        {
-            Reset();
+        { 
         }
 
         public void Reset()
         {
-
-            lock (_lock)
+            lock (_Lock)
             {
                 Weather = new TrackEnvironment();
                 GameState = new GameState();
@@ -53,10 +45,9 @@ namespace Rev76.DataModels
                 Track = new Track();
                 BroadcastCar = new Car();
                 Session = new Session();
-                _meCar = null;
+                _MeCar = null;
                 Trace.WriteLine($"GameData Reset.");
             }
-
         }
 
         public static string GetFormattedLapTime(float milliseconds)
@@ -90,8 +81,6 @@ namespace Rev76.DataModels
             }
         }
 
-
-
         public static string GetFormattedClockTime(float milliseconds)
         {
             // Start from midnight (arbitrary date)
@@ -105,7 +94,6 @@ namespace Rev76.DataModels
 
             return formattedTime;
         }
-
        
     }
 }
