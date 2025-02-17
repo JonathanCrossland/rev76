@@ -36,14 +36,11 @@ namespace Rev76.Windows.Widgets
 
         protected override string Title { get => "Purple"; }
         protected override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
-        //protected override bool Visible { get => true; }
-
-
-
+      
 
         private bool DrawDriver(System.Drawing.Graphics g)
         {
-            Car meCar = GetMeCar();
+            Car meCar = GameData.Instance.MeCar;
             DriverInfo driver = GetMeDriver(meCar);
             Car purpleCar = GetPurpleCar();
             DriverInfo purpleDriver = GetPurpleDriver(purpleCar);
@@ -460,17 +457,7 @@ namespace Rev76.Windows.Widgets
             return preCar;
         }
 
-        private static Car GetMeCar()
-        {
-            Car meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
-
-            if (GameData.Instance.BroadcastCar != null)
-            {
-                meCar = GameData.Instance.BroadcastCar;
-            }
-
-            return meCar;
-        }
+       
 
         private Car GetPostCar(Car meCar)
         {

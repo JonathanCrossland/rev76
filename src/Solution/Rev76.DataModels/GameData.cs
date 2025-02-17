@@ -27,6 +27,12 @@ namespace Rev76.DataModels
                 {
                     _MeCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
                 }
+
+                if (GameData.Instance.BroadcastCar != null)
+                {
+                    _MeCar = GameData.Instance.BroadcastCar;
+                }
+
                 return _MeCar; 
             }
         }
