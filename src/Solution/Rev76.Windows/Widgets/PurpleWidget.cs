@@ -40,34 +40,6 @@ namespace Rev76.Windows.Widgets
 
 
 
-        protected override void OnRender(System.Drawing.Graphics g)
-        {
-            if (!Visible) return;
-
-
-            if (g.IsVisibleClipEmpty)
-            {
-                // Handle the error or log it
-                return;
-            }
-
-            if (GameData.Instance.Track.Cars.Count == 0) return;
-            if (GameData.Instance.PlayerCarIndex == 0) return;
-
-
-            bool rendered = DrawDriver(g);
-
-
-            if (!rendered)
-            {
-                //base.DrawNoDataMessage();
-            }
-
-
-            base.OnRender(g);
-
-
-        }
 
         private bool DrawDriver(System.Drawing.Graphics g)
         {
@@ -598,6 +570,54 @@ namespace Rev76.Windows.Widgets
             }
         }
 
+
+        protected override void OnRender(System.Drawing.Graphics g)
+        {
+            if (!Visible) return;
+
+
+            if (g.IsVisibleClipEmpty)
+            {
+                // Handle the error or log it
+                return;
+            }
+
+            if (GameData.Instance.Track.Cars.Count == 0) return;
+            if (GameData.Instance.PlayerCarIndex == 0) return;
+
+
+            bool rendered = DrawDriver(g);
+
+            if (Settings.TryGetValue("Kind", out object kindObj))
+            {
+                string kind = kindObj.ToString();
+                if (kind == "position" || kind == "relative")
+                {
+                    g.TranslateTransform(7 , this.Height / 2);
+                    g.RotateTransform(-90);
+
+                    string text = kind == "position" ? "o v e r a l l" : "r e l a t i v e";
+                    SizeF textSize = g.MeasureString(text, this._Fonts["consolas"]);
+                    
+                    g.DrawString(text, this._Fonts["consolas"], this._Brushes["white"], -textSize.Width / 2, -textSize.Height / 2);
+
+                    g.ResetTransform();
+                }
+            }
+
+
+
+            if (!rendered)
+            {
+                //base.DrawNoDataMessage();
+            }
+
+
+            base.OnRender(g);
+
+
+        }
+
         protected override void OnGraphicsSetup(System.Drawing.Graphics g)
         {
             this.SVG.LoadSvgFiles(
@@ -605,6 +625,9 @@ namespace Rev76.Windows.Widgets
                 {
                     "Assets/Purple.svg",
                 });
+
+            _Brushes["white"] = new SolidBrush(Color.FromArgb(250, 255, 255, 255));
+            _Fonts["consolas"] = new Font("Consolas", 9, FontStyle.Regular);
 
             base.OnGraphicsSetup(g);
         }
