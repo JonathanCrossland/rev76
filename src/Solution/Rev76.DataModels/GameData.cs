@@ -15,6 +15,24 @@ namespace Rev76.DataModels
         public Tyres Tyres { get; set; } = new Tyres();
         public Track Track { get; set; } = new Track();
         public int PlayerCarIndex { get; set; }
+
+        private Car _meCar;
+
+        public Car MeCar
+        {
+            get { 
+
+                if (_meCar == null && PlayerCarIndex > 0 && Track.Cars.Count>0)
+                {
+                    _meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                }
+                return _meCar; 
+            
+            }
+            
+        }
+
+
         public Car BroadcastCar { get; set; } = new Car();
         public Session Session { get; set; } = new Session();
 

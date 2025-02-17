@@ -11,7 +11,6 @@ namespace Rev76.DataModels.Listeners
        
         private AccSharedMemory _AccMemory;
 
-       
         public ACCListener()
         {
             _AccMemory = new AccSharedMemory();
@@ -20,7 +19,6 @@ namespace Rev76.DataModels.Listeners
             _AccMemory.GraphicsUpdateInterval = 200;
        
             SubscribeToEvents();
-
         }
 
         private void SubscribeToEvents()
@@ -28,16 +26,13 @@ namespace Rev76.DataModels.Listeners
          
             _AccMemory.StaticInfoUpdated += (sender, e) =>
             {
-               
-
                 if (GameData.Instance.Track.Name != e.Data.Track)
                 {
                     Trace.WriteLine($"Mem: {GameData.Instance.Track.Name} <- {e.Data.Track}");
                     GameData.Instance.Track.Name = e.Data.Track;
-                    //GameData.Instance.GameState.IsSetupMenuVisible 
                 }
 
-                Car meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                Car meCar = GameData.Instance.MeCar;// GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
 
                 if (meCar != null)
                 {
@@ -64,14 +59,11 @@ namespace Rev76.DataModels.Listeners
                 GameData.Instance.Weather.RoadTemperature = e.Data.RoadTemp.ToString();
                 GameData.Instance.Weather.AirDensity = e.Data.AirDensity.ToString();
 
-
-                Car meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                Car meCar = GameData.Instance.MeCar; //GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
 
                 if (meCar != null)
                 {
                     meCar.FuelTank.Fuel = e.Data.Fuel;
-
-
 
                     GameData.Instance.Tyres.SteerAngle = e.Data.SteerAngle;
                     GameData.Instance.Tyres.WheelsPressure = e.Data.WheelsPressure;
@@ -120,10 +112,8 @@ namespace Rev76.DataModels.Listeners
                 if (GameData.Instance.Session.SessionType != e.Data.Session )
                 {
                     Trace.WriteLine($"Mem: {GameData.Instance.Session.SessionType} <- {e.Data.Session}");
-                    //GameData.Instance.Reset();
                     GameData.Instance.Session.SessionType = e.Data.Session;
-                    //Thread.Sleep(100);
-                    //return;
+                  
                 }
                 
                 GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;
@@ -159,7 +149,7 @@ namespace Rev76.DataModels.Listeners
                 GameData.Instance.Tyres.ABS = e.Data.ABS;
 
 
-                Car meCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                Car meCar = GameData.Instance.MeCar;// GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
 
                 if (meCar != null)
                 {
@@ -183,12 +173,9 @@ namespace Rev76.DataModels.Listeners
                 {
                     GameData.Instance.Session.Flag = e.Data.Flag;
                 }
-
             };
-
         }
-
-       
+               
         private float BrakeBiasAdjustment(Car car,float brakeBias)
         {
             if (string.IsNullOrEmpty(car.CarModel))
