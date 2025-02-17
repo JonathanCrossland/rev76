@@ -112,7 +112,7 @@ namespace Assetto.Data.Broadcasting
                     while (!disposedValue)
                     {
                         stopwatch.Restart();
-                        var timeoutTask = Task.Delay(4000);
+                        var timeoutTask = Task.Delay(10000);
                         var receiveTask = _client.ReceiveAsync();
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
                         stopwatch.Stop();
@@ -145,8 +145,8 @@ namespace Assetto.Data.Broadcasting
                         if (adaptiveUpdateInterval >= 350 && (DateTime.Now - lastReRegisterTime).TotalSeconds >= 30)
                         {
                            
-                            MessageHandler.Disconnect();
-                            MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
+                            //MessageHandler.Disconnect();
+                            //MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
                             adaptiveUpdateInterval = 200;
                             lastReRegisterTime = DateTime.Now;
                             Trace.TraceWarning($"Re-registering with ACC using update interval: {adaptiveUpdateInterval}ms");
@@ -186,7 +186,7 @@ namespace Assetto.Data.Broadcasting
                         if (_client != null)
                         {
                            
-                            MessageHandler?.Disconnect();
+                            //MessageHandler?.Disconnect();
                          
                             OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
                             Trace.TraceWarning("Udp: Client reset");

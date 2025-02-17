@@ -496,7 +496,7 @@ namespace Assetto.Data.Broadcasting
 
             if (_entryListCars != null && _entryListCars.Count > 0) return;
 
-            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds > 2)
+            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds > 5)
             {
                 lastEntrylistRequest = DateTime.Now;
                    

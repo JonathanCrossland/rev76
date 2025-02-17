@@ -22,19 +22,13 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
-                if (connectionId == 0 && connectionSuccess == false)
+               
+                if (connectionSuccess == true)
                 {
                     GameData.Instance.Reset();
                     _UDPClient.MessageHandler._entryListCars.Clear();
                 }
-                else
-                {
-                    if (Connected == false && connectionSuccess == true)
-                    {
-                        GameData.Instance.Reset();
-                        _UDPClient.MessageHandler._entryListCars.Clear();
-                    }
-                }
+                
                 Connected = connectionSuccess; 
 
                 Trace.WriteLine($"ConnectionStateChanged: {error}");
@@ -50,6 +44,7 @@ namespace Rev76.DataModels.Listeners
 
                     if (e.Phase == SessionPhase.PreSession || e.Phase == SessionPhase.Starting)
                     {
+                        Trace.WriteLine($"SessionPhase: {e.Phase} Reset");
                         GameData.Instance.Reset();
                         _UDPClient.MessageHandler._entryListCars.Clear();
                     }
@@ -107,7 +102,7 @@ namespace Rev76.DataModels.Listeners
 
                     if (!car.LapTimes.Any(lap => lap.LapNumber == e.Laps))
                     {
-                        if (e.Laps > 0)
+                        if (e.Laps >= 0)
                         {
                             e.LastLap.LapNumber = e.Laps;
                             car.LapTimes.Add(e.LastLap);
@@ -205,6 +200,7 @@ namespace Rev76.DataModels.Listeners
                     car.CupPosition = c.CupPosition;
                     car.Number = c.RaceNumber;
 
+                    car.LapTimes = new System.Collections.Generic.List<LapInfo>();
 
                     car.Drivers.Clear();
                     foreach (var driver in c.Drivers)
@@ -217,7 +213,7 @@ namespace Rev76.DataModels.Listeners
                 {
                     car = new Car();
                     car.CarIndex = c.CarIndex;
-
+                   
                     GameData.Instance.Track.Cars.Add(car);
                 }
 
