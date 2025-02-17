@@ -23,34 +23,14 @@ namespace Rev76.DataModels.Listeners
 
         private void SubscribeToEvents()
         {
-         
+
             _AccMemory.StaticInfoUpdated += (sender, e) =>
             {
-                if (GameData.Instance.Track.Name != e.Data.Track)
-                {
-                    Trace.WriteLine($"Mem: {GameData.Instance.Track.Name} <- {e.Data.Track}");
-                    GameData.Instance.Track.Name = e.Data.Track;
-                }
+                GameData.Instance.Track.Name = e.Data.Track;
 
-                Car meCar = GameData.Instance.MeCar;// GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
-
-                if (meCar != null)
-                {
-                    meCar.CarModel = e.Data.CarModel;
-
-                    if (meCar.Drivers.Count == 0)
-                    {
-                        DriverInfo driverInfo = new DriverInfo();
-                        driverInfo.FirstName = e.Data.PlayerName;
-                        driverInfo.LastName = e.Data.PlayerSurname;
-                        driverInfo.ShortName = e.Data.PlayerNick;
-                        meCar.Drivers.Add(driverInfo);
-
-                    }
-                }
+                AddPlayerDriverInfo(e);
             };
 
-            // Subscribe the event for PhysicsUpdated and write some example data to stdout
             _AccMemory.PhysicsUpdated += (sender, e) =>
             {
                 if (GameData.Instance.GameState.Status == GameStatus.OFF) return;
@@ -58,66 +38,29 @@ namespace Rev76.DataModels.Listeners
                 GameData.Instance.Weather.AirTemperature = e.Data.AirTemp.ToString();
                 GameData.Instance.Weather.RoadTemperature = e.Data.RoadTemp.ToString();
                 GameData.Instance.Weather.AirDensity = e.Data.AirDensity.ToString();
-
-                Car meCar = GameData.Instance.MeCar; //GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+              
+                Car meCar = GameData.Instance.MeCar; 
 
                 if (meCar != null)
                 {
                     meCar.FuelTank.Fuel = e.Data.Fuel;
 
-                    GameData.Instance.Tyres.SteerAngle = e.Data.SteerAngle;
-                    GameData.Instance.Tyres.WheelsPressure = e.Data.WheelsPressure;
-                    GameData.Instance.Tyres.TyreWear = e.Data.TyreWear;
-                    GameData.Instance.Tyres.TyreDirtyLevel = e.Data.TyreDirtyLevel;
-                    GameData.Instance.Tyres.TyreCoreTemperature = e.Data.TyreCoreTemperature;
-                    GameData.Instance.Tyres.BrakeTemp = e.Data.BrakeTemp;
-                    GameData.Instance.Tyres.FrontBrakeCompound = e.Data.FrontBrakeCompound + 1;
-                    GameData.Instance.Tyres.RearBrakeCompound = e.Data.RearBrakeCompound + 1;
-                    GameData.Instance.Tyres.Brake = e.Data.Brake;
-                    GameData.Instance.Tyres.BrakeBias = BrakeBiasAdjustment(meCar,e.Data.BrakeBias);
-                    GameData.Instance.Tyres.WheelSlip = e.Data.WheelSlip;
-                    GameData.Instance.Tyres.TyreTemp = e.Data.TyreTemp;
-                    GameData.Instance.Tyres.BrakePressure = e.Data.BrakePressure;
-                    GameData.Instance.Tyres.PadLife = e.Data.PadLife;
-                    GameData.Instance.Tyres.DiscLife = e.Data.DiscLife;
-                    GameData.Instance.Tyres.AbsVibrations = e.Data.AbsVibrations;
-                    GameData.Instance.Tyres.TCInAction = e.Data.TC;
-
-                    //GameData.Instance.Tyres.WheelSlip = e.Data.WheelSlip;
-                    //GameData.Instance.Tyres.WheelLoad = e.Data.WheelLoad;
-                    //GameData.Instance.Tyres.CamberRad = e.Data.CamberRad;
-                    //GameData.Instance.Tyres.SuspensionTravel = e.Data.SuspensionTravel;
-                    //GameData.Instance.Tyres.WheelAngularSpeed = e.Data.WheelAngularSpeed;
-                    //GameData.Instance.Tyres.TyreTempI = e.Data.TyreTempI;
-                    //GameData.Instance.Tyres.TyreTempM = e.Data.TyreTempM;
-                    //GameData.Instance.Tyres.TyreTempO = e.Data.TyreTempO;
-                    //GameData.Instance.Tyres.SuspensionDamage = e.Data.SuspensionDamage;
-
-                    //GameData.Instance.Tyres.Mz = e.Data.Mz;
-                    //GameData.Instance.Tyres.Fx = e.Data.Fx;
-                    //GameData.Instance.Tyres.Fy = e.Data.Fy;
-                    //GameData.Instance.Tyres.SlipRatio = e.Data.SlipRatio;
-                    //GameData.Instance.Tyres.SlipAngle = e.Data.SlipAngle;
+                    AddTyreInfo(e, meCar);
                 }
 
             };
 
-            // Subscribe the event for GraphicsUpdated and write some example data to stdout
+
             _AccMemory.GraphicsUpdated += (sender, e) =>
             {
+                GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;
+
                 GameData.Instance.GameState.Status = e.Data.Status;
 
                 if (GameData.Instance.GameState.Status == GameStatus.OFF) return;
 
-                if (GameData.Instance.Session.SessionType != e.Data.Session )
-                {
-                    Trace.WriteLine($"Mem: {GameData.Instance.Session.SessionType} <- {e.Data.Session}");
-                    GameData.Instance.Session.SessionType = e.Data.Session;
-                  
-                }
-                
-                GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;
-                                
+
+                GameData.Instance.Session.SessionType = e.Data.Session;
 
                 GameData.Instance.Weather.WindDirection = e.Data.WindDirection.ToString();
                 GameData.Instance.Weather.WindSpeed = e.Data.WindSpeed.ToString();
@@ -135,21 +78,9 @@ namespace Rev76.DataModels.Listeners
                 GameData.Instance.GameState.IsSetupMenuVisible = e.Data.IsSetupMenuVisible == 1;
                 GameData.Instance.GameState.Status = e.Data.Status;
 
-                //tyres
-                GameData.Instance.Tyres.TyreCompound = e.Data.TyreCompound;
-                GameData.Instance.Tyres.MfdTyrePressureLF = e.Data.MfdTyrePressureLF;
-                GameData.Instance.Tyres.MfdTyrePressureRF = e.Data.MfdTyrePressureRF;
-                GameData.Instance.Tyres.MfdTyrePressureLR = e.Data.MfdTyrePressureLR;
-                GameData.Instance.Tyres.MfdTyrePressureRR = e.Data.MfdTyrePressureRR;
-                GameData.Instance.Tyres.RainTyres = e.Data.RainTyres;
-                GameData.Instance.Tyres.MfdTyreSet = e.Data.MfdTyreSet;
-                GameData.Instance.Tyres.CurrentTyreSet = e.Data.CurrentTyreSet;
-                GameData.Instance.Tyres.StrategyTyreSet = e.Data.StrategyTyreSet;
-                GameData.Instance.Tyres.TC = e.Data.TC;
-                GameData.Instance.Tyres.ABS = e.Data.ABS;
+                AddTyreInfo(e);
 
-
-                Car meCar = GameData.Instance.MeCar;// GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
+                Car meCar = GameData.Instance.MeCar;
 
                 if (meCar != null)
                 {
@@ -159,7 +90,7 @@ namespace Rev76.DataModels.Listeners
                     meCar.GapAhead = e.Data.GapAhead; //always zero
                     meCar.GapBehind = e.Data.GapAhead;//always zero
                     meCar.Position = e.Data.Position;
-                   
+
                 }
 
                 GameData.Instance.Session.Flag = (e.Data.GlobalYellow == 1 ||
@@ -175,7 +106,80 @@ namespace Rev76.DataModels.Listeners
                 }
             };
         }
-               
+
+        private static void AddTyreInfo(UpdatedEventArgs<Graphics> e)
+        {
+            GameData.Instance.Tyres.TyreCompound = e.Data.TyreCompound;
+            GameData.Instance.Tyres.MfdTyrePressureLF = e.Data.MfdTyrePressureLF;
+            GameData.Instance.Tyres.MfdTyrePressureRF = e.Data.MfdTyrePressureRF;
+            GameData.Instance.Tyres.MfdTyrePressureLR = e.Data.MfdTyrePressureLR;
+            GameData.Instance.Tyres.MfdTyrePressureRR = e.Data.MfdTyrePressureRR;
+            GameData.Instance.Tyres.RainTyres = e.Data.RainTyres;
+            GameData.Instance.Tyres.MfdTyreSet = e.Data.MfdTyreSet;
+            GameData.Instance.Tyres.CurrentTyreSet = e.Data.CurrentTyreSet;
+            GameData.Instance.Tyres.StrategyTyreSet = e.Data.StrategyTyreSet;
+            GameData.Instance.Tyres.TC = e.Data.TC;
+            GameData.Instance.Tyres.ABS = e.Data.ABS;
+        }
+
+        private void AddTyreInfo(UpdatedEventArgs<Physics> e, Car meCar)
+        {
+            GameData.Instance.Tyres.SteerAngle = e.Data.SteerAngle;
+            GameData.Instance.Tyres.WheelsPressure = e.Data.WheelsPressure;
+            GameData.Instance.Tyres.TyreWear = e.Data.TyreWear;
+            GameData.Instance.Tyres.TyreDirtyLevel = e.Data.TyreDirtyLevel;
+            GameData.Instance.Tyres.TyreCoreTemperature = e.Data.TyreCoreTemperature;
+            GameData.Instance.Tyres.BrakeTemp = e.Data.BrakeTemp;
+            GameData.Instance.Tyres.FrontBrakeCompound = e.Data.FrontBrakeCompound + 1;
+            GameData.Instance.Tyres.RearBrakeCompound = e.Data.RearBrakeCompound + 1;
+            GameData.Instance.Tyres.Brake = e.Data.Brake;
+            GameData.Instance.Tyres.BrakeBias = BrakeBiasAdjustment(meCar, e.Data.BrakeBias);
+            GameData.Instance.Tyres.WheelSlip = e.Data.WheelSlip;
+            GameData.Instance.Tyres.TyreTemp = e.Data.TyreTemp;
+            GameData.Instance.Tyres.BrakePressure = e.Data.BrakePressure;
+            GameData.Instance.Tyres.PadLife = e.Data.PadLife;
+            GameData.Instance.Tyres.DiscLife = e.Data.DiscLife;
+            GameData.Instance.Tyres.AbsVibrations = e.Data.AbsVibrations;
+            GameData.Instance.Tyres.TCInAction = e.Data.TC;
+
+
+            //GameData.Instance.Tyres.WheelSlip = e.Data.WheelSlip;
+            //GameData.Instance.Tyres.WheelLoad = e.Data.WheelLoad;
+            //GameData.Instance.Tyres.CamberRad = e.Data.CamberRad;
+            //GameData.Instance.Tyres.SuspensionTravel = e.Data.SuspensionTravel;
+            //GameData.Instance.Tyres.WheelAngularSpeed = e.Data.WheelAngularSpeed;
+            //GameData.Instance.Tyres.TyreTempI = e.Data.TyreTempI;
+            //GameData.Instance.Tyres.TyreTempM = e.Data.TyreTempM;
+            //GameData.Instance.Tyres.TyreTempO = e.Data.TyreTempO;
+            //GameData.Instance.Tyres.SuspensionDamage = e.Data.SuspensionDamage;
+
+            //GameData.Instance.Tyres.Mz = e.Data.Mz;
+            //GameData.Instance.Tyres.Fx = e.Data.Fx;
+            //GameData.Instance.Tyres.Fy = e.Data.Fy;
+            //GameData.Instance.Tyres.SlipRatio = e.Data.SlipRatio;
+            //GameData.Instance.Tyres.SlipAngle = e.Data.SlipAngle;
+        }
+
+        private static void AddPlayerDriverInfo(UpdatedEventArgs<StaticInfo> e)
+        {
+            Car meCar = GameData.Instance.MeCar;
+
+            if (meCar != null)
+            {
+                meCar.CarModel = e.Data.CarModel;
+
+                if (meCar.Drivers.Count == 0)
+                {
+                    DriverInfo driverInfo = new DriverInfo();
+                    driverInfo.FirstName = e.Data.PlayerName;
+                    driverInfo.LastName = e.Data.PlayerSurname;
+                    driverInfo.ShortName = e.Data.PlayerNick;
+                    meCar.Drivers.Add(driverInfo);
+
+                }
+            }
+        }
+
         private float BrakeBiasAdjustment(Car car,float brakeBias)
         {
             if (string.IsNullOrEmpty(car.CarModel))
