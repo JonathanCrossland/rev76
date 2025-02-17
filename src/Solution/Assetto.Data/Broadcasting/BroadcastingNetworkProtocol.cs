@@ -47,8 +47,6 @@ namespace Assetto.Data.Broadcasting
 
         public List<byte> carModels = new List<byte>();
 
-        
-
         internal delegate void SendMessageDelegate(byte[] payload);
 
         #region Events
@@ -113,9 +111,9 @@ namespace Assetto.Data.Broadcasting
                 switch (messageType)
                 {
                     case InboundMessageTypes.MASTERBROADCASTER_EVENT:
-                        var x33 = 2;
 
                         break;
+
                     case InboundMessageTypes.REGISTRATION_RESULT:
                         {
                             ConnectionId = br.ReadInt32();
@@ -127,10 +125,9 @@ namespace Assetto.Data.Broadcasting
 
                             OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
 
-                            //RequestEntryList();
-                            //RequestTrackData();
                         }
                         break;
+
                     case InboundMessageTypes.ENTRY_LIST:
                         {
                             _entryListCars.Clear();
@@ -146,6 +143,7 @@ namespace Assetto.Data.Broadcasting
                             Trace.WriteLine($"UDP: entryCarList cleared: {carEntryCount} cars added");
                         }
                         break;
+
                     case InboundMessageTypes.ENTRY_LIST_CAR:
                         {
                         
@@ -198,6 +196,7 @@ namespace Assetto.Data.Broadcasting
                             OnEntrylistUpdate?.Invoke(ConnectionIdentifier, carInfo);
                         }
                         break;
+
                     case InboundMessageTypes.REALTIME_UPDATE:
                         {
                             RealtimeUpdate update = new RealtimeUpdate();
@@ -236,6 +235,7 @@ namespace Assetto.Data.Broadcasting
                         }
                    
                         break;
+
                     case InboundMessageTypes.REALTIME_CAR_UPDATE:
                     {
 
@@ -266,7 +266,6 @@ namespace Assetto.Data.Broadcasting
 
                             if (carEntry == null || carEntry.Drivers.Count != carUpdate.DriverCount)
                             {
-                               // RequestEntryList();
                                
                             }
                             else
@@ -290,14 +289,13 @@ namespace Assetto.Data.Broadcasting
                                 carEntry.DriverIndex = carUpdate.DriverIndex;
                                 carEntry.DriverCount = carUpdate.DriverCount;
                             
-                            
-
                                 OnRealtimeCarUpdate?.Invoke(ConnectionIdentifier, carUpdate);
 
                                 Trace.WriteLine($"UDP: realtime car: {carEntry.CarLocation} updated");
                             }
                         }
                         break;
+
                     case InboundMessageTypes.TRACK_DATA:
                         {
                             var connectionId = br.ReadInt32();
@@ -350,6 +348,7 @@ namespace Assetto.Data.Broadcasting
                             OnBroadcastingEvent?.Invoke(ConnectionIdentifier, evt);
                         }
                         break;
+
                     default:
                         break;
                 }
@@ -459,7 +458,6 @@ namespace Assetto.Data.Broadcasting
                 return;
             }
 
-
             try
             {
                 using (var ms = new MemoryStream())
@@ -467,7 +465,7 @@ namespace Assetto.Data.Broadcasting
                     using (var br = new BinaryWriter(ms))
                     {
                         br.Write((byte)OutboundMessageTypes.UNREGISTER_COMMAND_APPLICATION); // First byte is always the command type
-                        br.Write((int)ConnectionId);
+                        br.Write((int)ConnectionId); //the missing piece - the code did not have a connectionid....#4%$3?#!!
                         Send(ms.ToArray());
                     }
                 }

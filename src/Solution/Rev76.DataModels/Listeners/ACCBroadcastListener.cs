@@ -1,9 +1,6 @@
-﻿
-using Assetto.Data.Broadcasting;
+﻿using Assetto.Data.Broadcasting;
 using Assetto.Data.Broadcasting.Structs;
 using System;
-using System.ComponentModel.Design;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +10,10 @@ namespace Rev76.DataModels.Listeners
     public class ACCBroadcastListener : IDisposable
     {
         private static ACCUdpRemoteClient _UDPClient = null;
-        private readonly object _lock = new object(); 
-
         public bool Connected { get; set; }  
-
-        
 
         public ACCBroadcastListener()
         {
-
         }
         public async Task Listen(object token)
         {
@@ -51,7 +43,6 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnRealtimeUpdate += (sender, e) =>
             {
-                
 
                 if (GameData.Instance.Session.Phase != e.Phase)
                 {
@@ -68,7 +59,6 @@ namespace Rev76.DataModels.Listeners
 
                 }
 
-
                 GameData.Instance.BroadcastCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == e.FocusedCarIndex);
                
                 if (GameData.Instance.PlayerCarIndex != e.FocusedCarIndex)
@@ -82,7 +72,6 @@ namespace Rev76.DataModels.Listeners
                 }
 
                 GameData.Instance.Weather.Cloudy = e.Clouds;
-                
 
             };
 
@@ -124,14 +113,10 @@ namespace Rev76.DataModels.Listeners
                             car.LapTimes.Add(e.LastLap);
                            
                         }
-
                     }
-
                 }
 
                 TryAssignBestSession(e.LastLap);
-
-
 
                 if (GameData.Instance.Track.TrackLength == 0)
                 {
@@ -139,6 +124,7 @@ namespace Rev76.DataModels.Listeners
                 }
 
             };
+
             _UDPClient.OnBroadcastingEvent += (sender, e) =>
             {
 
@@ -152,28 +138,19 @@ namespace Rev76.DataModels.Listeners
                 }
 
                 Trace.WriteLine($"BroadcastingEvent: {e.Type.ToString()} | {e.CarId} | {e.Msg}");
-                // GameData.Instance.BroadcastCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == e.CarId);
-
-                //var x = e.CarData.TrackPosition;
-                //Trace.WriteLine($"BroadcastingEvent: {e.}");
+            
             };
 
             _UDPClient.OnEntrylistUpdate += (sender, e) =>
             {
-              
-                   LoadCarsFromEntryList();
-        
-
+                LoadCarsFromEntryList();
             };
 
             _UDPClient.OnTrackDataUpdate += (sender, e) =>
             {
-
                 GameData.Instance.Track.TrackLength = e.TrackMeters;
                 GameData.Instance.Track.Name = e.TrackName;
-
             };
-          
 
         }
 
@@ -215,9 +192,9 @@ namespace Rev76.DataModels.Listeners
                     car.DriverIndex = c.DriverIndex;
                     car.Gear = c.Gear;
                     car.Kmh = c.Kmh;
-                    // if (car.CarIndex != GameData.Instance.PlayerCarIndex) {
+                 
                     car.Position = c.Position;
-                    // }
+       
 
                     car.TrackPosition = c.TrackPosition;
                     car.SplinePosition = c.SplinePosition;
@@ -241,12 +218,8 @@ namespace Rev76.DataModels.Listeners
                     car = new Car();
                     car.CarIndex = c.CarIndex;
 
-
-
                     GameData.Instance.Track.Cars.Add(car);
                 }
-
-               
 
                 if (GameData.Instance.Session.BestSession == null)
                 {
@@ -260,11 +233,7 @@ namespace Rev76.DataModels.Listeners
 
         public void Dispose()
         {
-            
-           
             _UDPClient.Dispose();
-           
-            
         }
     }
 }

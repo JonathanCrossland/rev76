@@ -1,7 +1,5 @@
-﻿using Assetto.Data.Broadcasting.Structs;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using static Assetto.Data.Broadcasting.BroadcastingNetworkProtocol;
@@ -33,6 +31,10 @@ namespace Assetto.Data.Broadcasting
         private readonly string _ip;
         private readonly int _port;
 
+
+        public void RequestTrackData() => MessageHandler.RequestTrackData();
+        public void RequestEntryList() => MessageHandler.RequestEntryList();
+
         public ACCUdpRemoteClient(string ip, int port, string displayName, string connectionPassword, string commandPassword, int msRealtimeUpdateInterval)
         {
             _ip = ip;
@@ -43,7 +45,6 @@ namespace Assetto.Data.Broadcasting
             CommandPassword = commandPassword;
             MsRealtimeUpdateInterval = msRealtimeUpdateInterval;
 
-           // InitializeMessageHandler();
             _listenerTask = Task.Run(ConnectAndRunAsync);
         }
 
@@ -80,10 +81,6 @@ namespace Assetto.Data.Broadcasting
                 Trace.TraceError($"Unexpected Send error: {e.Message}");
             }
         }
-
-
-       
-
         private async Task ConnectAndRunAsync()
         {
             int adaptiveUpdateInterval = MsRealtimeUpdateInterval; // Start with provided interval
@@ -134,7 +131,6 @@ namespace Assetto.Data.Broadcasting
                             MessageHandler.ProcessMessage(reader);
                         }
 
-                       
                         int elapsedTime = (int)stopwatch.ElapsedMilliseconds;
 
                         if (elapsedTime > 250) 
@@ -145,8 +141,6 @@ namespace Assetto.Data.Broadcasting
                         {
                             adaptiveUpdateInterval = Math.Max(adaptiveUpdateInterval - 5, 20); 
                         }
-
-                        //Trace.TraceWarning($"Message processing time: {elapsedTime} ms");
 
                         if (adaptiveUpdateInterval >= 350 && (DateTime.Now - lastReRegisterTime).TotalSeconds >= 30)
                         {
@@ -193,11 +187,7 @@ namespace Assetto.Data.Broadcasting
                         {
                            
                             MessageHandler?.Disconnect();
-                            //_client?.Close();
-                            //Task.Delay(1000);
-                            //_client?.Dispose();
-                            //_client = null;
-
+                         
                             OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
                             Trace.TraceWarning("UDP Client reset");
                         }
@@ -209,20 +199,14 @@ namespace Assetto.Data.Broadcasting
         }
 
 
-        public void RequestTrackData() => MessageHandler.RequestTrackData();
-        public void RequestEntryList() => MessageHandler.RequestEntryList();
-
         #region IDisposable Support
         public async Task ShutdownAsync()
         {
 
-
-            
             if (_listenerTask != null && !_listenerTask.IsCompleted)
             {
                 await _listenerTask; // Wait for the loop to exit
             }
-
 
             MessageHandler.OnConnectionStateChanged -= OnConnectionStateChanged;
             MessageHandler.OnTrackDataUpdate -= OnTrackDataUpdate;
@@ -233,14 +217,6 @@ namespace Assetto.Data.Broadcasting
 
             MessageHandler?.Disconnect();
             MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-            MessageHandler?.Disconnect();
-
-
 
             lock (_lock)
             {
@@ -266,8 +242,7 @@ namespace Assetto.Data.Broadcasting
             {
                Trace.TraceError($"Dispose of UDP {ex.Message}");
             }
-           // GC.Collect();
-           // GC.WaitForPendingFinalizers();
+
         }
         #endregion
     }
