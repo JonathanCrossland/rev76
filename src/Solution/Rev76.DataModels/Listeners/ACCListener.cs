@@ -93,17 +93,18 @@ namespace Rev76.DataModels.Listeners
 
                 }
 
-                GameData.Instance.Session.Flag = (e.Data.GlobalYellow == 1 ||
-                           e.Data.GlobalYellow1 == 1 ||
-                           e.Data.GlobalYellow2 == 1 ||
-                           e.Data.GlobalYellow3 == 1)
-                          ? FlagType.YELLOW_FLAG
-                          : FlagType.NO_FLAG;
+                GameData.Instance.Session.FlagSector1 = e.Data.GlobalYellow1;
+                GameData.Instance.Session.FlagSector2 = e.Data.GlobalYellow2;
+                GameData.Instance.Session.FlagSector3 = e.Data.GlobalYellow3;
 
-                if (GameData.Instance.Session.Flag == FlagType.NO_FLAG)
-                {
-                    GameData.Instance.Session.Flag = e.Data.Flag;
-                }
+
+                GameData.Instance.Session.GlobalGreen = e.Data.GlobalGreen;
+                GameData.Instance.Session.GlobalYellow = e.Data.GlobalYellow;
+                GameData.Instance.Session.GlobalRed = e.Data.GlobalRed;
+                GameData.Instance.Session.GlobalWhite = e.Data.GlobalWhite;
+                GameData.Instance.Session.GlobalChequered = e.Data.GlobalChequered;
+
+                GameData.Instance.Session.Flag = e.Data.Flag;
             };
         }
 

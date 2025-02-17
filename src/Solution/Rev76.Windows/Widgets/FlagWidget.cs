@@ -1,14 +1,7 @@
 ﻿using Rev76.DataModels;
 using Svg;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Rev76.DataModels;
 
 namespace Rev76.Windows.Widgets
 {
@@ -43,35 +36,69 @@ namespace Rev76.Windows.Widgets
 
         public SvgPaintServer GetFlagColor()
         {
+
+            SvgPaintServer ret = null;
+
+          
+
             switch (GameData.Instance.Session.Flag)
             {
                 case FlagType.NO_FLAG:
-                    return new SvgColourServer(Color.Transparent);
+                    ret = new SvgColourServer(Color.Transparent);
                     break;
                 case FlagType.BLUE_FLAG:
-                    return new SvgColourServer(Color.Blue);
+                    ret = new SvgColourServer(Color.Blue);
                     break;
                 case FlagType.YELLOW_FLAG:
-                    return new SvgColourServer(Color.Yellow);
+                    ret = new SvgColourServer(Color.Yellow);
                     break;
                 case FlagType.BLACK_FLAG:
-                    return new SvgColourServer(Color.Black);
+                    ret = new SvgColourServer(Color.Black);
                     break;
                 case FlagType.WHITE_FLAG:
-                    return new SvgColourServer(Color.White);
+                    ret = new SvgColourServer(Color.White);
                     break;
                 case FlagType.CHECKERED_FLAG:
-                    return new SvgDeferredPaintServer("url(#chequeredFlag)");
+                    ret = new SvgDeferredPaintServer("url(#chequeredFlag)");
                     break;
                 case FlagType.PENALTY_FLAG:
-                    return new SvgColourServer(Color.Red);
+                    ret = new SvgColourServer(Color.Red);
+                    break;
                 case FlagType.GREEN_FLAG:
-                    return new SvgColourServer(Color.Green);
+                    ret = new SvgColourServer(Color.LightGreen);
+                    break;
                 case FlagType.BLACK_FLAG_WITH_ORANGE_CIRCLE:
-                    return new SvgDeferredPaintServer("url(#meatballFlag)");
+                    ret = new SvgDeferredPaintServer("url(#meatballFlag)");
                     break;
             }
-            return new SvgColourServer(Color.Transparent);
+
+
+            if (GameData.Instance.Session.GlobalGreen == 1)
+            {
+                ret = new SvgColourServer(Color.LightGreen);
+            }
+            if (GameData.Instance.Session.GlobalYellow == 1)
+            {
+                ret = new SvgColourServer(Color.Yellow);
+            }
+            if (GameData.Instance.Session.GlobalWhite == 1)
+            {
+                ret = new SvgColourServer(Color.White);
+            }
+            if (GameData.Instance.Session.GlobalRed == 1)
+            {
+                ret = new SvgColourServer(Color.Red);
+            }
+            if (GameData.Instance.Session.GlobalChequered == 1)
+            {
+                ret = new SvgDeferredPaintServer("url(#chequeredFlag)");
+            }
+
+
+            
+
+            return ret;
+
         }
 
         protected override void OnRender(System.Drawing.Graphics gfx)
@@ -86,19 +113,33 @@ namespace Rev76.Windows.Widgets
                    {
                        switch (element.ID)
                        {
-                           case "flagrect":
+                           case "flagrect1":
                                rect.Fill = GetFlagColor();
                                break;
-                            default:
+                           case "flagrect2":
+                               rect.Fill = GetFlagColor();
+                               break;
+                           case "flagrect3":
+                               rect.Fill = GetFlagColor();
+                               break;
+                           default:
                                break;
                        }
                    }
+
                    if (element is SvgText text)
                    {
+                       text.Fill = new SvgColourServer(Color.Transparent);
                        switch (element.ID)
                        {
-                           case "flagtext":
-                               text.Text ="";
+                           case "flagtext1":
+                               if (GameData.Instance.Session.FlagSector1 == 1) text.Fill = new SvgColourServer(Color.Black);
+                               break;
+                           case "flagtext2":
+                               if (GameData.Instance.Session.FlagSector2 == 1) text.Fill = new SvgColourServer(Color.Black);
+                               break;
+                           case "flagtext3":
+                               if (GameData.Instance.Session.FlagSector3 == 1) text.Fill = new SvgColourServer(Color.Black);
                                break;
                            default:
                                break;

@@ -128,7 +128,7 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                              }
-                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (preCar.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (preCar?.Kmh < 40 || preCar?.Gear <= 0)
                                  {
@@ -155,10 +155,10 @@ namespace Rev76.Windows.Widgets
                              }
                              if (meCar?.Flag == FlagType.BLUE_FLAG)
                              {
-                                 rect.StrokeWidth = 1;
+                                 rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 0, 0, 255));
                              }
-                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (meCar.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (meCar?.Kmh < 40 || meCar?.Gear <= 0)
                                  {
@@ -182,7 +182,7 @@ namespace Rev76.Windows.Widgets
                                  rect.StrokeWidth = 2;
                                  rect.Stroke = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
                              }
-                             if (GameData.Instance.Session.Flag == FlagType.YELLOW_FLAG)
+                             if (postCar.Flag == FlagType.YELLOW_FLAG)
                              {
                                  if (postCar?.Kmh < 40 || postCar?.Gear <= 0)
                                  {

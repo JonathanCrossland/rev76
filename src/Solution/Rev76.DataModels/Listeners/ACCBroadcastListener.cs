@@ -109,6 +109,7 @@ namespace Rev76.DataModels.Listeners
                            
                         }
                     }
+
                 }
 
                 TryAssignBestSession(e.LastLap);
