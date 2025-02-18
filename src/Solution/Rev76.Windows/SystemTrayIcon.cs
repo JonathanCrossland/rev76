@@ -2,7 +2,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Drawing;
-using Rev76.Core.Logging;
+using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rev76.Windows
 {
@@ -12,12 +13,14 @@ namespace Rev76.Windows
         private static IntPtr _hwnd;
         private static int _messageId;
         private static Win32.NOTIFYICONDATA _nid;
-        private static Action<string> _onClickAction;
+        
         private static IntPtr _hMenu;
         private Win32.WndProcDelegate _wndProcDelegate; // Keep a reference to the delegate
 
+        private static Action _onClickAction;
+        private static List<(string, Action)> _menuItems = new List<(string, Action)>();
 
-        public void AddIcon(Icon icon, string tooltip, Action<string> onClick)
+        public void AddIcon(Icon icon, string tooltip, Action onClick)
         {
 
             _messageId = Win32.WM_USER + 100;
@@ -65,8 +68,21 @@ namespace Rev76.Windows
 
             _onClickAction = onClick;
 
-            
+        }
+
+        public void Show()
+        {
             MessageLoop();
+        }
+
+        public void AddMenuSeparator()
+        {
+            _menuItems.Add(("-", null));
+        }
+
+        public void AddMenuItem(string text, Action clickAction)
+        {
+            _menuItems.Add((text, clickAction));
         }
 
         private void RegisterWindowClass()
@@ -103,6 +119,9 @@ namespace Rev76.Windows
                         case Win32.WM_DESTROY:
                             Win32.PostQuitMessage(0);
                             return IntPtr.Zero;
+                        case Win32.WM_LBUTTONUP:
+                            _onClickAction?.Invoke();
+                            return IntPtr.Zero;
                         case Win32.WM_RBUTTONUP:
                             ShowContextMenu();
                             return IntPtr.Zero;
@@ -115,50 +134,37 @@ namespace Rev76.Windows
 
         private static void ShowContextMenu()
         {
+            if (_menuItems.Count == 0) return;
+
             _hMenu = Win32.CreatePopupMenu();
-            Win32.AppendMenu(_hMenu, Win32.MF_STRING, Win32.IDM_QUIT, "Quit");
-            Win32.AppendMenu(_hMenu, Win32.MF_STRING, Win32.IDM_WIDGET, "Show");
+            for (int i = 0; i < _menuItems.Count; i++)
+            {
+                if (_menuItems[i].Item2 == null) // If it's a separator
+                {
+                    Win32.AppendMenu(_hMenu, Win32.MF_SEPARATOR, 0, "");
+                }
+                else
+                {
+                    Win32.AppendMenu(_hMenu, Win32.MF_STRING, (uint)(i + 1), _menuItems[i].Item1);
+                }
+            }
 
             Win32.POINT pt;
             Win32.GetCursorPos(out pt);
             Win32.SetForegroundWindow(_hwnd);
 
-            uint selected = Win32.TrackPopupMenu(
-                _hMenu,
-                Win32.TPM_RETURNCMD | Win32.TPM_RIGHTBUTTON,
-                pt.X, pt.Y,
-                0,
-                _hwnd,
-                IntPtr.Zero
-            );
+            int cmd = (int)Win32.TrackPopupMenu(_hMenu, Win32.TPM_RETURNCMD | Win32.TPM_NONOTIFY, pt.X, pt.Y, 0, _hwnd, IntPtr.Zero);
 
-            Win32.PostMessage(_hwnd, Win32.WM_NULL, IntPtr.Zero, IntPtr.Zero); // Prevent menu lockup
-
-            switch (selected)
+            if (cmd > 0 && cmd <= _menuItems.Count && _menuItems[cmd - 1].Item2 != null)
             {
-                case Win32.IDM_QUIT:
-                    RemoveIcon();
-                    _onClickAction?.Invoke("Quit");
-                    break;
-                case Win32.IDM_WIDGET:
-                    try
-                    {
-                        _onClickAction?.Invoke("Widget");
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.TraceError($"{ex.Message}");
-                        throw;
-                    }
-                    break;
-                default:
-                    break;
+                _menuItems[cmd - 1].Item2?.Invoke();
             }
 
-
-
-
+            Win32.PostMessage(_hwnd, Win32.WM_NULL, IntPtr.Zero, IntPtr.Zero);
+            Win32.DestroyMenu(_hMenu);
         }
+
+
 
         private static void MessageLoop()
         {

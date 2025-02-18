@@ -19,6 +19,7 @@ using Rev76.DataModels;
 using Rev76.DataModels.Listeners;
 using Rev76.Windows;
 using Rev76.Windows.Widgets;
+using Rev86.Core.Config;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -82,21 +83,33 @@ namespace Rev76
         {
             Task.Run(() =>
             {
-                _SystemTrayIcon.AddIcon(icon, "Rev76", (m) =>
+
+                _SystemTrayIcon.AddIcon(icon, "Rev76", () =>
                 {
-                    if (m == "Widget")
-                    {
-                        //_ACCBroadcastListener.Dispose();
-                        //_ACCBroadcastListener = null;
-                    }
-                    else if (m == "Quit")
-                    {
-                        Win32.PostQuitMessage(0);
-                        cts.CancelAfter(100);
-                    }
                    
                 });
+
+                _SystemTrayIcon.AddMenuItem("Quit", () =>
+                {
+                    Win32.PostQuitMessage(0);
+                    cts.CancelAfter(100);
+                });
+
+                _SystemTrayIcon.AddMenuSeparator();
+
+                 _SystemTrayIcon.AddMenuItem("Settings", () =>
+                 {
+                     var widget = new Rev76Widget((WindowManager.Screen.PrimaryScreen.CX /2) - 42, (WindowManager.Screen.PrimaryScreen.CY / 2) -42, 84, 84, icon);
+                     widget.FPS = 4;
+                     widget.Show();
+                 });
+
+                _SystemTrayIcon.Show();
+
             });
+
+
+          
         }
 
         private static void Udp(CancellationTokenSource cts)

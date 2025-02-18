@@ -67,15 +67,16 @@ namespace Rev76.Windows
         public const int NIM_ADD = 0x00000000;
         public const int NIM_DELETE = 0x00000002;
 
-        //menu
-        public const int IDM_QUIT = 1000;
-        public const int IDM_WIDGET = 1001;
 
         #endregion
 
         public const int TPM_RIGHTBUTTON = 0x0002;
         public const int TPM_RETURNCMD = 0x0100;
+        public const uint TPM_NONOTIFY = 0x0080;
+
 
         public const int MF_STRING = 0x00000000;
+        public const uint MF_SEPARATOR = 0x0800;
+
     }
 }

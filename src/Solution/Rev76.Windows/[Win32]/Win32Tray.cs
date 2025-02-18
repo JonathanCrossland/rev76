@@ -88,7 +88,8 @@ namespace Rev76.Windows
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint TrackPopupMenu(IntPtr hMenu, uint uFlags, int x, int y, int nReserved, IntPtr hWnd, IntPtr prcRect);
 
-
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool DestroyMenu(IntPtr hMenu);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool DestroyIcon(IntPtr handle);

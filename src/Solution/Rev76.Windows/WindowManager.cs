@@ -1,9 +1,7 @@
-﻿using Rev76.Windows.Widgets;
-using Rev86.Core.Config;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
+
 
 namespace Rev76.Windows
 {
@@ -12,6 +10,25 @@ namespace Rev76.Windows
         public static Dictionary<IntPtr, OverlayWindow> Windows = new Dictionary<IntPtr, OverlayWindow>();
         private static readonly object lockObject = new object();
 
+
+        public class Screen
+        {
+            public Screen() {
+                
+            }
+
+            public static Win32.SIZE PrimaryScreen
+            {
+                get
+                {
+                    int screenWidth = Win32.GetSystemMetrics(0);  // SM_CXSCREEN
+                    int screenHeight = Win32.GetSystemMetrics(1); // SM_CYSCREEN
+
+                    return new Win32.SIZE() { CX = screenWidth, CY = screenHeight };
+                }
+            }
+        }
+     
         public static bool HandOverToGame()
         {
             IntPtr gameWindow = GetGameWindow();
@@ -60,6 +77,5 @@ namespace Rev76.Windows
             Windows.Clear();
         }
 
-        
     }
 }

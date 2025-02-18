@@ -95,6 +95,9 @@ namespace Rev76.Windows
             uint dwFlags                // Options for the layered window
         );
 
+        [DllImport("user32.dll")]
+        public static extern int GetSystemMetrics(int nIndex);
+
         #region cursor
 
         [DllImport("user32.dll", SetLastError = true)]
