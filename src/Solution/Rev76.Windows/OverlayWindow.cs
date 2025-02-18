@@ -24,6 +24,13 @@ namespace Rev76.Windows
         
         public Icon Icon { get;  }
 
+        public Rectangle Size { 
+            get
+            {
+                return new Rectangle(X,Y, Width, Height);
+            }
+        }
+
         public int FPS
         {
             get
@@ -42,6 +49,18 @@ namespace Rev76.Windows
                 }
             }
         }
+
+        private bool _ShowInTaskbar;
+
+        public bool ShowInTaskbar
+        {
+            get { return _ShowInTaskbar; }
+            set { 
+                _ShowInTaskbar = value;
+                ShowWindowInTaskbar(value);
+            }
+        }
+
 
         public abstract string Title { get; }
         public abstract bool Visible { get; }
@@ -393,6 +412,28 @@ namespace Rev76.Windows
         {
             foreach (var pair in _Brushes) pair.Value.Dispose();
         }
+
+        private void ShowWindowInTaskbar(bool show)
+        {
+            
+            int exStyle = Win32.GetWindowLong(this.HWND, Win32.GWL_EXSTYLE);
+
+            if (show)
+            {
+                exStyle |= Win32.WS_EX_APPWINDOW;
+                exStyle &= ~Win32.WS_EX_TOOLWINDOW; // Remove tool window style
+                Win32.SetParent(this.HWND, Win32.GetDesktopWindow()); // Ensure no hidden owner
+            }
+            else
+            {
+                exStyle &= ~Win32.WS_EX_APPWINDOW;
+                exStyle |= Win32.WS_EX_TOOLWINDOW; // Make it a tool window
+                Win32.SetParent(this.HWND, IntPtr.Zero); // Hide from taskbar
+            }
+
+            Win32.SetWindowLong(this.HWND, Win32.GWL_EXSTYLE, exStyle);
+        }
+
 
         public void Dispose()
         {

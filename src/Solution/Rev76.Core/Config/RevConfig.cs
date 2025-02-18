@@ -16,6 +16,7 @@ namespace Rev86.Core.Config
         public int Height { get; set; }
         public bool Enable { get; set; }
 
+        public bool ShowInTaskBar { get; set; }
         public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
     }

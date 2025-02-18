@@ -48,6 +48,8 @@ namespace Rev76.Windows
         public const int WS_EX_TOPMOST = 0x00000008;
         public const int WS_OVERLAPPEDWINDOW = 0x00CF0000;
         public const int WS_POPUP = unchecked((int)0x80000000);
+        public const int WS_EX_APPWINDOW = 0x00040000;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
 
         // UpdateLayeredWindow
         public const byte AC_SRC_OVER = 0x00; // Blend source and destination based on alpha
@@ -57,7 +59,11 @@ namespace Rev76.Windows
         //cursor
         public const int IDC_ARROW = 32512;
 
-        
+
+        // Constants for window styles
+        public const int GWL_EXSTYLE = -20;
+
+
 
         #region System Tray
 

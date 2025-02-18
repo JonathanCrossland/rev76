@@ -20,14 +20,22 @@ namespace Rev76.Windows.Widgets
             //Bitmap bmp = resizedIcon.ToBitmap();
 
             //gfx.DrawImage(bmp, 10,10);
+            
+            //gfx.FillRectangle(_Brushes["background"],this.Size);
 
             SVG.DrawSvg(
              gfx,
              this.SVG._SVG[0],
-              10, 10, 300, 550,
+              0, 0, 300, 550,
               element =>
               {
-                 
+                  if (element is SvgText text)
+                  {
+                    if (text.ID == "version")
+                    {
+                        text.Text = $"Version {new AppData().Version}";
+                    }
+                  }
               });
 
             base.OnRender(gfx);
@@ -48,7 +56,9 @@ namespace Rev76.Windows.Widgets
                     "Assets/Settings.svg",
                });
 
+
             base.OnGraphicsSetup(gfx);
+            _Brushes["background"] = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
         }
 
         

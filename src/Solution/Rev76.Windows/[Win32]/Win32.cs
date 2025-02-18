@@ -98,6 +98,23 @@ namespace Rev76.Windows
         [DllImport("user32.dll")]
         public static extern int GetSystemMetrics(int nIndex);
 
+
+
+        // Get and set window long (extended styles)
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        // Set window parent (for taskbar visibility)
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndNewParent);
+
+        // Find the desktop window (used for SetParent)
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDesktopWindow();
+
         #region cursor
 
         [DllImport("user32.dll", SetLastError = true)]
