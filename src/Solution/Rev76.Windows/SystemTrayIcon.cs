@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace Rev76.Windows
 {
@@ -18,7 +19,8 @@ namespace Rev76.Windows
         private Win32.WndProcDelegate _wndProcDelegate; // Keep a reference to the delegate
 
         private static Action _onClickAction;
-        private static List<(string, Action)> _menuItems = new List<(string, Action)>();
+        private static Dictionary<string, (Action, bool)> _menuItems = new Dictionary<string, (Action, bool)>();
+
 
         public void AddIcon(Icon icon, string tooltip, Action onClick)
         {
@@ -77,13 +79,24 @@ namespace Rev76.Windows
 
         public void AddMenuSeparator()
         {
-            _menuItems.Add(("-", null));
+            _menuItems["-"] = (null, false);
+         
         }
 
-        public void AddMenuItem(string text, Action clickAction)
+        public void AddMenuItem(string text, bool isChecked, Action clickAction)
         {
-            _menuItems.Add((text, clickAction));
+            _menuItems[text] = (clickAction, isChecked);
+            
         }
+
+        public void SetMenuItemChecked(string text, bool isChecked)
+        {
+            if (_menuItems.ContainsKey(text))
+            {
+                _menuItems[text] = (_menuItems[text].Item1, isChecked);
+            }
+        }
+
 
         private void RegisterWindowClass()
         {
@@ -137,16 +150,20 @@ namespace Rev76.Windows
             if (_menuItems.Count == 0) return;
 
             _hMenu = Win32.CreatePopupMenu();
-            for (int i = 0; i < _menuItems.Count; i++)
+            int id = 1;
+
+            foreach (var item in _menuItems)
             {
-                if (_menuItems[i].Item2 == null) // If it's a separator
+                if (item.Key == "-") // If it's a separator
                 {
                     Win32.AppendMenu(_hMenu, Win32.MF_SEPARATOR, 0, "");
                 }
                 else
                 {
-                    Win32.AppendMenu(_hMenu, Win32.MF_STRING, (uint)(i + 1), _menuItems[i].Item1);
+                    uint flags = item.Value.Item2 ? Win32.MF_STRING | Win32.MF_CHECKED : Win32.MF_STRING;
+                    Win32.AppendMenu(_hMenu, flags, (uint)id, item.Key);
                 }
+                id++;
             }
 
             Win32.POINT pt;
@@ -155,14 +172,16 @@ namespace Rev76.Windows
 
             int cmd = (int)Win32.TrackPopupMenu(_hMenu, Win32.TPM_RETURNCMD | Win32.TPM_NONOTIFY, pt.X, pt.Y, 0, _hwnd, IntPtr.Zero);
 
-            if (cmd > 0 && cmd <= _menuItems.Count && _menuItems[cmd - 1].Item2 != null)
+            if (cmd > 0 && cmd <= _menuItems.Count)
             {
-                _menuItems[cmd - 1].Item2?.Invoke();
+                string selectedText = _menuItems.Keys.ToArray()[cmd - 1]; // Retrieve menu item text
+                _menuItems[selectedText].Item1?.Invoke(); // Call the action
             }
 
             Win32.PostMessage(_hwnd, Win32.WM_NULL, IntPtr.Zero, IntPtr.Zero);
             Win32.DestroyMenu(_hMenu);
         }
+
 
 
 

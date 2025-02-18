@@ -10,6 +10,7 @@ namespace Rev76.Windows
         public static Dictionary<IntPtr, OverlayWindow> Windows = new Dictionary<IntPtr, OverlayWindow>();
         private static readonly object lockObject = new object();
 
+        public static event EventHandler<string> WindowClosed;
 
         public class Screen
         {
@@ -59,12 +60,16 @@ namespace Rev76.Windows
             }
         }
 
-        internal static void Remove(OverlayWindow window)
+        public static void RemoveWindow(OverlayWindow window)
         {
             if (window == null) return;
             if (window.HWND == IntPtr.Zero) return;
-
+            if (!Windows.ContainsKey(window.HWND)) return;
+            
             Windows.Remove(window.HWND);
+            //window.Dispose();
+            WindowClosed?.Invoke(null,window.Title);
+            
         }
 
         internal static void CloseWindows()

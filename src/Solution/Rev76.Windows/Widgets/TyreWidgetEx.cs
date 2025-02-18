@@ -15,9 +15,9 @@ namespace Rev76.Windows.Widgets
         {
         }
 
-        protected override string Title => "Tyres";
+        public override string Title => "Tyres";
 
-        protected override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
+        public override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
 
         protected override void OnRender(System.Drawing.Graphics gfx)
         {

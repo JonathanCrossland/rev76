@@ -12,9 +12,9 @@ namespace Rev76.Windows.Widgets
         {
         }
 
-        protected override string Title => "Flags";
+        public override string Title => "Flags";
 
-        protected override bool Visible { get =>
+        public override bool Visible { get =>
                 GameData.Instance.GameState.Status == GameStatus.LIVE;
                 //&& 
                 //GameData.Instance.Session.Flag != FlagType.NO_FLAG; 
@@ -32,14 +32,10 @@ namespace Rev76.Windows.Widgets
             base.OnGraphicsSetup(gfx);
         }
 
-       
-
         public SvgPaintServer GetFlagColor()
         {
 
             SvgPaintServer ret = null;
-
-          
 
             switch (GameData.Instance.Session.Flag)
             {
@@ -93,9 +89,6 @@ namespace Rev76.Windows.Widgets
             {
                 ret = new SvgDeferredPaintServer("url(#chequeredFlag)");
             }
-
-
-            
 
             return ret;
 

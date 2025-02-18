@@ -34,8 +34,8 @@ namespace Rev76.Windows.Widgets
             
         }
 
-        protected override string Title { get => "Purple"; }
-        protected override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
+        public override string Title { get => "Purple"; }
+        public override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
       
 
         private bool DrawDriver(System.Drawing.Graphics g)

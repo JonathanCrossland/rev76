@@ -8,10 +8,10 @@ namespace Assetto.Data.Broadcasting
 {
     public class ACCUdpRemoteClient : IDisposable
     {
-        private UdpClient _client;
-        private Task _listenerTask;
-        private readonly object _lock = new object();
-        private bool disposedValue = false;
+        private UdpClient _Client;
+        private Task _ListenerTask;
+        private readonly object _Lock = new object();
+        private bool _Disposing = false;
 
         public event ConnectionStateChangedDelegate OnConnectionStateChanged;
         public event TrackDataUpdateDelegate OnTrackDataUpdate;
@@ -45,7 +45,7 @@ namespace Assetto.Data.Broadcasting
             CommandPassword = commandPassword;
             MsRealtimeUpdateInterval = msRealtimeUpdateInterval;
 
-            _listenerTask = Task.Run(ConnectAndRunAsync);
+            _ListenerTask = Task.Run(ConnectAndRunAsync);
         }
 
         private void InitializeMessageHandler()
@@ -65,8 +65,8 @@ namespace Assetto.Data.Broadcasting
         {
             try
             {
-                if (payload != null && _client?.Client != null && _client.Client.Connected)
-                    _client.Send(payload, payload.Length);
+                if (payload != null && _Client?.Client != null && _Client.Client.Connected)
+                    _Client.Send(payload, payload.Length);
             }
             catch (ObjectDisposedException)
             {
@@ -87,20 +87,20 @@ namespace Assetto.Data.Broadcasting
             Stopwatch stopwatch = new Stopwatch();
             DateTime lastReRegisterTime = DateTime.Now;
              
-            while (!disposedValue)
+            while (!_Disposing)
             {
                 Trace.TraceWarning("Udp:  Loop Start");
                 try
                 {
-                    lock (_lock)
+                    lock (_Lock)
                     {
-                        if (_client == null)
+                        if (_Client == null)
                         {
                             InitializeMessageHandler();
-                            _client = new UdpClient();
-                            _client.EnableBroadcast = true;
-                            _client.ExclusiveAddressUse = false;
-                            _client.Connect(_ip, _port);
+                            _Client = new UdpClient();
+                            _Client.EnableBroadcast = true;
+                            _Client.ExclusiveAddressUse = false;
+                            _Client.Connect(_ip, _port);
                             Trace.TraceWarning("Udp: Client is set");
                         }
                     }
@@ -109,15 +109,15 @@ namespace Assetto.Data.Broadcasting
                     // **Register with ACC using the current adaptive interval**
                     MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
 
-                    while (!disposedValue)
+                    while (!_Disposing)
                     {
                         stopwatch.Restart();
                         var timeoutTask = Task.Delay(10000);
-                        var receiveTask = _client.ReceiveAsync();
+                        var receiveTask = _Client.ReceiveAsync();
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
                         stopwatch.Stop();
 
-                        if (disposedValue) break; 
+                        if (_Disposing) break; 
 
                         if (completedTask == timeoutTask)
                         {
@@ -181,9 +181,9 @@ namespace Assetto.Data.Broadcasting
                 }
                 finally
                 {
-                    lock (_lock)
+                    lock (_Lock)
                     {
-                        if (_client != null)
+                        if (_Client != null)
                         {
                            
                             //MessageHandler?.Disconnect();
@@ -203,9 +203,9 @@ namespace Assetto.Data.Broadcasting
         public async Task ShutdownAsync()
         {
 
-            if (_listenerTask != null && !_listenerTask.IsCompleted)
+            if (_ListenerTask != null && !_ListenerTask.IsCompleted)
             {
-                await _listenerTask; // Wait for the loop to exit
+                await _ListenerTask; // Wait for the loop to exit
             }
 
             MessageHandler.OnConnectionStateChanged -= OnConnectionStateChanged;
@@ -218,21 +218,21 @@ namespace Assetto.Data.Broadcasting
             MessageHandler?.Disconnect();
             MessageHandler?.Disconnect();
 
-            lock (_lock)
+            lock (_Lock)
             {
-                if (_client != null)
+                if (_Client != null)
                 {
-                    _client?.Close();
+                    _Client?.Close();
                     Task.Delay(1000);
-                    _client?.Dispose();
-                    _client = null;
+                    _Client?.Dispose();
+                    _Client = null;
                 }
             }
         }
 
         public void Dispose()
         {
-            disposedValue = true; // Signal loop to stop
+            _Disposing = true; // Signal loop to stop
 
             try
             {

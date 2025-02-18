@@ -31,6 +31,9 @@ namespace Rev76.Windows.Widgets
 
         public static OverlayWindow CreateWidget(WidgetConfig config, Icon icon)
         {
+            if (config == null) return null;
+            if (icon == null) return null;
+
             switch (config.Name)
             {
                 //case "WeatherWidget":

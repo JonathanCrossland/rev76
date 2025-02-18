@@ -22,12 +22,15 @@ using System.IO;
 using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 using Rev76.Core.Logging;
 using Rev76.DataModels;
 using Rev76.DataModels.Listeners;
 using Rev76.Windows;
 using Rev76.Windows.Widgets;
+
+using Rev86.Core.Config;
 
 namespace Rev76
 {
@@ -49,15 +52,18 @@ namespace Rev76
 
             Icon icon = GetIcon();
 
-            CreateSystemTrayIcon(icon);
-
+          
+            
             WidgetFactory.LoadWidgets(icon);
 
+            CreateSystemTrayIcon(icon);
 
             SharedMemory(cts);
             Udp(cts);
 
             Trace.WriteLine("Handing over to game.");
+
+            WindowManager.WindowClosed += WindowManager_WindowClosed;       
 
             bool ret = WindowManager.HandOverToGame();
 
@@ -79,6 +85,11 @@ namespace Rev76
             }
         }
 
+        private static void WindowManager_WindowClosed(object sender, string e)
+        {
+            _SystemTrayIcon.SetMenuItemChecked(e, false);
+        }
+
         private static void CreateSystemTrayIcon(Icon icon)
         {
             Task.Run(() =>
@@ -86,10 +97,43 @@ namespace Rev76
 
                 _SystemTrayIcon.AddIcon(icon, "Rev76", () =>
                 {
-                   
+
                 });
 
-                _SystemTrayIcon.AddMenuItem("Settings", () =>
+                foreach (OverlayWindow window in WindowManager.Windows.Values)
+                {
+
+                    _SystemTrayIcon.AddMenuItem(window.Title, true, () =>
+                    {
+
+                        Task.Run(() =>
+                        {
+                            OverlayWindow w = WindowManager.Windows.Values.FirstOrDefault(e => e.Title == window.Title);
+                            if (w == default(OverlayWindow))
+                            {
+                                WidgetConfig wconfig = RevConfig.Instance.Widgets.Find(wc => wc.Name == window.GetType().Name);
+                                
+                                w = WidgetFactory.CreateWidget(wconfig, icon);
+
+                                w.FPS = wconfig.FPS;
+                               
+                                _SystemTrayIcon.SetMenuItemChecked(w.Title, true);
+                                w.Show();
+                            }
+                            else
+                            {
+                                WindowManager.RemoveWindow(w);
+                                _SystemTrayIcon.SetMenuItemChecked(w.Title, false);
+                            }
+                        });
+
+                    });
+
+                }
+           
+               
+
+                _SystemTrayIcon.AddMenuItem("Settings",false, () =>
                 {
                     var widget = new Rev76Widget((WindowManager.Screen.PrimaryScreen.CX / 2) - 42, (WindowManager.Screen.PrimaryScreen.CY / 2) - 42, 84, 84, icon);
                     widget.FPS = 4;
@@ -98,7 +142,7 @@ namespace Rev76
 
                 _SystemTrayIcon.AddMenuSeparator();
 
-                _SystemTrayIcon.AddMenuItem("Quit", () =>
+                _SystemTrayIcon.AddMenuItem("Quit", false, () =>
                 {
                     Win32.PostQuitMessage(0);
                     cts.CancelAfter(100);

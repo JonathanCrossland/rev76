@@ -18,9 +18,9 @@ namespace Rev76.Windows.Widgets
             base.OnRender(gfx);
         }
 
-        protected override string Title => "Rev76";
+        public override string Title => "Rev76";
 
-        protected override bool Visible => true;
+        public override bool Visible => true;
 
       
     }

@@ -77,6 +77,8 @@ namespace Rev76.Windows
 
         public const int MF_STRING = 0x00000000;
         public const uint MF_SEPARATOR = 0x0800;
+        public const uint MF_CHECKED = 0x00000008;
+
 
     }
 }

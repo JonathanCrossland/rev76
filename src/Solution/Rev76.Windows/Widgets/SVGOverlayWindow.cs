@@ -138,7 +138,7 @@ namespace Rev76.Windows.Widgets
             catch (Exception ex)
             {
                 Trace.TraceError(ex.Message);
-                throw ex;
+                //throw ex;
             }
         }
 

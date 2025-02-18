@@ -43,8 +43,8 @@ namespace Rev76.Windows
             }
         }
 
-        protected abstract string Title { get; }
-        protected abstract bool Visible { get; }
+        public abstract string Title { get; }
+        public abstract bool Visible { get; }
         protected virtual void OnMouseClick(PointF position) { }
         protected virtual bool HitTest(PointF position) => false;
 
@@ -59,7 +59,9 @@ namespace Rev76.Windows
         private bool _IsRunning = true;
         private int _FPS = 4;
         private bool _NeedsRedraw = true;
-        
+
+        private bool _Disposing = false;
+
         protected readonly Dictionary<string, Brush> _Brushes = new Dictionary<string, Brush>();
         protected readonly Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
 
@@ -129,6 +131,12 @@ namespace Rev76.Windows
         {
             _IsRunning = true;
             Render();
+        }
+
+        public void Close()
+        {
+            _IsRunning = false;
+            
         }
 
         private void UpdateTheLayeredWindow()
@@ -203,9 +211,9 @@ namespace Rev76.Windows
                 switch (msg)
                 {
                     case WM_DESTROY:
-                        Win32.PostQuitMessage(0);
+                        instance._IsRunning = false;
                         WindowManager.Windows.Remove(hwnd);
-
+                        Win32.PostQuitMessage(0);
                         return IntPtr.Zero;
 
 
@@ -280,6 +288,7 @@ namespace Rev76.Windows
 
             while (_IsRunning && Win32.IsWindow(HWND))
             {
+                if (!_IsRunning) return;
                 long currentTime = stopwatch.ElapsedMilliseconds;
                 long timeDiff = currentTime - lastFrameTime;
 
@@ -294,6 +303,7 @@ namespace Rev76.Windows
                     MSG msg;
                     while (PeekMessage(out msg, IntPtr.Zero, 0, 0, Win32.PM_REMOVE))
                     {
+                        if (!_IsRunning) return; 
 
                         TranslateMessage(ref msg);
 
@@ -388,13 +398,21 @@ namespace Rev76.Windows
         {
             _IsRunning = false;
 
+            if (_Disposing) return;
+
+            _Disposing = true;
+
+            Task.Delay(1000).Wait();
+
+          
+
             OnGraphicsDestroyed(_BufferGraphics);
 
             if (_Graphics != null) _Graphics.Dispose();
             if (_BufferGraphics != null) _BufferGraphics.Dispose();
             if (_BufferBitmap != null) _BufferBitmap.Dispose();
 
-            WindowManager.Remove(this);
+            WindowManager.RemoveWindow(this);
 
             if (_HDC != IntPtr.Zero)
             {
@@ -402,7 +420,7 @@ namespace Rev76.Windows
                 _HDC = IntPtr.Zero;
             }
 
-            if (HWND != IntPtr.Zero)
+            if (HWND != IntPtr.Zero && Win32.IsWindow(HWND))
             {
                 DestroyWindow(HWND);
                 HWND = IntPtr.Zero;
