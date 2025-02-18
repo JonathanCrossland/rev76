@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using static Rev76.Windows.Win32;
 
@@ -14,21 +13,10 @@ namespace Rev76.Windows
 {
     public abstract class OverlayWindow : IDisposable
     {
-        private WndProcDelegate _wndProcDelegate;
-
-        public IntPtr HWND;
-        private IntPtr _HDC;
-        private System.Drawing.Graphics _Graphics;
-        private Bitmap _BufferBitmap;
-        private System.Drawing.Graphics _BufferGraphics;
-        private bool _IsRunning = true;
-        private bool _NeedsRedraw = true;
-        private string _ClassName;
-
-        protected Dictionary<string, Brush> _Brushes = new Dictionary<string, Brush>();
-        protected readonly Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
+        
         public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
+        public IntPtr HWND;
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
@@ -36,7 +24,6 @@ namespace Rev76.Windows
         
         public Icon Icon { get;  }
 
-        private int _FPS = 4;
         public int FPS
         {
             get
@@ -58,10 +45,23 @@ namespace Rev76.Windows
 
         protected abstract string Title { get; }
         protected abstract bool Visible { get; }
-
         protected virtual void OnMouseClick(PointF position) { }
         protected virtual bool HitTest(PointF position) => false;
 
+        private WndProcDelegate _wndProcDelegate;
+        private string _ClassName;
+
+        private IntPtr _HDC;
+        private System.Drawing.Graphics _Graphics;
+        private Bitmap _BufferBitmap;
+        private System.Drawing.Graphics _BufferGraphics;
+
+        private bool _IsRunning = true;
+        private int _FPS = 4;
+        private bool _NeedsRedraw = true;
+        
+        protected readonly Dictionary<string, Brush> _Brushes = new Dictionary<string, Brush>();
+        protected readonly Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
 
         public OverlayWindow(int x, int y, int width, int height, Icon icon)
         {
@@ -76,7 +76,6 @@ namespace Rev76.Windows
             CreateLayeredWindow();
             InitializeGraphics();
 
-            //Render();
         }
 
         private void RegisterWindowClass()
@@ -129,9 +128,6 @@ namespace Rev76.Windows
         public void Show()
         {
             _IsRunning = true;
-            //Win32.ShowWindow(HWND, 5);
-            //Win32.UpdateWindow(HWND);
-
             Render();
         }
 
@@ -200,7 +196,8 @@ namespace Rev76.Windows
         {
             int mouseX;
             int mouseY;
-            PointF svgPoint = new PointF(0, 0);
+            PointF point = new PointF(0, 0);
+
             if (WindowManager.Windows.TryGetValue(hwnd, out OverlayWindow instance))
             {
                 switch (msg)
@@ -211,20 +208,19 @@ namespace Rev76.Windows
 
                         return IntPtr.Zero;
 
-                
 
                     case Win32.WM_NCHITTEST:
                         mouseX = lParam.ToInt32() & 0xFFFF;
                         mouseY = (lParam.ToInt32() >> 16) & 0xFFFF;
-                        svgPoint = new PointF(mouseX - instance.X, mouseY - instance.Y);
+                        point = new PointF(mouseX - instance.X, mouseY - instance.Y);
 
-                        // Use a new method in OverlayWindow to determine if we should block dragging
-                        if (instance.HitTest(svgPoint))
+                        
+                        if (instance.HitTest(point))
                         {
-                            return (IntPtr)Win32.HTCLIENT; // Allow clicks through
+                            return (IntPtr)Win32.HTCLIENT; 
                         }
 
-                        return (IntPtr)Win32.HTCAPTION; // Otherwise, allow dragging
+                        return (IntPtr)Win32.HTCAPTION; 
 
                     case WM_WINDOWPOSCHANGED:
                         Win32.WINDOWPOS pos = Marshal.PtrToStructure<Win32.WINDOWPOS>(lParam);
@@ -241,15 +237,12 @@ namespace Rev76.Windows
                         instance.OnHandOverToGame();
                         RevConfig.Instance.UpdateWidgetPosition(instance.GetType().Name, instance.X, instance.Y);
                         return IntPtr.Zero;
-                    case WM_LBUTTONDOWN:
-                        mouseX = lParam.ToInt32() & 0xFFFF; // Extract X from lParam
-                        mouseY = (lParam.ToInt32() >> 16) & 0xFFFF; // Extract Y from lParam
 
-                        // Convert to local window coordinates
-                        //svgPoint = new PointF(mouseX - instance.X, mouseY - instance.Y);
-                        svgPoint = new PointF(mouseX, mouseY );
-                        // Trigger event instead of calling a specific method
-                        instance.OnMouseClick(svgPoint);
+                    case WM_LBUTTONDOWN:
+                        mouseX = lParam.ToInt32() & 0xFFFF;
+                        mouseY = (lParam.ToInt32() >> 16) & 0xFFFF;
+                        point = new PointF(mouseX, mouseY);
+                        instance.OnMouseClick(point);
 
                         return IntPtr.Zero;
 
@@ -272,7 +265,6 @@ namespace Rev76.Windows
             _BufferGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             _Graphics = System.Drawing.Graphics.FromHdc(_HDC);
-
         }
 
         private void Render()
@@ -292,8 +284,7 @@ namespace Rev76.Windows
                 long timeDiff = currentTime - lastFrameTime;
 
                 Task.Delay(1000 / FPS);
-                //System.Threading.Thread.Sleep(1000 / FPS);
-
+              
                 if (timeDiff >= frameTime)
                 {
                     lastFrameTime = currentTime;
@@ -361,22 +352,23 @@ namespace Rev76.Windows
                 path.AddArc(0, Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
                 path.CloseFigure();
 
-                using (Pen pen = new Pen(Color.FromArgb(225, 255, 255, 255), 1))
+                using (Pen pen = new Pen(Color.FromArgb(20, 0, 0, 0), 2))
                 {
-                    pen.DashStyle = DashStyle.Dot;
+                    pen.DashStyle = DashStyle.Solid;
                     _BufferGraphics.DrawPath(pen, path);
                 }
             }
         }
-
+      
         protected virtual void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            _Brushes["background"] = new SolidBrush(Color.FromArgb(60, 0, 0, 0));
+            _Brushes["background"] = new SolidBrush(Color.FromArgb(60, 20, 20, 0));
         }
 
         protected virtual void OnRender(System.Drawing.Graphics gfx)
         {
             DrawWindowBackground();
+            DrawWindowOutline();
         }
 
         protected virtual void OnHandOverToGame()

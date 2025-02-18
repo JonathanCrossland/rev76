@@ -11,15 +11,16 @@ namespace Rev76.Windows.Widgets
     public class SVGOverlayWindow 
     {
         public List<string> _SVG = new List<string>();
-        // Store interactive elements
-        Dictionary<SvgElement, RectangleF> interactiveElements = new Dictionary<SvgElement, RectangleF>();
-        SvgDocument svgDocument = new SvgDocument();
-        Action<SvgElement> svgClickHandler = null;
-
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+
+
+        private Dictionary<SvgElement, RectangleF> interactiveElements = new Dictionary<SvgElement, RectangleF>();
+
+        private SvgDocument svgDocument = new SvgDocument();
+        private Action<SvgElement> svgClickHandler = null;
 
         public void HandleSvgClick(PointF clickPoint)
         {
@@ -59,14 +60,12 @@ namespace Rev76.Windows.Widgets
         }
 
 
-        public void DrawSvg(System.Drawing.Graphics graphics, string svgString, float x, float y, float width, float height,
-                    Action<SvgElement> modifyAction, Action<SvgElement> clickHandler = null)
+        public void DrawSvg(System.Drawing.Graphics graphics, string svgString, float x, float y, float width, float height, Action<SvgElement> modifyAction, Action<SvgElement> clickHandler = null)
         {
 
             try
             {
-
-           
+          
                 if (graphics == null) throw new ArgumentNullException(nameof(graphics));
                 if (string.IsNullOrWhiteSpace(svgString)) throw new ArgumentException("SVG string cannot be null or empty.", nameof(svgString));
 
@@ -142,7 +141,6 @@ namespace Rev76.Windows.Widgets
                 throw ex;
             }
         }
-
 
         public void LoadSvgFiles(List<string> filePaths)
         {
