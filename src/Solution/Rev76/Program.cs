@@ -131,13 +131,23 @@ namespace Rev76
 
                 }
            
-               
-
                 _SystemTrayIcon.AddMenuItem("Settings",false, () =>
                 {
-                    var widget = new Rev76Widget((WindowManager.Screen.PrimaryScreen.CX / 2) - 42, (WindowManager.Screen.PrimaryScreen.CY / 2) - 42, 84, 84, icon);
-                    widget.FPS = 4;
-                    widget.Show();
+                    OverlayWindow w = WindowManager.Windows.Values.FirstOrDefault(e => e.Title == "Rev76");
+                    if (w == default(OverlayWindow))
+                    {
+                        WidgetConfig wconfig = RevConfig.Instance.Widgets.Find(wc => wc.Name == "Rev76Widget");
+                        w = WidgetFactory.CreateWidget(wconfig, icon);
+                        w.FPS = 4;
+                       
+                        _SystemTrayIcon.SetMenuItemChecked(w.Title, false);
+                        w.Show();
+                    }
+                    else
+                    {
+                        WindowManager.RemoveWindow(w);
+                        _SystemTrayIcon.SetMenuItemChecked(w.Title, false);
+                    }
                 });
 
                 _SystemTrayIcon.AddMenuSeparator();
@@ -145,7 +155,7 @@ namespace Rev76
                 _SystemTrayIcon.AddMenuItem("Quit", false, () =>
                 {
                     Win32.PostQuitMessage(0);
-                    cts.CancelAfter(100);
+                    cts.CancelAfter(50);
                 });
 
                 _SystemTrayIcon.Show();

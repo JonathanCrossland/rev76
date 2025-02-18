@@ -116,6 +116,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\rev76.png" />
+    <Content Include="Assets\Settings.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Sunny.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
