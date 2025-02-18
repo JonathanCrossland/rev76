@@ -8,7 +8,9 @@
       "Width": 190,
       "Height": 265,
       "Enable": true,
-      "Settings": {}
+      "Settings": {
+        "Kind": "standard"
+      }
     },
     {
       "Name": "PurpleWidget",

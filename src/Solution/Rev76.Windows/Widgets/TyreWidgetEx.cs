@@ -24,21 +24,26 @@ namespace Rev76.Windows.Widgets
             if (GameData.Instance.Tyres.BrakeTemp.FrontLeft == 0 && GameData.Instance.Tyres.TC == 0)
             {
                 //base.DrawNoDataMessage();
-
             }
-            else { 
-           
-            DrawTyrePanel(gfx);
+            else {
 
-            DrawTyreWidget(gfx);
+                if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "extended")
+                {
+                    DrawTyrePanel(gfx, -10, 10);
+                    DrawTyreWidget(gfx, -10, 45);
                 }
+                else
+                {
+                    DrawTyreWidget(gfx, -10,10);
+                }
+            }
             
 
             base.OnRender(gfx);
         }
 
 
-        private void DrawTyrePanel(System.Drawing.Graphics g)
+        private void DrawTyrePanel(System.Drawing.Graphics g, int x, int y)
         {
             string svgString = SVG._SVG[1]; // Assuming _SVG is a list of SVG strings
 
@@ -51,7 +56,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
                 g,
                 svgString,
-                -10, 10, 200, 18,
+                x, y, 200, 18,
                 element =>
                 {
                     if (element is SvgRectangle rect)
@@ -109,20 +114,18 @@ namespace Rev76.Windows.Widgets
         }
 
 
-        private void DrawTyreWidget(System.Drawing.Graphics g)
+        private void DrawTyreWidget(System.Drawing.Graphics g, int x, int y)
         {
             string svgString = SVG._SVG.First(); // Assuming _SVG is a list of SVG strings
-
             
-            var dynamicFillColor = Color.Green;  
-            var dynamicFontSize = 18;            
+            var dynamicFillColor = Color.Green;      
             var offset = 55;
             
             
             SVG.DrawSvg(
                 g,
                 svgString,
-                -10, 45, 200, 200,
+                x, y, 200, 200,
                 element =>
                 {
                     if (element is SvgRectangle rect)
@@ -232,8 +235,6 @@ namespace Rev76.Windows.Widgets
                     
                     if (element is SvgText el)
                     {
-                        //var el = element as SvgText;
-
                         switch (el.ID)
                         {
                             case "brakeset":
@@ -296,13 +297,7 @@ namespace Rev76.Windows.Widgets
                             default:
                                 break;
                         }
-                        
-                        
-
-
-
                     }
-
                 });
         }
 
