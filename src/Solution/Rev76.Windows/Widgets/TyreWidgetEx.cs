@@ -139,7 +139,7 @@ namespace Rev76.Windows.Widgets
                                     break;
                                 }
 
-                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Instance.Tyres.BrakeBiasDefault) + offset;
+                                rect.Y = rect.Y = ((int)(this.Height / Scale)) * (1.0f - GameData.Instance.Tyres.BrakeBiasDefault) + offset;
                                 
 
                                 break;
@@ -148,7 +148,7 @@ namespace Rev76.Windows.Widgets
                                 {
                                     break;
                                 }
-                                rect.Y = rect.Y = this.Height * (1.0f - GameData.Instance.Tyres.BrakeBias) + offset;
+                                rect.Y = rect.Y = ((int)(this.Height / Scale)) * (1.0f - GameData.Instance.Tyres.BrakeBias) + offset;
                                 
                                 break;
                             case "leftfronttyre":
