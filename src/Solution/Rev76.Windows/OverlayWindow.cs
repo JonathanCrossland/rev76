@@ -50,7 +50,8 @@ namespace Rev76.Windows
             }
         }
 
-      
+        public float Scale { get; set; }
+
         private bool _ShowInTaskbar;
 
         public bool ShowInTaskbar
@@ -85,13 +86,16 @@ namespace Rev76.Windows
         protected readonly Dictionary<string, Brush> _Brushes = new Dictionary<string, Brush>();
         protected readonly Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
 
-        public OverlayWindow(int x, int y, int width, int height, Icon icon)
+        public OverlayWindow(int x, int y, int width, int height, float scale, Icon icon)
         {
             Icon = icon;
             X = x;
             Y = y;
-            Width = width;
-            Height = height;
+
+            Width = (int)(width * scale);
+            Height = (int)(height * scale);
+            
+            Scale = scale;
             _ClassName = $"OverlayWindow_{Guid.NewGuid()}";
 
             RegisterWindowClass();

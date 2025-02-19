@@ -13,10 +13,10 @@ namespace Rev76.Windows.Widgets
     {
         private SVGOverlayWindow SVG = new SVGOverlayWindow();
 
-        public Rev76Widget(int x, int y, int width, int height, Icon icon) 
-            : base(x, y, width, height, icon)
+        public Rev76Widget(int x, int y, int width, int height, float scale, Icon icon) 
+            : base(x, y, width, height, scale, icon)
         {
-           
+          
         }
         
         protected override void OnRender(System.Drawing.Graphics gfx)
@@ -26,7 +26,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
              gfx,
              0,
-              0, 0, 300, 550,
+              0, 0, 300 * Scale, 550 * Scale,
               element =>
               {
                   if (element is SvgText text)
@@ -86,18 +86,17 @@ namespace Rev76.Windows.Widgets
 
         protected override bool HitTest(PointF position)
         {
-            return SVG.IsMouseOverInteractiveElement(position);
-
+            PointF svgCoords = new PointF(position.X / Scale, position.Y / Scale);
+            return SVG.IsMouseOverInteractiveElement(svgCoords);
         }
 
-        protected override void OnMouseClick(PointF clickPoint)
+
+        protected override void OnMouseClick(PointF position)
         {
-            // Convert click to SVG space
-            PointF svgCoords = SVG.ConvertToSvgSpace((int)clickPoint.X, (int)clickPoint.Y);
-
-            // Handle the click on the SVG
-            SVG.HandleSvgClick(clickPoint);
+            PointF svgCoords = new PointF(position.X / Scale, position.Y / Scale);
+            SVG.HandleSvgClick(svgCoords);
         }
+
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {

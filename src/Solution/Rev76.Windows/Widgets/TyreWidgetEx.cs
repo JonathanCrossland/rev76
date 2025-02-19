@@ -11,7 +11,7 @@ namespace Rev76.Windows.Widgets
     public class TyreWidgetEx : OverlayWindow
     {
         SVGOverlayWindow SVG = new SVGOverlayWindow();
-        public TyreWidgetEx(int x, int y, int width, int height, Icon icon = null) : base(x, y, width, height, icon)
+        public TyreWidgetEx(int x, int y, int width, int height, float scale, Icon icon = null) : base(x, y, width, height, scale, icon)
         {
         }
 
@@ -29,12 +29,12 @@ namespace Rev76.Windows.Widgets
 
                 if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "extended")
                 {
-                    DrawTyrePanel(gfx, -10, 10);
-                    DrawTyreWidget(gfx, -10, 45);
+                    DrawTyrePanel(gfx, 0, 0);
+                    DrawTyreWidget(gfx, 0, (int) (35 * Scale));
                 }
                 else
                 {
-                    DrawTyreWidget(gfx, -10,10);
+                    DrawTyreWidget(gfx, 0,0);
                 }
             }
             
@@ -56,7 +56,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
                 g,
                 1,
-                x, y, 200, 18,
+                x, y, 200 * Scale, 18 * Scale,
                 element =>
                 {
                     if (element is SvgRectangle rect)
@@ -125,7 +125,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
                 g,
                 0,
-                x, y, 200, 200,
+                x, y, 200 * Scale, 200 * Scale,
                 element =>
                 {
                     if (element is SvgRectangle rect)

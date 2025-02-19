@@ -8,7 +8,7 @@ namespace Rev76.Windows.Widgets
     public class FlagWidget : OverlayWindow
     {
         private SVGOverlayWindow SVG = new SVGOverlayWindow();
-        public FlagWidget(int x, int y, int width, int height, Icon icon) : base(x, y, width, height, icon)
+        public FlagWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
         }
 
@@ -99,7 +99,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
               gfx,
               0,
-               10, 10, 310, 60,
+               5 , 5, 310 * Scale, 60 * Scale,
                element =>
                {
                    if (element is SvgRectangle rect)

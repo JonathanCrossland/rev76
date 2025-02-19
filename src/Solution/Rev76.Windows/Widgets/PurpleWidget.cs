@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using static Rev76.DataModels.Tyres;
 
 namespace Rev76.Windows.Widgets
 {
@@ -24,14 +25,8 @@ namespace Rev76.Windows.Widgets
             State2 = 1
         }
 
-        public PurpleWidget(int x, int y, int width, int height, Icon icon=null) : base(x, y, width, height, icon)
+        public PurpleWidget(int x, int y, int width, int height, float scale, Icon icon=null) : base(x, y, width, height, scale, icon)
         {
-            this.FPS = 6;
-            SVG.Width = width;
-            SVG.Height = height;
-            SVG.X = x;
-            SVG.Y= y;
-            
         }
 
         public override string Title { get => "Purple"; }
@@ -98,7 +93,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
              g,
              0,
-             5, 5, 430, 230,
+             5, 5, 430 * Scale, 230 * Scale,
              element =>
              {
 
@@ -621,17 +616,19 @@ namespace Rev76.Windows.Widgets
             base.OnGraphicsDestroyed(g);
         }
 
-
         protected override bool HitTest(PointF position)
         {
-            return SVG.IsMouseOverInteractiveElement(position);
-        
+            float scaledX = position.X * Scale;
+            float scaledY = position.Y * Scale;
+            return SVG.IsMouseOverInteractiveElement(new PointF(scaledX, scaledY));
         }
+
         protected override void OnMouseClick(PointF clickPoint)
         {
             // Convert click to SVG space
-            PointF svgCoords = SVG.ConvertToSvgSpace((int)clickPoint.X, (int)clickPoint.Y);
-
+            //PointF svgCoords = SVG.ConvertToSvgSpace((int)clickPoint.X, (int)clickPoint.Y);
+            float scaledX = clickPoint.X * Scale;
+            float scaledY = clickPoint.Y * Scale;
             // Handle the click on the SVG
             SVG.HandleSvgClick(clickPoint);
         }

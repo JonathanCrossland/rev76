@@ -10,10 +10,10 @@ namespace Rev76.Windows.Widgets
     public class SVGOverlayWindow
     {
         public List<SvgDocument> _SVGDocuments = new List<SvgDocument>();
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
 
         private Dictionary<ISVGComponent, RectangleF> _ElementsClickEvent = new Dictionary<ISVGComponent, RectangleF>();
         
@@ -27,6 +27,11 @@ namespace Rev76.Windows.Widgets
             if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
 
             svgClickHandler = clickHandlerCallback;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+              
 
             var svgDocument = _SVGDocuments[documentIndex];
 
@@ -45,21 +50,21 @@ namespace Rev76.Windows.Widgets
 
         private void PreRender(Action<dynamic> modifyAction, SvgDocument svgDocument)
         {
-            if (_ElementsClickEvent.Count == 0)
+            _ElementsClickEvent.Clear();
+            foreach (var element in svgDocument.Descendants())
             {
-                foreach (var element in svgDocument.Descendants())
-                {
-                    var el = WireComponent(element);
-                    modifyAction?.Invoke(el); // allow element modification before render
-
-                    
-                }
+                var el = WireComponent(element);
+                modifyAction?.Invoke(el); // allow element modification before render
             }
+           
         }
 
         private object WireComponent(SvgElement element)
-        {
+        { 
             object el = element;
+
+          
+
             if (element is SvgVisualElement rect)
             {
                 element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var checkbox);
@@ -79,7 +84,7 @@ namespace Rev76.Windows.Widgets
                 }
 
             }
-
+           
             return el;
         }
 
@@ -141,11 +146,11 @@ namespace Rev76.Windows.Widgets
         }
 
 
-        public PointF ConvertToSvgSpace(int screenX, int screenY)
+        public PointF ConvertToSvgSpace(float screenX, float screenY)
         {
             // Convert screen space to local window coordinates
-            int localX = screenX - this.X;
-            int localY = screenY - this.Y;
+            float localX = screenX - this.X;
+            float localY = screenY - this.Y;
 
             // Scale from window size to SVG size
             float scaleX = (float)_SVGDocuments[0].Width / this.Width;
