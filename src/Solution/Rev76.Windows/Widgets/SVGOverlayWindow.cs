@@ -21,7 +21,7 @@ namespace Rev76.Windows.Widgets
         
 
 
-        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<SvgElement> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
+        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<dynamic> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
             if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
@@ -43,40 +43,44 @@ namespace Rev76.Windows.Widgets
             graphics.Restore(state);
         }
 
-        private void PreRender(Action<SvgElement> modifyAction, SvgDocument svgDocument)
+        private void PreRender(Action<dynamic> modifyAction, SvgDocument svgDocument)
         {
             if (_ElementsClickEvent.Count == 0)
             {
                 foreach (var element in svgDocument.Descendants())
                 {
-                    modifyAction?.Invoke(element); // allow element modification before render
+                    var el = WireComponent(element);
+                    modifyAction?.Invoke(el); // allow element modification before render
 
-                    WireComponent(element);
+                    
                 }
             }
         }
 
-        private void WireComponent(SvgElement element)
+        private object WireComponent(SvgElement element)
         {
+            object el = element;
             if (element is SvgVisualElement rect)
             {
                 element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var checkbox);
 
                 if (checkbox == "")
                 {
-                    SVGCheckBox checkBox = new SVGCheckBox(element);
-                    _ElementsClickEvent[checkBox] = rect.Bounds;
+                    el = new SVGCheckBox(element);
+                    _ElementsClickEvent[el as ISVGComponent] = rect.Bounds;
                 }
 
                 element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:button", out var button);
 
                 if (button == "")
                 {
-                    SVGButton checkBox = new SVGButton(element);
-                    _ElementsClickEvent[checkBox] = rect.Bounds;
+                    el = new SVGButton(element);
+                    _ElementsClickEvent[el as ISVGComponent] = rect.Bounds;
                 }
 
             }
+
+            return el;
         }
 
 
@@ -86,6 +90,7 @@ namespace Rev76.Windows.Widgets
             {
                 if (kvp.Value.Contains(clickPoint)) // Check if click is inside an element
                 {
+                    kvp.Key.RaiseClickEvent();
                     svgClickHandler?.Invoke(kvp.Key);
                     return;
                 }

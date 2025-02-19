@@ -1,10 +1,5 @@
 ﻿using Svg;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Rev76.Windows.Components
 {
@@ -17,8 +12,13 @@ namespace Rev76.Windows.Components
         {
             Element = el;
             _Checkmark = Element.Children.FirstOrDefault(c => c.GetType().Name  == "SvgPath") as SvgPath;
+            this.Clicked += SVGCheckBox_Clicked;
         }
 
+        private void SVGCheckBox_Clicked(object sender, System.EventArgs e)
+        {
+            Checked = !Checked;
+        }
 
         public bool Checked
         {
@@ -29,5 +29,7 @@ namespace Rev76.Windows.Components
 
             }
         }
+
+
     }
 }

@@ -37,13 +37,15 @@ namespace Rev76.Windows.Widgets
                     }
                   }
 
+                  if (element is SVGCheckBox)
+                  {
+                      var x = 0;
+                  }
+
               },
               clickElement =>
               {
-                  if (clickElement is SVGCheckBox el)
-                  {
-                      el.Checked = !el.Checked;
-                  }
+                 
 
                   switch (clickElement.Element.ID)
                   {

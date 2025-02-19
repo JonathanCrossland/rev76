@@ -50,6 +50,7 @@ namespace Rev76.Windows
             }
         }
 
+      
         private bool _ShowInTaskbar;
 
         public bool ShowInTaskbar
