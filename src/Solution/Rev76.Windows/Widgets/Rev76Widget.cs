@@ -1,4 +1,5 @@
 ﻿using Rev76.DataModels;
+using Rev76.Windows.Components;
 using Svg;
 using System;
 using System.Collections.Generic;
@@ -37,32 +38,22 @@ namespace Rev76.Windows.Widgets
                   }
 
               },
-              hoverElement =>
-              {
-                  switch (hoverElement.ID)
-                  {
-                      case "check_Purple_ShowInTaskbar":
-
-                          
-                          var element = hoverElement.Children.FirstOrDefault() as SvgVisualElement;
-                        
-                          
-
-
-                          break;
-                      default:
-                          break;
-                  }
-              },
               clickElement =>
               {
-                  switch (clickElement.ID)
+                  if (clickElement is SVGCheckBox el)
+                  {
+                      el.Checked = !el.Checked;
+                  }
+
+                  switch (clickElement.Element.ID)
                   {
                       case "check_Purple_ShowInTaskbar":
 
-                          var checkmark = clickElement.Children.FirstOrDefault(c => c.ID == "checkmark") as SvgPath;
+                         
 
-                          checkmark.Visibility = (checkmark.Visibility == "hidden") ? "visible" : "hidden";
+                          //var checkmark = clickElement.Children.FirstOrDefault(c => c.ID == "checkmark") as SvgPath;
+
+                          //checkmark.Visibility = (checkmark.Visibility == "hidden") ? "visible" : "hidden";
                           
 
                           break;

@@ -1,4 +1,5 @@
-﻿using Svg;
+﻿using Rev76.Windows.Components;
+using Svg;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,10 +17,10 @@ namespace Rev76.Windows.Widgets
         public int Width { get; set; }
         public int Height { get; set; }
 
-        private Dictionary<SvgElement, RectangleF> _ElementsClickEvent = new Dictionary<SvgElement, RectangleF>();
-        private Dictionary<SvgElement, RectangleF> _ElementsHoverEvent = new Dictionary<SvgElement, RectangleF>();
-        private Action<SvgElement> svgClickHandler = null;
-        private Action<SvgElement> svgHoverHandler = null;
+        private Dictionary<ISVGComponent, RectangleF> _ElementsClickEvent = new Dictionary<ISVGComponent, RectangleF>();
+        
+        private Action<ISVGComponent> svgClickHandler = null;
+        
 
         public void HandleSvgClick(PointF clickPoint)
         {
@@ -32,17 +33,7 @@ namespace Rev76.Windows.Widgets
                 }
             }
         }
-        public void HandleSvgHover(PointF clickPoint)
-        {
-            foreach (var kvp in _ElementsHoverEvent)
-            {
-                if (kvp.Value.Contains(clickPoint)) // Check if click is inside an element
-                {
-                    svgHoverHandler?.Invoke(kvp.Key);
-                    return;
-                }
-            }
-        }
+       
 
         public bool IsMouseOverInteractiveElement(PointF svgPoint)
         {
@@ -50,7 +41,6 @@ namespace Rev76.Windows.Widgets
             {
                 if (kvp.Value.Contains(svgPoint))
                 {
-                    HandleSvgHover(svgPoint);
                     return true; // Mouse is over a clickable element
                 }
             }
@@ -70,34 +60,33 @@ namespace Rev76.Windows.Widgets
             return new PointF(localX * scaleX, localY * scaleY);
         }
 
-        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<SvgElement> modifyAction, Action<SvgElement> hoverHandler = null, Action < SvgElement> clickHandler = null)
+        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<SvgElement> modifyAction, Action <ISVGComponent> clickHandler = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
             if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
 
             svgClickHandler = clickHandler;
-            svgHoverHandler = hoverHandler;
+        
 
             var svgDocument = _SVGDocuments[documentIndex];
-            _ElementsClickEvent.Clear();
 
-            foreach (var element in svgDocument.Descendants())
+            if (_ElementsClickEvent.Count == 0)
             {
-                modifyAction?.Invoke(element); // Modify the element
-
-                if (element is SvgVisualElement rect)
+                foreach (var element in svgDocument.Descendants())
                 {
-                    element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:click", out var clickValue);
-                    if (clickValue == "")
+                    modifyAction?.Invoke(element); // Modify the element
+
+                    if (element is SvgVisualElement rect)
                     {
-                        _ElementsClickEvent[element] = rect.Bounds; // Store its bounds for hit-testing
+                        element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var clickValue);
+
+                        if (clickValue == "")
+                        {
+                            SVGCheckBox checkBox = new SVGCheckBox(element);
+                            _ElementsClickEvent[checkBox] = rect.Bounds;
+                        }
+
                     }
-                    element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:click", out var hoverValue);
-                    if (hoverValue == "")
-                    {
-                        _ElementsHoverEvent[element] = rect.Bounds; // Store its bounds for hit-testing
-                    }
-                    
                 }
             }
 

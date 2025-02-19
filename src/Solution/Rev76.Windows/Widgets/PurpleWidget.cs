@@ -347,8 +347,8 @@ namespace Rev76.Windows.Widgets
             click =>
             {
 
-                click.StrokeWidth = new SvgUnit(2);
-                click.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                click.Element.StrokeWidth = new SvgUnit(2);
+                click.Element.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
                 Environment.Exit(0);
             }
 
