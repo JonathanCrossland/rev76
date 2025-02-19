@@ -7,24 +7,23 @@ using System.IO;
 using System.Xml;
 
 namespace Rev76.Windows.Widgets
-{ 
-    public class SVGOverlayWindow 
+{
+    public class SVGOverlayWindow
     {
-        public List<string> _SVG = new List<string>();
+        public List<SvgDocument> _SVGDocuments = new List<SvgDocument>();
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 
-
-        private Dictionary<SvgElement, RectangleF> interactiveElements = new Dictionary<SvgElement, RectangleF>();
-
-        private SvgDocument svgDocument = new SvgDocument();
+        private Dictionary<SvgElement, RectangleF> _ElementsClickEvent = new Dictionary<SvgElement, RectangleF>();
+        private Dictionary<SvgElement, RectangleF> _ElementsHoverEvent = new Dictionary<SvgElement, RectangleF>();
         private Action<SvgElement> svgClickHandler = null;
+        private Action<SvgElement> svgHoverHandler = null;
 
         public void HandleSvgClick(PointF clickPoint)
         {
-            foreach (var kvp in interactiveElements)
+            foreach (var kvp in _ElementsClickEvent)
             {
                 if (kvp.Value.Contains(clickPoint)) // Check if click is inside an element
                 {
@@ -33,13 +32,25 @@ namespace Rev76.Windows.Widgets
                 }
             }
         }
+        public void HandleSvgHover(PointF clickPoint)
+        {
+            foreach (var kvp in _ElementsHoverEvent)
+            {
+                if (kvp.Value.Contains(clickPoint)) // Check if click is inside an element
+                {
+                    svgHoverHandler?.Invoke(kvp.Key);
+                    return;
+                }
+            }
+        }
 
         public bool IsMouseOverInteractiveElement(PointF svgPoint)
         {
-            foreach (var kvp in interactiveElements)
+            foreach (var kvp in _ElementsClickEvent)
             {
                 if (kvp.Value.Contains(svgPoint))
                 {
+                    HandleSvgHover(svgPoint);
                     return true; // Mouse is over a clickable element
                 }
             }
@@ -53,100 +64,59 @@ namespace Rev76.Windows.Widgets
             int localY = screenY - this.Y;
 
             // Scale from window size to SVG size
-            float scaleX = (float)svgDocument.Width / this.Width;
-            float scaleY = (float)svgDocument.Height / this.Height;
+            float scaleX = (float)_SVGDocuments[0].Width / this.Width;
+            float scaleY = (float)_SVGDocuments[0].Height / this.Height;
 
             return new PointF(localX * scaleX, localY * scaleY);
         }
 
-
-        public void DrawSvg(System.Drawing.Graphics graphics, string svgString, float x, float y, float width, float height, Action<SvgElement> modifyAction, Action<SvgElement> clickHandler = null)
+        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<SvgElement> modifyAction, Action<SvgElement> hoverHandler = null, Action < SvgElement> clickHandler = null)
         {
+            if (graphics == null) throw new ArgumentNullException(nameof(graphics));
+            if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
 
-            try
+            svgClickHandler = clickHandler;
+            svgHoverHandler = hoverHandler;
+
+            var svgDocument = _SVGDocuments[documentIndex];
+            _ElementsClickEvent.Clear();
+
+            foreach (var element in svgDocument.Descendants())
             {
-          
-                if (graphics == null) throw new ArgumentNullException(nameof(graphics));
-                if (string.IsNullOrWhiteSpace(svgString)) throw new ArgumentException("SVG string cannot be null or empty.", nameof(svgString));
+                modifyAction?.Invoke(element); // Modify the element
 
-                svgClickHandler = clickHandler;
-
-                // Load SVG string into an XmlDocument to preserve namespaces
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(svgString);
-
-                // Create and register XmlNamespaceManager
-                var xmlnsManager = new XmlNamespaceManager(xmlDoc.NameTable);
-
-                foreach (XmlAttribute attr in xmlDoc.DocumentElement.Attributes)
+                if (element is SvgVisualElement rect)
                 {
-                    if (attr.Prefix == "xmlns")
+                    element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:click", out var clickValue);
+                    if (clickValue == "")
                     {
-                        xmlnsManager.AddNamespace(attr.LocalName, attr.Value);
+                        _ElementsClickEvent[element] = rect.Bounds; // Store its bounds for hit-testing
                     }
-                }
-
-                // Convert XmlDocument to MemoryStream for SVG.NET
-                using (var stream = new MemoryStream())
-                using (var writer = new StreamWriter(stream))
-                {
-                    xmlDoc.Save(writer);
-                    writer.Flush();
-                    stream.Position = 0;
-
-                    // Load SVG document with preserved namespaces
-                    svgDocument = SvgDocument.Open<SvgDocument>(stream);
-
-                    interactiveElements.Clear();
-
-                    // Apply modifications and detect interactable elements
-                    foreach (var element in svgDocument.Descendants())
+                    element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:click", out var hoverValue);
+                    if (hoverValue == "")
                     {
-                        modifyAction?.Invoke(element); // Modify the element
-
-                        if (element is SvgRectangle rect)
-                        {
-                            // Look for lucid:interacts="click"
-                            if (element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:interacts", out var interactValue) && interactValue == "click")
-                            {
-                                interactiveElements[element] = rect.Bounds; // Store its bounds for hit-testing
-                            }
-                        }
+                        _ElementsHoverEvent[element] = rect.Bounds; // Store its bounds for hit-testing
                     }
-
-                    // Scale and translate the SVG to fit within the given dimensions
-                    var originalSize = svgDocument.GetDimensions();
-                    var scaleX = width / originalSize.Width;
-                    var scaleY = height / originalSize.Height;
-
-                    // Save the current graphics state
-                    var state = graphics.Save();
-
-                    // Apply transformations for scaling and positioning
-                    graphics.TranslateTransform(x, y);
-                    graphics.ScaleTransform(scaleX, scaleY);
-
-                    // Render the modified SVG
-                    svgDocument.Draw(graphics);
-
-                    // Restore the graphics state
-                    graphics.Restore(state);
-
-
+                    
                 }
             }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.Message);
-                //throw ex;
-            }
+
+            var originalSize = svgDocument.GetDimensions();
+            var scaleX = width / originalSize.Width;
+            var scaleY = height / originalSize.Height;
+
+            var state = graphics.Save();
+            graphics.TranslateTransform(x, y);
+            graphics.ScaleTransform(scaleX, scaleY);
+            svgDocument.Draw(graphics);
+            graphics.Restore(state);
         }
 
         public void LoadSvgFiles(List<string> filePaths)
         {
             if (filePaths == null) throw new ArgumentNullException(nameof(filePaths));
 
-            var svgContents = new List<string>();
+            _SVGDocuments.Clear();
 
             foreach (var filePath in filePaths)
             {
@@ -154,9 +124,11 @@ namespace Rev76.Windows.Widgets
                 {
                     try
                     {
-                        // Read the SVG file into a string and add to the list
-                        var svgString = File.ReadAllText(filePath);
-                        svgContents.Add(svgString);
+                        using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                        {
+                            var svgDocument = SvgDocument.Open<SvgDocument>(stream);
+                            _SVGDocuments.Add(svgDocument);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -168,9 +140,6 @@ namespace Rev76.Windows.Widgets
                     Console.WriteLine($"File not found: {filePath}");
                 }
             }
-
-            _SVG = svgContents;
         }
-
     }
 }

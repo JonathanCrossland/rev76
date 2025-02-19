@@ -45,7 +45,7 @@ namespace Rev76.Windows.Widgets
 
         private void DrawTyrePanel(System.Drawing.Graphics g, int x, int y)
         {
-            string svgString = SVG._SVG[1]; // Assuming _SVG is a list of SVG strings
+          
 
 
             var dynamicFillColor = Color.Green;
@@ -55,7 +55,7 @@ namespace Rev76.Windows.Widgets
 
             SVG.DrawSvg(
                 g,
-                svgString,
+                1,
                 x, y, 200, 18,
                 element =>
                 {
@@ -116,7 +116,7 @@ namespace Rev76.Windows.Widgets
 
         private void DrawTyreWidget(System.Drawing.Graphics g, int x, int y)
         {
-            string svgString = SVG._SVG.First(); // Assuming _SVG is a list of SVG strings
+           
             
             var dynamicFillColor = Color.Green;      
             var offset = 55;
@@ -124,7 +124,7 @@ namespace Rev76.Windows.Widgets
             
             SVG.DrawSvg(
                 g,
-                svgString,
+                0,
                 x, y, 200, 200,
                 element =>
                 {

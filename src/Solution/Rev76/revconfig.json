@@ -8,8 +8,9 @@
       "Width": 190,
       "Height": 265,
       "Enable": true,
+      "ShowInTaskBar": true,
       "Settings": {
-        "Kind": "standard"
+        "Kind": "extended"
       }
     },
     {
@@ -20,6 +21,7 @@
       "Width": 435,
       "Height": 235,
       "Enable": true,
+      "ShowInTaskBar": true,
       "Settings": {
         "Kind": "relative"
       }
@@ -29,9 +31,10 @@
       "FPS": 10,
       "X": 100,
       "Y": 400,
-      "Width": 84,
-      "Height": 84,
+      "Width": 300,
+      "Height": 550,
       "Enable": false,
+      "ShowInTaskBar": true,
       "Settings": {}
     },
     {
@@ -39,9 +42,10 @@
       "FPS": 10,
       "X": 2348,
       "Y": 132,
-      "Width": 330,
+      "Width": 320,
       "Height": 70,
       "Enable": true,
+      "ShowInTaskBar": true,
       "Settings": {}
     },
     {

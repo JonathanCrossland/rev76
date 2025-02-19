@@ -97,7 +97,7 @@ namespace Rev76.Windows.Widgets
 
             SVG.DrawSvg(
              g,
-             this.SVG._SVG[0],
+             0,
              5, 5, 430, 230,
              element =>
              {
@@ -344,13 +344,13 @@ namespace Rev76.Windows.Widgets
 
 
              },
-                 click =>
-                 {
+            click =>
+            {
 
-                     click.StrokeWidth = new SvgUnit(2);
-                     click.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
-                     Environment.Exit(0);
-                 }
+                click.StrokeWidth = new SvgUnit(2);
+                click.Stroke = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                Environment.Exit(0);
+            }
 
 
              );

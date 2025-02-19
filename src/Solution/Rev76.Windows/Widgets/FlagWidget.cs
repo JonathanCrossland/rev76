@@ -98,7 +98,7 @@ namespace Rev76.Windows.Widgets
         {
             SVG.DrawSvg(
               gfx,
-              this.SVG._SVG[0],
+              0,
                10, 10, 310, 60,
                element =>
                {
