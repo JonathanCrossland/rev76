@@ -35,3 +35,4 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Debug\Rev76.Windows.
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Debug\Rev76.Wi.8F474284.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Debug\Rev76.Windows.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Debug\Rev76.Windows.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Debug\Assets\Settings.svg

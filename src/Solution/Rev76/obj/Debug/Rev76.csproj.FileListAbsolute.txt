@@ -41,3 +41,4 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompi
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.exe
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Settings.svg
