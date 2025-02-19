@@ -8,14 +8,14 @@ namespace Rev86.Core.Config
 {
     public class WidgetConfig
     {
-        public string Name { get; set; }
-        public int FPS { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public bool Enable { get; set; }
-
+        public string Name { get; set; } = "Widget";
+        public int FPS { get; set; } = 4;
+        public int X { get; set; } = 1;
+        public int Y { get; set; } = 1;
+        public int Width { get; set; } = 100;
+        public int Height { get; set; } = 100;
+        public bool Enable { get; set; } = false;
+        public float Scale { get; set; } = 1;
         public bool ShowInTaskBar { get; set; }
         public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
