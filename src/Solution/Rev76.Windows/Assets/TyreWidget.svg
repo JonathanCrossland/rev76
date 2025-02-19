@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-    viewBox="0 0 350 350" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
-   >
+   x="0" y="0" width="350" height="350"  shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
 
 	
 	
@@ -95,50 +94,55 @@
 	<rect id="brakebiasdefault" width="100%" height="10" />
 	<rect id="brakebiasrect" width="100%" height="10" />
 	
-	
-	<rect id="leftfronttyre" x="46" y="51" width="75" height="105" rx="15" ry="15" />
-	<rect id="leftfrontbrake" x="130" y="78" width="25" height="55" rx="3" ry="3" />
-	<rect id="rightfronttyre" x="250" y="50" width="75" height="105" rx="15" ry="15" />
-	<rect id="rightfrontbrake" x="215" y="78" width="25" height="55" rx="3" ry="3" />
+	<!-- Tyres -->
+	<rect id="leftfronttyre" x="20" y="51" width="75" height="105" rx="15" ry="15" />
+	<rect id="leftfrontbrake" x="104" y="78" width="25" height="55" rx="3" ry="3" />
+	<rect id="rightfronttyre" x="224" y="50" width="75" height="105" rx="15" ry="15" />
+	<rect id="rightfrontbrake" x="189" y="78" width="25" height="55" rx="3" ry="3" />
 
-	<rect id="leftreartyre" x="45" y="245" width="75" height="105" rx="15" ry="15" />
-	<rect id="leftrearbrake" x="130" y="270" width="25" height="55"  rx="3" ry="3" />
-	<rect id="rightreartyre" x="250" y="244.5" width="75" height="105" rx="15" ry="15" />
-	<rect id="rightrearbrake" x="215" y="270" width="25" height="55" rx="3" ry="3" />
-	
-	
-	<rect id="leftfronttempbg" x="46" y="80" width="75" height="50" style="opacity: .7" />
-	<rect id="rightfronttempbg" x="250" y="80" width="75.5" height="50" style="opacity: .7" />
-	<rect id="leftreartempbg" x="45" y="273.9" width="75.3" height="50" style="opacity: .7" />
-	<rect id="rightreartempbg" x="249.8" y="271.9" width="75.6" height="50" style="opacity: .7" />
-	
-	
-	<text x="3.1" y="-0.1" id="leftfrontpsi" dx="52" dy="38"><tspan>21.1</tspan></text>
-	<text x="-0.2" y="-0.1" id="rightfrontpsi" dx="258" dy="38"><tspan>22.2</tspan></text>
-	<text x="0.5" y="-1.5" id="leftrearpsi" dx="52" dy="235"><tspan>23.3</tspan></text>
-	<text x="-1" y="-1.5" id="rightrearpsi" dx="258" dy="235"><tspan>24.4</tspan></text>
+	<rect id="leftreartyre" x="20" y="245" width="75" height="105" rx="15" ry="15" />
+	<rect id="leftrearbrake" x="104" y="270" width="25" height="55"  rx="3" ry="3" />
+	<rect id="rightreartyre" x="224" y="244.5" width="75" height="105" rx="15" ry="15" />
+	<rect id="rightrearbrake" x="189" y="270" width="25" height="55" rx="3" ry="3" />
 
-	<text x="0.5" y="-2.3" id="leftfronttemp" dx="83" dy="115"><tspan>100</tspan></text>
-	<text x="-3.5" y="-2" id="rightfronttemp" dx="292" dy="115"><tspan>100</tspan></text>
-	<text x="0.2" y="-3" id="leftreartemp" dx="83" dy="310"><tspan>100</tspan></text>
-	<text x="-2.4" y="-4" id="rightreartemp" dx="292" dy="310"><tspan>100</tspan></text>
+	<!-- Temperature Backgrounds -->
+	<rect id="leftfronttempbg" x="20" y="80" width="75" height="50" style="opacity: .7" />
+	<rect id="rightfronttempbg" x="224" y="80" width="75.5" height="50" style="opacity: .7" />
+	<rect id="leftreartempbg" x="20" y="273.9" width="75.3" height="50" style="opacity: .7" />
+	<rect id="rightreartempbg" x="213.8" y="271.9" width="75.6" height="50" style="opacity: .7" />
 
-	<text x="-1.4" y="-0.5" id="leftfrontbraketemp" dx="146" dy="71"><tspan>60</tspan></text>
-	<text x="1" y="0" id="rightfrontbraketemp" dx="227" dy="71"><tspan>60</tspan></text>
-	<text x="-2.3" y="0" id="leftrearbraketemp" dx="146" dy="260"><tspan>60</tspan></text>
-	<text id="rightrearbraketemp" dx="227" dy="260"><tspan>60</tspan></text>
-	
-	<text x="1.2" y="0" id="leftfrontbrakewear" dx="152" dy="156"><tspan>100%</tspan></text>
-	<text x="-3.2" y="0" id="rightfrontbrakewear" dx="220" dy="156"><tspan>100%</tspan></text>
-	<text x="-0.1" y="-0.1" id="leftrearbrakewear" dx="152" dy="346"><tspan>100%</tspan></text>
-	<text x="-5.8" y="0" id="rightrearbrakewear" dx="220" dy="346"><tspan>100%</tspan></text>
-	
-	<text x="12" y="-0.5" id="brakebias" dx="155" dy="40"><tspan>50%</tspan></text>
+	<!-- PSI -->
+	<text x="3.1" y="-0.1" id="leftfrontpsi" dx="26" dy="38"><tspan>21.1</tspan></text>
+	<text x="-0.2" y="-0.1" id="rightfrontpsi" dx="218" dy="38"><tspan>22.2</tspan></text>
+	<text x="0.5" y="-1.5" id="leftrearpsi" dx="26" dy="235"><tspan>23.3</tspan></text>
+	<text x="-1" y="-1.5" id="rightrearpsi" dx="218" dy="235"><tspan>24.4</tspan></text>
 
-	<text x="-0.5" y="-3" id="tyreset" dx="185" dy="192">
+	<!-- Tyre Temperatures -->
+	<text x="0.5" y="-2.3" id="leftfronttemp" dx="57" dy="115"><tspan>100</tspan></text>
+	<text x="-3.5" y="-2" id="rightfronttemp" dx="252" dy="115"><tspan>100</tspan></text>
+	<text x="0.2" y="-3" id="leftreartemp" dx="57" dy="310"><tspan>100</tspan></text>
+	<text x="-2.4" y="-4" id="rightreartemp" dx="252" dy="310"><tspan>100</tspan></text>
+
+	<!-- Brake Temperatures -->
+	<text x="-1.4" y="-0.5" id="leftfrontbraketemp" dx="120" dy="71"><tspan>60</tspan></text>
+	<text x="1" y="0" id="rightfrontbraketemp" dx="187" dy="71"><tspan>60</tspan></text>
+	<text x="-2.3" y="0" id="leftrearbraketemp" dx="120" dy="260"><tspan>60</tspan></text>
+	<text id="rightrearbraketemp" dx="187" dy="260"><tspan>60</tspan></text>
+
+	<!-- Brake Wear -->
+	<text x="1.2" y="0" id="leftfrontbrakewear" dx="126" dy="156"><tspan>100%</tspan></text>
+	<text x="-3.2" y="0" id="rightfrontbrakewear" dx="180" dy="156"><tspan>100%</tspan></text>
+	<text x="-0.1" y="-0.1" id="leftrearbrakewear" dx="126" dy="346"><tspan>100%</tspan></text>
+	<text x="-5.8" y="0" id="rightrearbrakewear" dx="180" dy="346"><tspan>100%</tspan></text>
+
+	<!-- Brake Bias -->
+	<text x="12" y="-0.5" id="brakebias" dx="115" dy="40"><tspan>50%</tspan></text>
+
+	<!-- Tyre and Brake Set -->
+	<text x="-0.5" y="-3" id="tyreset" dx="159" dy="192">
 		<tspan>DRY 9</tspan>
 	</text>
-	<text x="2" y="-6" id="brakeset"  dx="184" dy="217">
+	<text x="2" y="-6" id="brakeset" dx="158" dy="217">
 		<tspan>BRAKES 1</tspan>
 	</text>
 	
