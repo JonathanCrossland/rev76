@@ -100,6 +100,15 @@ namespace Rev76.DataModels
 
             return formattedTime;
         }
-       
+
+        public static string FormatTimeLeft(float milliseconds)
+        {
+            TimeSpan time = TimeSpan.FromMilliseconds(milliseconds);
+            return time.TotalHours >= 1
+                ? time.ToString(@"hh\:mm\:ss")
+                : time.ToString(@"mm\:ss");
+        }
+
+
     }
 }

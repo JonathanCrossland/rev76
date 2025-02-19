@@ -37,7 +37,7 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnRealtimeUpdate += (sender, e) =>
             {
-
+                
                 if (GameData.Instance.Session.Phase != e.Phase)
                 {
                     Trace.WriteLine($"{GameData.Instance.Session.Phase} <- {e.Phase}");
@@ -123,7 +123,7 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnBroadcastingEvent += (sender, e) =>
             {
-
+                
                 GameData.Instance.Session.EventType = e.Type;
                 if (e.CarData == null) return;
 
@@ -144,6 +144,7 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnTrackDataUpdate += (sender, e) =>
             {
+                
                 GameData.Instance.Track.TrackLength = e.TrackMeters;
                 GameData.Instance.Track.Name = e.TrackName;
             };

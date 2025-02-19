@@ -68,6 +68,7 @@
     <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="OverlayWindow.cs" />
+    <Compile Include="Widgets\Leaderboard.cs" />
     <Compile Include="Widgets\FlagWidget.cs" />
     <Compile Include="Widgets\PurpleWidget.cs" />
     <Compile Include="Widgets\Rev76Widget.cs" />
@@ -126,6 +127,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\ThunderStorm.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Leaderboard.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\TyrePanel.svg">

@@ -42,5 +42,6 @@ namespace Rev76.DataModels
         public int GlobalRed { get; internal set; }
         public int GlobalWhite { get; internal set; }
         public int GlobalChequered { get; internal set; }
+        public int CompletedLaps { get; internal set; }
     }
 }

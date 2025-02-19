@@ -48,6 +48,8 @@ namespace Rev76.Windows.Widgets
                     return new TyreWidgetEx(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
                 case "PurpleWidget":
                     return new PurpleWidget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
+                case "LeaderboardWidget":
+                    return new LeaderboardWidget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
                 case "Rev76Widget":
                     return new Rev76Widget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
                     //case "GameStateWidget":

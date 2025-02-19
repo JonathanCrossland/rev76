@@ -35,3 +35,4 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Window
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\obj\Release\Rev76.Windows.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\Purple.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\flags.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76.Windows\bin\Release\Assets\Settings.svg

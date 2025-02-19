@@ -59,7 +59,7 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.GameState.Status == GameStatus.OFF) return;
 
-
+                GameData.Instance.Session.CompletedLaps = e.Data.CompletedLaps;
                 GameData.Instance.Session.SessionType = e.Data.Session;
 
                 GameData.Instance.Weather.WindDirection = e.Data.WindDirection.ToString();
