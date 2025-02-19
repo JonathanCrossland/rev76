@@ -17,10 +17,8 @@ namespace Rev76.Windows.Components
         {
             Element = el;
             _Checkmark = Element.Children.FirstOrDefault(c => c.GetType().Name  == "SvgPath") as SvgPath;
-          
         }
 
-      
 
         public bool Checked
         {
@@ -31,8 +29,5 @@ namespace Rev76.Windows.Components
 
             }
         }
-
-      
-
     }
 }

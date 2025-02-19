@@ -78,11 +78,19 @@ namespace Rev76.Windows.Widgets
 
                     if (element is SvgVisualElement rect)
                     {
-                        element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var clickValue);
+                        element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var checkbox);
 
-                        if (clickValue == "")
+                        if (checkbox == "")
                         {
                             SVGCheckBox checkBox = new SVGCheckBox(element);
+                            _ElementsClickEvent[checkBox] = rect.Bounds;
+                        }
+
+                        element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:button", out var button);
+
+                        if (button == "")
+                        {
+                            SVGButton checkBox = new SVGButton(element);
                             _ElementsClickEvent[checkBox] = rect.Bounds;
                         }
 
