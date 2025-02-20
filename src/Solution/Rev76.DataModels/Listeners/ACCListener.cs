@@ -27,7 +27,7 @@ namespace Rev76.DataModels.Listeners
             _AccMemory.StaticInfoUpdated += (sender, e) =>
             {
                 GameData.Instance.Track.Name = e.Data.Track;
-
+                GameData.Instance.Track.NumberOfCars = e.Data.NumCars;
                 AddPlayerDriverInfo(e);
             };
 

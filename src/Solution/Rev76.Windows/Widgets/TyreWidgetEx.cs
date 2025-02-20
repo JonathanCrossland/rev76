@@ -67,7 +67,7 @@ namespace Rev76.Windows.Widgets
                             case "tc1rect":
                                 if (GameData.Instance.Tyres.TCInAction > 0)
                                 {
-                                    rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
+                                    //rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
                                 break;
                             case "bbrect":
@@ -75,7 +75,7 @@ namespace Rev76.Windows.Widgets
                             case "absrect":
                                 if (GameData.Instance.Tyres.AbsVibrations > 0)
                                 {
-                                    rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
+                                    //rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
                                 break;
 
@@ -130,7 +130,7 @@ namespace Rev76.Windows.Widgets
                 {
                     if (element is SvgRectangle rect)
                     {
-
+                        if (rect.ID == null) rect.ID = "";
                         switch (rect.ID)
                         {
                             case "brakebiasdefault":

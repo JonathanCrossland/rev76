@@ -75,7 +75,10 @@ namespace Rev76.DataModels.Listeners
 
                 if (GameData.Instance.Track.Cars.Count == 0)
                 {
+                   
                     LoadCarsFromEntryList();
+
+                  
                 }
 
                 Car car = GameData.Instance.Track.Cars.Find(carindex => carindex.CarIndex == e.CarIndex);
@@ -226,6 +229,11 @@ namespace Rev76.DataModels.Listeners
                    
                 }
 
+            }
+
+            if (GameData.Instance.Track.Cars.Count ==0)
+            {
+                _UDPClient.RequestEntryList();
             }
         }
 

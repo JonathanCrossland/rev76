@@ -112,25 +112,27 @@ namespace Assetto.Data.Broadcasting
                     while (!_Disposing)
                     {
                         stopwatch.Restart();
-                        var timeoutTask = Task.Delay(10000);
+
                         var receiveTask = _Client.ReceiveAsync();
+                        var timeoutTask = Task.Delay(15000);
+
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
                         stopwatch.Stop();
 
-                        if (_Disposing) break; 
+                        if (_Disposing) break;
 
                         if (completedTask == timeoutTask)
                         {
                             throw new TimeoutException("Udp: Receive timeout after 10 seconds.");
                         }
-
-                        var result = await receiveTask;
-                        using (var ms = new System.IO.MemoryStream(result.Buffer))
-                        using (var reader = new System.IO.BinaryReader(ms))
-                        {
-                            MessageHandler.ProcessMessage(reader);
-                        }
-
+                        if (_Client.Available > 0) { 
+                            //var result = await receiveTask.Result;
+                            using (var ms = new System.IO.MemoryStream(receiveTask.Result.Buffer))
+                            using (var reader = new System.IO.BinaryReader(ms))
+                            {
+                                MessageHandler.ProcessMessage(reader);
+                            }
+                    }
                         int elapsedTime = (int)stopwatch.ElapsedMilliseconds;
 
                         if (elapsedTime > 250) 
@@ -146,6 +148,7 @@ namespace Assetto.Data.Broadcasting
                         {
                            
                             //MessageHandler.Disconnect();
+                          
                             //MessageHandler.RequestConnection($"{DisplayName}.{DateTime.Now.Millisecond}", ConnectionPassword, adaptiveUpdateInterval, CommandPassword);
                             adaptiveUpdateInterval = 200;
                             lastReRegisterTime = DateTime.Now;
@@ -177,7 +180,7 @@ namespace Assetto.Data.Broadcasting
                     Trace.TraceError("Udp: Generic Exception on UDP Connection");
                     Trace.TraceError(ex.Message);
                     LastError = ex.Message;
-                    await Task.Delay(5000);
+                     await Task.Delay(5000);
                 }
                 finally
                 {
@@ -186,8 +189,9 @@ namespace Assetto.Data.Broadcasting
                         if (_Client != null)
                         {
                            
-                            //MessageHandler?.Disconnect();
-                         
+                            MessageHandler?.Disconnect();
+                            MessageHandler?.Disconnect();
+                            MessageHandler?.Disconnect();
                             OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
                             Trace.TraceWarning("Udp: Client reset");
                         }
@@ -215,6 +219,10 @@ namespace Assetto.Data.Broadcasting
             MessageHandler.OnRealtimeUpdate -= OnRealtimeUpdate;
             MessageHandler.OnRealtimeCarUpdate -= OnRealtimeCarUpdate;
 
+            MessageHandler?.Disconnect();
+            MessageHandler?.Disconnect();
+
+            Task.Delay(1000).Wait();
             MessageHandler?.Disconnect();
             MessageHandler?.Disconnect();
 
