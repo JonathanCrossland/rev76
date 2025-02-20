@@ -191,11 +191,9 @@ namespace Rev76.Windows.Widgets
                                    .OfType<SvgGroup>()
                                    .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "pit");
                                 
-                                if (car.InPits)
-                                {
-                                    pit.Visibility = car.InPits ? "visible" : "hidden";
-                                }
                                
+                                  pit.Visibility = car.InPits ? "visible" : "hidden";
+                                                               
                             }
                         }
 
