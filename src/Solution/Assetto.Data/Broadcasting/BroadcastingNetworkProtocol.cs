@@ -83,8 +83,8 @@ namespace Assetto.Data.Broadcasting
 
         #region optional failsafety - detect when we have a desync and need a new entry list
 
-        private DateTime lastEntrylistRequest = DateTime.Now;
-        private DateTime lastTrackDataRequest = DateTime.Now;
+        private DateTime lastEntrylistRequest = DateTime.Now.AddMinutes(-1);
+        private DateTime lastTrackDataRequest = DateTime.Now.AddMinutes(-1);
 
         #endregion
 

@@ -27,6 +27,8 @@ namespace Rev76.DataModels.Listeners
                 {
                     GameData.Instance.Reset();
                     _UDPClient.MessageHandler._entryListCars.Clear();
+                    _UDPClient.RequestEntryList();
+                    _UDPClient.RequestTrackData();
                 }
                 
                 Connected = connectionSuccess; 
