@@ -12,7 +12,7 @@
 		#driverRows{
 			fill: rgba(220,0,0,0);
 		}
-		text#drivername, text#lastlaptime, #offsettime {
+		text.drivername, text.lastlaptime, text.offsettime {
 			fill: #ddd;
 			font-size: 9pt;
 			font-weight: 600;
@@ -29,37 +29,49 @@
 		#time{
 			font-size:20pt;
 		}
-		text#pos,text#number,text#pit{
+		text.pos,text.number,text.pit{
 			text-anchor: middle;
 			fill: #000;
 		}
-		text#number{
+		text.number{
 			fill: #000;
 			font-weight: 900;
 			stroke: #000;
 		}
+		text.offsettime{
+			fill: #fff894;
+		}
 	
 	</style>
 
-	
-	<rect id="title" x="10" y="10" width="380" height="30" rx="5" />
-	<text id="racetype" x="20" y="30">R</text>
-	<text id="time" x="160" y="34">21:59</text>
-	<text id="laps" x="365" y="30" text-anchor="end">Lap 1</text>
+	<pattern id="chequeredFlag" width="20" height="20" patternUnits="userSpaceOnUse">
+		<rect x="0" y="0" width="10" height="10" fill="black"/>
+		<rect x="10" y="0" width="10" height="10" fill="white"/>
+		<rect x="0" y="10" width="10" height="10" fill="white"/>
+		<rect x="10" y="10" width="10" height="10" fill="black"/>
+	</pattern>
+
+	<g id="titlepanel">
+		<rect id="title" x="10" y="10" width="380" height="30" rx="5" />
+		<rect id="flag" x="9" y="0" width="382" height="14" visibility="hidden" />
+		<text id="racetype" x="20" y="30">R</text>
+		<text id="time" x="160" y="34">21:59</text>
+		<text id="laps" x="365" y="30" text-anchor="end">Lap 1</text>
+	</g>
 
 	<g id="template" transform="translate(10, 100)" visibility="hidden">
-		<rect width="330" height="25" fill="rgba(0,0,0,0.50)"  />
+			<rect width="330" height="25" fill="rgba(0,0,0,0.75)"  />
 			<rect x="330" width="50" height="25" fill="rgba(0,0,0,0.50)"  />
-			<rect width="35" height="25" fill="rgba(255,255,255,.8)"  />
+			<rect class="posrect" width="35" height="25" fill="rgba(255,255,255,.8)"  />
 			<rect x="210" width="37" height="25" rx="22" fill="rgba(255,255,255,.8)"  />
-			<text x="16" y="16" id="pos">11</text>
-			<text x="50" y="16" id="drivername">J. Crossland</text>
-			<text x="229" y="17" id="number">76</text>
-			<text x="260" y="16" id="lastlaptime">01:25:41</text>
-			<text x="340" y="16" id="offsettime">+0.2</text>
-			<g visibility="hidden" id="pit">
+			<text x="16" y="16" class="pos">11</text>
+			<text x="50" y="16" class="drivername">J. Crossland</text>
+			<text x="229" y="17" class="number">76</text>
+			<text x="260" y="16" class="lastlaptime">01:25:41</text>
+			<text x="340" y="16" class="offsettime"></text>
+			<g visibility="hidden" class="pit">
 				<rect x="380" y="0" width="10" height="25" fill="#fff" rx="0"/>
-				<text x="385" y="18" id="pos">P</text>
+				<text x="381" y="18">P</text>
 			</g>
 	</g>	
 	<g id="DriverRows" transform="translate(10, 43)">
