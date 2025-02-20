@@ -2,6 +2,7 @@
 using Svg;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -135,28 +136,15 @@ namespace Rev76.Windows.Widgets
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error reading file {filePath}: {ex.Message}");
+                        Trace.TraceError($"Error reading file {filePath}: {ex.Message}");
+                        throw ex;
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"File not found: {filePath}");
+                    Trace.TraceError($"File not found: {filePath}");
                 }
             }
-        }
-
-
-        public PointF ConvertToSvgSpace(float screenX, float screenY)
-        {
-            // Convert screen space to local window coordinates
-            float localX = screenX - this.X;
-            float localY = screenY - this.Y;
-
-            // Scale from window size to SVG size
-            float scaleX = (float)_SVGDocuments[0].Width / this.Width;
-            float scaleY = (float)_SVGDocuments[0].Height / this.Height;
-
-            return new PointF(localX * scaleX, localY * scaleY);
         }
 
     }
