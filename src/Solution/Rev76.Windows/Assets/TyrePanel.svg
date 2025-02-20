@@ -1,36 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="350" height="30" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+    width="320" height="60" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
     <style>
-		@import url('https://fonts.googleapis.com/css2?family=Archivo+Black');
+		
 		text {
 		font-family: 'Archivo Black', sans-serif;
 		text-rendering:geometricPrecision;
-		font-weight:bold;
+		font-weight: bold;
      
 		}
     </style>
-	<rect id="tc1rect" x="20" y="0" width="60" height="50" fill="#000000" rx="5" stroke="#cccccc" fill-opacity="0.5"/>
-	<rect id="bbrect" x="134" y="0" width="60" height="50" fill="#ffff00" rx="5" stroke="#cccccc" fill-opacity="0.5"/>
-	<rect id="absrect" x="251" y="0" width="60" height="50" fill="#000000" rx="5" stroke="#cccccc" fill-opacity="0.5"/>
+	
+	<g>
+		<rect id="tc1rect" x="20" y="2" width="60" height="50" fill="#111" rx="5" stroke="#ccc" stroke-width="2" />
+		<rect fill="#111" x="35" y="0" width="30" height="20"></rect>
+		<text textLength="23" font-size="16" x="39" y="14" fill="#ddd">TC</text>
+		<text id="tc1" textLength="19" font-size="23" x="41.5" y="40" fill="#ddd">	4</text>
+	</g>
 
-	<text textLength="20" font-size="13" x="39.5" y="10" fill="#dddddd">
-		TC
-	</text>
-	<text textLength="23" font-size="13" x="151.5" y="10" fill="#000000">
-		BB
-	</text>
-	<text textLength="31" font-size="13" x="264.5" y="10" fill="#dddddd">
-		ABS
-	</text>
-	<text id="tc1" textLength="19" font-size="23" x="41.5" y="35.5" fill="#ffffff">
-		4
-	</text>
-
-	<text id="bb"  textLength="49" font-size="21" x="141.5" y="35.5" fill="#000000">
-		55%
-	</text>
-	<text id="abs" textLength="19" font-size="23" x="271.5" y="35.5" fill="#ffffff">
-		4
-	</text>
+	<g>
+		<rect id="bbrect" x="127" y="2" width="60" height="50" fill="#111" rx="5" stroke="#ccc" stroke-width="2" />
+		<rect fill="#111" x="140" y="0" width="34" height="20"></rect>
+		<text textLength="26" font-size="16" x="144" y="14" fill="#ddd">BB</text>
+		<text id="bb"  textLength="49" font-size="21" x="133" y="40" fill="#ddd">55%</text>
+	</g>
+	
+	<g>
+		<rect id="absrect" x="232" y="2" width="60" height="50" fill="#111" rx="5" stroke="#ccc" stroke-width="2" />
+		<rect fill="#111" x="242" y="0" width="40" height="20"></rect>
+		<text textLength="36" font-size="16" x="244" y="14" fill="#ddd">ABS</text>
+		<text id="abs" textLength="19" font-size="23" x="255" y="40" fill="#ddd">4</text>
+	</g>
 
 </svg>

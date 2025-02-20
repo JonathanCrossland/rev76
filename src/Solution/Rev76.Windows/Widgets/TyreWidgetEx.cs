@@ -30,7 +30,7 @@ namespace Rev76.Windows.Widgets
                 if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "extended")
                 {
                     DrawTyrePanel(gfx, 0, 0);
-                    DrawTyreWidget(gfx, 0, (int) (35 * Scale));
+                    DrawTyreWidget(gfx, 0, (int) (65 * Scale));
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
                 g,
                 1,
-                x, y, 200 * Scale, 18 * Scale,
+                x, y, 325 * Scale, 60 * Scale,
                 element =>
                 {
                     if (element is SvgRectangle rect)
@@ -119,13 +119,13 @@ namespace Rev76.Windows.Widgets
            
             
             var dynamicFillColor = Color.Green;      
-            var offset = 55;
+            var offset = y;
             
             
             SVG.DrawSvg(
                 g,
                 0,
-                x, y, 200 * Scale, 200 * Scale,
+                x, y, 320 * Scale, 350 * Scale,
                 element =>
                 {
                     if (element is SvgRectangle rect)
@@ -139,7 +139,7 @@ namespace Rev76.Windows.Widgets
                                     break;
                                 }
 
-                                rect.Y = rect.Y = ((int)(this.Height / Scale)) * (1.0f - GameData.Instance.Tyres.BrakeBiasDefault) + offset;
+                                rect.Y =   ((int)(this.Height / Scale)) / (1.0f - GameData.Instance.Tyres.BrakeBiasDefault) - offset;
                                 
 
                                 break;
@@ -148,7 +148,7 @@ namespace Rev76.Windows.Widgets
                                 {
                                     break;
                                 }
-                                rect.Y = rect.Y = ((int)(this.Height / Scale)) * (1.0f - GameData.Instance.Tyres.BrakeBias) + offset;
+                                rect.Y =  ((int)(this.Height / Scale)) * (1.0f - GameData.Instance.Tyres.BrakeBias) - offset ;
                                 
                                 break;
                             case "leftfronttyre":
