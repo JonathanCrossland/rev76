@@ -10,7 +10,7 @@
 			
 		}
 		#driverRows{
-			fill: rgba(200,0,0,0);
+			fill: rgba(220,0,0,0);
 		}
 		text#drivername, text#lastlaptime, #offsettime {
 			fill: #ddd;
@@ -19,8 +19,8 @@
 			
 		}
 		#title{
-			fill:#ddd;
-			stroke:#444;
+			fill:#fff;
+			stroke:#fff;
 		}
 		
 		#racetype, #laps{
@@ -34,7 +34,9 @@
 			fill: #000;
 		}
 		text#number{
-			font-weight:  bold;
+			fill: #000;
+			font-weight: 900;
+			stroke: #000;
 		}
 	
 	</style>
