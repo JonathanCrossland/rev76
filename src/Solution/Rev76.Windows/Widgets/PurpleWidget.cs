@@ -93,7 +93,7 @@ namespace Rev76.Windows.Widgets
             SVG.DrawSvg(
              g,
              0,
-             5, 5, 430 * Scale, 230 * Scale,
+             5, 5, 435 * Scale, 230 * Scale,
              element =>
              {
 
