@@ -3,6 +3,7 @@ using Rev76.DataModels;
 using Rev76.Windows.Helpers;
 using Svg;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -35,13 +36,15 @@ namespace Rev76.Windows.Widgets
 
         private bool DrawDriver(System.Drawing.Graphics g)
         {
+            ConcurrentBag<Car> cars = new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values);
+
             Car meCar = GameData.Instance.MeCar;
             DriverInfo driver = GetMeDriver(meCar);
-            Car purpleCar = GetPurpleCar();
+            Car purpleCar = GetPurpleCar(cars);
             DriverInfo purpleDriver = GetPurpleDriver(purpleCar);
-            Car preCar = GetPreCar(meCar);
+            Car preCar = GetPreCar(meCar, cars);
             DriverInfo preDriver = GetPreDriver(preCar);
-            Car postCar = GetPostCar(meCar);
+            Car postCar = GetPostCar(meCar, cars);
             DriverInfo postDriver = GetPostDriver(postCar);
 
 
@@ -392,7 +395,8 @@ namespace Rev76.Windows.Widgets
 
         private static List<LapInfo> GetLastLapTimes(Car car)
         {
-            return car.LapTimes
+            var laptimes = new ConcurrentBag<LapInfo> (car.LapTimes.Values);
+            return laptimes
                     .OrderByDescending(lap => lap.LapNumber)
                     .Take(6)
                     .ToList();
@@ -432,18 +436,20 @@ namespace Rev76.Windows.Widgets
 
         }
 
-        private Car GetPreCar(Car meCar)
+        private Car GetPreCar(Car meCar, ConcurrentBag<Car> cars)
         {
             Car preCar = null;
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                preCar = SplineUtil.GetPreCar(meCar, GameData.Instance.Track.Cars, GameData.Instance.Track.TrackLength);
+               
+                preCar = SplineUtil.GetPreCar(meCar, new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values), GameData.Instance.Track.TrackLength);
             }
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "position")
             {
-                preCar = GameData.Instance.Track.Cars.Find(c => c.Position == meCar?.Position - 1);
+                
+                preCar = cars.FirstOrDefault(c => c.Position == meCar?.Position - 1);
             }
 
             return preCar;
@@ -451,25 +457,25 @@ namespace Rev76.Windows.Widgets
 
        
 
-        private Car GetPostCar(Car meCar)
+        private Car GetPostCar(Car meCar, ConcurrentBag<Car> cars)
         {
             Car postCar = null;
 
             if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "relative")
             {
-                postCar = SplineUtil.GetPostCar(meCar, GameData.Instance.Track.Cars, GameData.Instance.Track.TrackLength);
+                postCar = SplineUtil.GetPostCar(meCar, new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values), GameData.Instance.Track.TrackLength);
             }
             else
             {
-                postCar = GameData.Instance.Track.Cars.Find(c => c.Position == meCar?.Position + 1);
+                postCar = cars.FirstOrDefault(c => c.Position == meCar?.Position + 1);
             }
 
             return postCar;
         }
 
-        private static Car GetPurpleCar()
+        private static Car GetPurpleCar(ConcurrentBag<Car> cars)
         {
-            return GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.Session.BestSession?.CarIndex);
+            return cars.FirstOrDefault(c => c.CarIndex == GameData.Instance.Session.BestSession?.CarIndex);
         }
 
 

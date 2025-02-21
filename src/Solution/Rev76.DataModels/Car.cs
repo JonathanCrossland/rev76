@@ -2,6 +2,7 @@
 using Assetto.Data.Broadcasting;
 using Assetto.Data.Broadcasting.Structs;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 
@@ -10,8 +11,8 @@ namespace Rev76.DataModels
     public class Car
     {
 
-
-
+        private readonly object _carLocationLock = new object();
+        private static readonly object _calculationLock = new object(); // Static lock
         public int CarIndex { get; set; }
         public int DriverIndex { get; set; }
         public int Gear { get; set; }
@@ -25,28 +26,31 @@ namespace Rev76.DataModels
         {
             get { return _CarLocation; }
             set {
-                _CarLocation = value;
-
-                switch (value)
+                lock (_carLocationLock) // Protect the entire setter logic
                 {
-                    case CarLocationEnum.NONE:
-                        InPits = false;
-                        break;
-                    case CarLocationEnum.Track:
-                        InPits = false;
-                        IsInAccident = false;
-                        break;
-                    case CarLocationEnum.Pitlane:
-                        InPits = true;
-                        break;
-                    case CarLocationEnum.PitEntry:
-                        InPits = true;
-                        break;
-                    case CarLocationEnum.PitExit:
-                        InPits = true;
-                        break;
-                    default:
-                        break;
+                    _CarLocation = value;
+
+                    switch (value)
+                    {
+                        case CarLocationEnum.NONE:
+                            InPits = false;
+                            break;
+                        case CarLocationEnum.Track:
+                            InPits = false;
+                            IsInAccident = false;
+                            break;
+                        case CarLocationEnum.Pitlane:
+                            InPits = true;
+                            break;
+                        case CarLocationEnum.PitEntry:
+                            InPits = true;
+                            break;
+                        case CarLocationEnum.PitExit:
+                            InPits = true;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -69,35 +73,41 @@ namespace Rev76.DataModels
         public int Number { get; set; }
         public FuelTank FuelTank { get; set; } = new FuelTank();
 
-        public List<DriverInfo> Drivers { get; } = new List<DriverInfo>();
+        public ConcurrentDictionary<int,DriverInfo> Drivers { get; } = new ConcurrentDictionary<int,DriverInfo>();
         public int GapAhead { get; internal set; }
         public int GapBehind { get; internal set; }
 
-        public List<LapInfo> LapTimes = new List<LapInfo>();
+        public ConcurrentDictionary<int,LapInfo> LapTimes = new ConcurrentDictionary<int,LapInfo>();
 
         public bool IsInAccident { get; set; }
         public FlagType Flag { get; internal set; }
 
         public static float CalculateGap(Car car1,  Car car2, float trackMeters)
         {
-            // Convert SplinePosition to absolute positions
-            float car1Position = (car1.SplinePosition * trackMeters);// + (car1.Laps * trackMeters);
-            float car2Position = (car2.SplinePosition * trackMeters);// + (car2.Laps * trackMeters);
+            lock (_calculationLock)
+            {
+                // Convert SplinePosition to absolute positions
+                float car1Position = (car1.SplinePosition * trackMeters);// + (car1.Laps * trackMeters);
+                float car2Position = (car2.SplinePosition * trackMeters);// + (car2.Laps * trackMeters);
 
-            // Calculate the absolute distance gap
-            return Math.Abs(car1Position - car2Position);
+                // Calculate the absolute distance gap
+                return Math.Abs(car1Position - car2Position);
+            }
         }
 
         // Optional: Time gap based on speed
         public static float CalculateTimeGap(Car car1, Car car2, float trackMeters)
         {
-            float gap = CalculateGap(car1, car2, trackMeters);
-            if (car1.Kmh == 0) car1.Kmh = car2.Kmh;
-            if (car2.Kmh == 0) car2.Kmh = car1.Kmh;
-            // Average speed in m/s (convert Kmh to m/s)
-            float averageSpeed = (car1.Kmh + car2.Kmh) / 2f / 3.6f;
+            lock (_calculationLock)
+            {
+                float gap = CalculateGap(car1, car2, trackMeters);
+                if (car1.Kmh == 0) car1.Kmh = car2.Kmh;
+                if (car2.Kmh == 0) car2.Kmh = car1.Kmh;
+                // Average speed in m/s (convert Kmh to m/s)
+                float averageSpeed = (car1.Kmh + car2.Kmh) / 2f / 3.6f;
 
-            return averageSpeed > 0 ? gap / averageSpeed : float.MaxValue;
+                return averageSpeed > 0 ? gap / averageSpeed : 0;
+            }
         }
 
 

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Rev76.DataModels
 {
     public sealed class GameData
     {
-        private static readonly Lazy<GameData> _Instance = new Lazy<GameData>(() => new GameData());
+        private static readonly Lazy<GameData> _Instance = new Lazy<GameData>(() => new GameData(), LazyThreadSafetyMode.PublicationOnly); // Use Lazy<T> for proper singleton creation
 
         private readonly object _Lock = new object();
         public static GameData Instance => _Instance.Value;
@@ -17,23 +18,28 @@ namespace Rev76.DataModels
         public Car BroadcastCar { get; set; } = new Car();
         public int PlayerCarIndex { get; set; }
 
-        private Car _MeCar;
-
+      
         public Car MeCar
         {
-            get { 
+            get {
 
-                if (_MeCar == null && PlayerCarIndex > 0 && Track.Cars.Count>0)
+                
+                Car meCar = null;
+               
+                lock (_Instance)
                 {
-                    _MeCar = GameData.Instance.Track.Cars.Find(c => c.CarIndex == GameData.Instance.PlayerCarIndex);
-                }
+                    if (PlayerCarIndex > 0 && Track.Cars.Count > 0)
+                    {
+                        meCar = GameData.Instance.Track.Cars[GameData.Instance.PlayerCarIndex];
+                    }
 
-                if (GameData.Instance.BroadcastCar != null)
-                {
-                    _MeCar = GameData.Instance.BroadcastCar;
+                    if (meCar == null && GameData.Instance.BroadcastCar != null) // Check after the first attempt
+                    {
+                        meCar = GameData.Instance.BroadcastCar;
+                    }
                 }
-
-                return _MeCar; 
+               
+                return meCar;
             }
         }
 
@@ -43,7 +49,8 @@ namespace Rev76.DataModels
 
         public void Reset()
         {
-            lock (_Lock)
+
+            lock (_Lock) 
             {
                 Weather = new TrackEnvironment();
                 GameState = new GameState();
@@ -51,7 +58,6 @@ namespace Rev76.DataModels
                 Track = new Track();
                 BroadcastCar = new Car();
                 Session = new Session();
-                _MeCar = null;
                 Trace.WriteLine($"GameData Reset.");
             }
         }

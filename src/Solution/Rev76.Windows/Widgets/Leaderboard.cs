@@ -1,7 +1,9 @@
-﻿using ExCSS;
+﻿using Assetto.Data.Broadcasting.Structs;
+using ExCSS;
 using Rev76.DataModels;
 using Svg;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,6 +18,10 @@ namespace Rev76.Windows.Widgets
         private bool _DriversAdded = false;
 
         private bool _InRender = false;
+
+        List<Car> carList = null;
+
+
         public LeaderboardWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
         }
@@ -35,6 +41,12 @@ namespace Rev76.Windows.Widgets
                 if (_InRender == true) return;
 
                 _InRender = true;
+
+                //if (carList == null || carList.Count() == 0) // TODO: ADD timer to only do this every so often as its a performance hit.
+                    carList = new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values).ToList();
+
+
+
                 SvgGroup template = null;
 
                 SVG.DrawSvg
@@ -59,9 +71,7 @@ namespace Rev76.Windows.Widgets
                                     {
                                         text.Text = GameData.FormatTimeLeft(GameData.Instance.Session.SessionTimeLeft);
                                     }
-                                    //Random rnd = new Random();
-                                    //text.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, rnd.Next(256), rnd.Next(256), rnd.Next(256)));
-
+                                 
                                     break;
                                 case "laps":
                                     text.Text = $"Lap {GameData.Instance.Session.CompletedLaps}";
@@ -100,11 +110,11 @@ namespace Rev76.Windows.Widgets
                         {
                             var positionString = (element as SvgGroup).ID.Replace("car_", "");
                             int.TryParse(positionString, out int position);
-
-                            Car car = GameData.Instance.Track.Cars.Find(c => c.Position == position);
+                          
+                            Car car = carList.Find(c => c.Position == position);
                             if (car != null)
                             {
-                                Car postCar = GameData.Instance.Track.Cars.Find(c => c.Position == position - 1);
+                                Car postCar = carList.Find(c => c.Position == position - 1);
 
                                 SvgGroup row = element;
 
@@ -150,10 +160,12 @@ namespace Rev76.Windows.Widgets
                                     .OfType<SvgText>()
                                     .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "drivername");
 
-                                var driver = car.Drivers[car.DriverIndex];
-                                drivername.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName}";
+                                if (car.Drivers.TryGetValue(car.DriverIndex, out DriverInfo driver))
+                                {
 
+                                    drivername.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName}";
 
+                                }
                                 SvgText number = (row as SvgGroup).Children
                                     .OfType<SvgText>()
                                     .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "number");
@@ -176,14 +188,17 @@ namespace Rev76.Windows.Widgets
                                         .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "offsettime");
 
                                     offsettime.Text = "";
-                                    if (postCar.Laps < car.Laps)
+                                    if (postCar.Laps > car.Laps)
                                     {
                                         offsettime.Text = $"+{postCar.Laps - car.Laps} Laps";
                                     }
                                     else
                                     {
                                         float postcarGap = Car.CalculateTimeGap(postCar, car, GameData.Instance.Track.TrackLength);
-                                        offsettime.Text = $"+{GameData.GetFormattedGap(postcarGap)}";
+                                        if (postcarGap > 0)
+                                        {
+                                            offsettime.Text = $"+{GameData.GetFormattedGap(postcarGap)}";
+                                        }
                                     }
                                 }
 
@@ -226,6 +241,10 @@ namespace Rev76.Windows.Widgets
         {
             if (template == null) return;
 
+            //if (parentGroup.Children.Count() != GameData.Instance.Track.Cars.Count())
+            //{
+
+            //}
             if (GameData.Instance.Track.Cars.Count() != GameData.Instance.Track.NumberOfCars)
             {
                 parentGroup.Children.Clear();
@@ -235,23 +254,26 @@ namespace Rev76.Windows.Widgets
 
             if (parentGroup.ID == "DriverRows" && GameData.Instance.Track.Cars.Count() > 1 && _DriversAdded == false)
             {
-                List<Car> cars = GameData.Instance.Track.Cars.OrderBy(car => car.Position).ToList<Car>();
+                ConcurrentBag<Car> carList = new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values);
+                List<Car> cars = carList.OrderBy(car => car.Position).ToList<Car>();
 
                 for (int i = 0; i < GameData.Instance.Track.Cars.Count; i++)
                 {
-                    Car car = GameData.Instance.Track.Cars[i];
-
-                    SvgGroup row = template.Clone() as SvgGroup;
-                    row.Visibility = "visible";
-                    row.ID = $"car_{(i+1).ToString()}";
-                    
-                    row.Transforms = new Svg.Transforms.SvgTransformCollection
+                    if (GameData.Instance.Track.Cars.TryGetValue(i, out Car car))
                     {
-                        new Svg.Transforms.SvgTranslate(0, i * template.Bounds.Height + 1)
-                    };
 
-                   
-                    (parentGroup as SvgGroup).Children.Add(row);
+                        SvgGroup row = template.Clone() as SvgGroup;
+                        row.Visibility = "visible";
+                        row.ID = $"car_{(i + 1).ToString()}";
+
+                        row.Transforms = new Svg.Transforms.SvgTransformCollection
+                        {
+                            new Svg.Transforms.SvgTranslate(0, i * template.Bounds.Height + 1)
+                        };
+
+
+                        (parentGroup as SvgGroup).Children.Add(row);
+                    }
 
                 }
                 _DriversAdded = true;

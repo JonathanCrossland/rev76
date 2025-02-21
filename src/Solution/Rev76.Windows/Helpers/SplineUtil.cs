@@ -1,5 +1,6 @@
 ﻿using Rev76.DataModels;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,8 +10,9 @@ namespace Rev76.Windows.Helpers
     {
         private const float TrackLength = 1.0f; // Normalized track range (0.0 to 1.0)
 
-        public static Car GetPreCar(Car meCar, List<Car> cars, float trackLength)
+        public static Car GetPreCar(Car meCar, ConcurrentBag<Car> cars, float trackLength)
         {
+          
             var validCars = cars
                 .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self
                 .Where(c => !c.InPits) // Ignore cars in pits
@@ -45,7 +47,7 @@ namespace Rev76.Windows.Helpers
             return nextCar;
         }
 
-        public static Car GetPostCar(Car meCar, List<Car> cars, float trackLength)
+        public static Car GetPostCar(Car meCar, ConcurrentBag<Car> cars, float trackLength)
         {
             var validCars = cars
                 .Where(c => c.CarIndex != meCar.CarIndex) // Exclude self

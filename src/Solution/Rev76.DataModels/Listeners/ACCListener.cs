@@ -175,7 +175,8 @@ namespace Rev76.DataModels.Listeners
                     driverInfo.FirstName = e.Data.PlayerName;
                     driverInfo.LastName = e.Data.PlayerSurname;
                     driverInfo.ShortName = e.Data.PlayerNick;
-                    meCar.Drivers.Add(driverInfo);
+
+                    meCar.Drivers[meCar.Drivers.Count] = driverInfo;
 
                 }
             }
