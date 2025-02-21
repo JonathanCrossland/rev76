@@ -125,6 +125,9 @@ namespace Assetto.Data.Broadcasting
 
                             OnConnectionStateChanged?.Invoke(ConnectionId, connectionSuccess, isReadonly, errMsg);
 
+                            RequestEntryList();
+                            RequestTrackData();
+
                         }
                         break;
 
@@ -266,7 +269,7 @@ namespace Assetto.Data.Broadcasting
 
                             if (carEntry == null && _entryListCars.Count() == 0)
                             {
-                               
+                                //this.RequestEntryList();
                             }
                             else
                             {

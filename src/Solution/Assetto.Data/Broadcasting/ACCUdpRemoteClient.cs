@@ -114,7 +114,7 @@ namespace Assetto.Data.Broadcasting
                         stopwatch.Restart();
 
                         var receiveTask = _Client.ReceiveAsync();
-                        var timeoutTask = Task.Delay(15000);
+                        var timeoutTask = Task.Delay(20000);
 
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
                         stopwatch.Stop();
@@ -126,7 +126,7 @@ namespace Assetto.Data.Broadcasting
                             throw new TimeoutException("Udp: Receive timeout after 10 seconds.");
                         }
                         if (_Client.Available > 0) { 
-                            //var result = await receiveTask.Result;
+
                             using (var ms = new System.IO.MemoryStream(receiveTask.Result.Buffer))
                             using (var reader = new System.IO.BinaryReader(ms))
                             {
@@ -189,9 +189,11 @@ namespace Assetto.Data.Broadcasting
                         if (_Client != null)
                         {
                            
-                            MessageHandler?.Disconnect();
-                            MessageHandler?.Disconnect();
-                            MessageHandler?.Disconnect();
+                            MessageHandler?.Disconnect(); // Sometimes the disconnect did not land. Important!
+                            MessageHandler?.Disconnect(); // Sometimes the disconnect did not land. Send again. Important!
+                            MessageHandler?.Disconnect(); // Sometimes the disconnect did not land. 2nd time seems to work, this one is extra. Important!
+                            _Client.Close(); // Close the UDP Client. Important!
+                            _Client = null; // Set Client to null. Important!
                             OnConnectionStateChanged?.Invoke(MessageHandler.ConnectionId, false, false, "Connection failed");
                             Trace.TraceWarning("Udp: Client reset");
                         }
