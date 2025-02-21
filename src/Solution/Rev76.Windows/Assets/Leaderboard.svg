@@ -64,10 +64,10 @@
 			<rect x="330" width="50" height="25" fill="rgba(0,0,0,0.50)"  />
 			<rect class="posrect" width="35" height="25" fill="rgba(255,255,255,.8)"  />
 			<rect x="210" width="37" height="25" rx="22" fill="rgba(255,255,255,.8)"  />
-			<text x="16" y="16" class="pos">11</text>
-			<text x="50" y="16" class="drivername">J. Crossland</text>
-			<text x="229" y="17" class="number">76</text>
-			<text x="260" y="16" class="lastlaptime">01:25:41</text>
+		<text x="16" y="16" class="pos">#</text>
+			<text x="50" y="16" class="drivername">n/a</text>
+			<text x="229" y="17" class="number">0</text>
+			<text x="260" y="16" class="lastlaptime">00:00</text>
 			<text x="340" y="16" class="offsettime"></text>
 			<g visibility="hidden" class="pit">
 				<rect x="380" y="0" width="10" height="25" fill="#fff" rx="0"/>
