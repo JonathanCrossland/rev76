@@ -241,10 +241,8 @@ namespace Rev76.Windows.Widgets
         {
             if (template == null) return;
 
-            //if (parentGroup.Children.Count() != GameData.Instance.Track.Cars.Count())
-            //{
+            if (GameData.Instance.Track.Cars.Count() <= 0 ) return; 
 
-            //}
             if (GameData.Instance.Track.Cars.Count() != GameData.Instance.Track.NumberOfCars)
             {
                 parentGroup.Children.Clear();
@@ -259,21 +257,21 @@ namespace Rev76.Windows.Widgets
 
                 for (int i = 0; i < GameData.Instance.Track.Cars.Count; i++)
                 {
-                    if (GameData.Instance.Track.Cars.TryGetValue(i, out Car car))
+                    Car car = cars[i];
+                    
+
+                    SvgGroup row = template.Clone() as SvgGroup;
+                    row.Visibility = "visible";
+                    row.ID = $"car_{(i + 1).ToString()}";
+
+                    row.Transforms = new Svg.Transforms.SvgTransformCollection
                     {
-
-                        SvgGroup row = template.Clone() as SvgGroup;
-                        row.Visibility = "visible";
-                        row.ID = $"car_{(i + 1).ToString()}";
-
-                        row.Transforms = new Svg.Transforms.SvgTransformCollection
-                        {
-                            new Svg.Transforms.SvgTranslate(0, i * template.Bounds.Height + 1)
-                        };
+                        new Svg.Transforms.SvgTranslate(0, i * template.Bounds.Height + 1)
+                    };
 
 
-                        (parentGroup as SvgGroup).Children.Add(row);
-                    }
+                    (parentGroup as SvgGroup).Children.Add(row);
+                    
 
                 }
                 _DriversAdded = true;

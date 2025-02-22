@@ -65,7 +65,7 @@ namespace Rev76.DataModels.Listeners
 
                 GameData.Instance.Session.Phase = e.Phase;
 
-                if (e.Phase == SessionPhase.PreFormation)
+                if (e.Phase == SessionPhase.PreFormation || (e.Phase == SessionPhase.Session))
                 {
                     if (_UDPClient.MessageHandler._entryListCars.Count() == 0)
                     {
