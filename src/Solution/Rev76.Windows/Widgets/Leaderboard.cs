@@ -191,6 +191,7 @@ namespace Rev76.Windows.Widgets
                                     if (postCar.Laps > car.Laps)
                                     {
                                         offsettime.Text = $"+{postCar.Laps - car.Laps} Laps";
+                                        offsettime.Fill = new SvgColourServer(System.Drawing.Color.Orange);
                                     }
                                     else
                                     {
@@ -199,6 +200,7 @@ namespace Rev76.Windows.Widgets
                                         {
                                             offsettime.Text = $"+{GameData.GetFormattedGap(postcarGap)}";
                                         }
+                                        offsettime.Fill = new SvgColourServer(System.Drawing.Color.LightYellow);
                                     }
                                 }
 
