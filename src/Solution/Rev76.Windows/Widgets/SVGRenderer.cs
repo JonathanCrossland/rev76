@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Rev76.Windows.Widgets
 {
-    public class SVGOverlayWindow
+    public class SVGRenderer
     {
         public List<SvgDocument> _SVGDocuments = new List<SvgDocument>();
         public float X { get; set; }
@@ -92,12 +92,12 @@ namespace Rev76.Windows.Widgets
 
         public void HandleSvgClick(PointF clickPoint)
         {
-            foreach (var kvp in _ElementsClickEvent)
+            foreach (var element in _ElementsClickEvent)
             {
-                if (kvp.Value.Contains(clickPoint)) // Check if click is inside an element
+                if (element.Value.Contains(clickPoint)) // Check if click is inside an element
                 {
-                    kvp.Key.RaiseClickEvent();
-                    svgClickHandler?.Invoke(kvp.Key);
+                    element.Key.RaiseClickEvent();
+                    svgClickHandler?.Invoke(element.Key);
                     return;
                 }
             }
@@ -106,12 +106,14 @@ namespace Rev76.Windows.Widgets
 
         public bool IsMouseOverInteractiveElement(PointF svgPoint)
         {
-            foreach (var kvp in _ElementsClickEvent)
+            foreach (var element in _ElementsClickEvent)
             {
-                if (kvp.Value.Contains(svgPoint))
+                if (element.Value.Contains(svgPoint))
                 {
+                    element.Key.RaiseMouseOverEvent(); 
                     return true; // Mouse is over a clickable element
                 }
+                element.Key.RaiseMouseOutEvent();
             }
             return false;
         }

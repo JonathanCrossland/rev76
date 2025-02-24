@@ -14,7 +14,7 @@ namespace Rev76.Windows.Widgets
 {
     public class PurpleWidget : OverlayWindow
     {
-        private SVGOverlayWindow SVG = new SVGOverlayWindow();
+        private SVGRenderer SVG = new SVGRenderer();
         private Stopwatch _Stopwatch = new Stopwatch();
         private int _StateChangeInterval = 4500;
         private DrawState _DrawState = DrawState.State1;

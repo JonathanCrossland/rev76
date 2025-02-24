@@ -72,7 +72,7 @@
     <Compile Include="Widgets\FlagWidget.cs" />
     <Compile Include="Widgets\PurpleWidget.cs" />
     <Compile Include="Widgets\Rev76Widget.cs" />
-    <Compile Include="Widgets\SVGOverlayWindow.cs" />
+    <Compile Include="Widgets\SVGRenderer.cs" />
     <Compile Include="Widgets\TyreWidgetEx.cs" />
     <Compile Include="Widgets\WidgetFactory.cs" />
     <Compile Include="[Win32]\Win32.cs" />

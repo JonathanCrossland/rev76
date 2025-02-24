@@ -7,7 +7,7 @@ namespace Rev76.Windows.Widgets
 {
     public class FlagWidget : OverlayWindow
     {
-        private SVGOverlayWindow SVG = new SVGOverlayWindow();
+        private SVGRenderer SVG = new SVGRenderer();
         public FlagWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
         }

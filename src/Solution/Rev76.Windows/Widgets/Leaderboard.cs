@@ -14,7 +14,7 @@ namespace Rev76.Windows.Widgets
 {
     public class LeaderboardWidget : OverlayWindow
     {
-        private SVGOverlayWindow SVG = new SVGOverlayWindow();
+        private SVGRenderer SVG = new SVGRenderer();
         private bool _DriversAdded = false;
 
         private bool _InRender = false;

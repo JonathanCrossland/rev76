@@ -10,7 +10,7 @@ namespace Rev76.Windows.Widgets
 {
     public class TyreWidgetEx : OverlayWindow
     {
-        SVGOverlayWindow SVG = new SVGOverlayWindow();
+        SVGRenderer SVG = new SVGRenderer();
         public TyreWidgetEx(int x, int y, int width, int height, float scale, Icon icon = null) : base(x, y, width, height, scale, icon)
         {
         }

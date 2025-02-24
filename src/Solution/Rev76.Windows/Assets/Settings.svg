@@ -16,7 +16,9 @@
 		text-anchor: start;
 		}
 
-		#check_Purple_ShowInTaskbar:hover { fill: #ff0000;}
+		#check_Purple_ShowInTaskbar { fill: #ff0000; }
+
+		
 
 	</style>
 
