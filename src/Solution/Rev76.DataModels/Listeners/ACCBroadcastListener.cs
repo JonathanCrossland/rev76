@@ -1,6 +1,5 @@
 ﻿using Assetto.Data.Broadcasting;
 using Assetto.Data.Broadcasting.Structs;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -19,11 +18,9 @@ namespace Rev76.DataModels.Listeners
         public ACCBroadcastListener()
         {
         }
-
         public async Task Listen(CancellationToken token)
         {
-            
-
+           
             _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Rev76", "asd", "", 100);
             _UDPClient.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
