@@ -2,7 +2,7 @@
 
 ![logo](rev76.png)
 
-Rev76 is a project to create a range of sim racing tools.
+Rev76 is a project to create a range of sim racing tools starting with some basic widgets.
 
 The widgets are used here in the streams.
 
