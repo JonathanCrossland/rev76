@@ -60,24 +60,26 @@ namespace Rev76.Windows.Widgets
 
         private object WireComponent(SvgElement element)
         { 
-            object el = element;
+            dynamic el = element;
           
 
             if (element is SvgVisualElement rect)
             {
                 element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var checkbox);
 
-                if (checkbox == "")
+                if (checkbox != null)
                 {
                     el = new SVGCheckBox(element);
+                    el.Name = checkbox;
                     _ElementsClickEvent[el as ISVGComponent] = rect.Bounds;
                 }
 
                 element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:button", out var button);
 
-                if (button == "")
+                if (button != null)
                 {
                     el = new SVGButton(element);
+                    el.Name = button;
                     _ElementsClickEvent[el as ISVGComponent] = rect.Bounds;
                 }
 

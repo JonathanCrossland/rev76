@@ -91,6 +91,15 @@ namespace Rev86.Core.Config
             }
         }
 
+        public void UpdateWidget(WidgetConfig widgetConfig)
+        {
+            int idcx = Widgets.FindIndex(w => w.Name == widgetConfig.Name);
+            Widgets[idcx] = widgetConfig;
+            _isDirty = true;
+            Save();
+        }
+
+
         public void UpdateWidgetPosition(string widgetName, int x, int y)
         {
             var widget = Widgets.Find(w => w.Name == widgetName);

@@ -1,5 +1,6 @@
 ﻿using Rev76.DataModels;
 using Rev76.Windows.Components;
+using Rev86.Core.Config;
 using Svg;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,16 +41,44 @@ namespace Rev76.Windows.Widgets
                         }
                     }
 
-                    if (element is SVGCheckBox)
-                    {
-                        var x = 0;
+                   if (element is SVGCheckBox checkbox) {
+                        WidgetConfig config = config = RevConfig.Instance.Widgets.Find(w => w.Name == element.Element.Parent.ID);
+
+                        switch (checkbox.Name)
+                        {
+                            case "ShowInTaskBar":
+                                checkbox.Checked = config.ShowInTaskBar;
+                                break;
+                            case "Enable":
+                                checkbox.Checked = config.Enable;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        
                     }
 
                 },
                 clickElement =>
                 {
-                 
+                    if (clickElement is SVGCheckBox checkbox) {
+                        WidgetConfig config = config = RevConfig.Instance.Widgets.Find(w => w.Name == clickElement.Element.Parent.ID);
 
+                        switch (checkbox.Name)
+                        {
+                            case "ShowInTaskBar":
+                                config.ShowInTaskBar = checkbox.Checked;
+                                break;
+                            case "Enable":
+                                config.Enable = checkbox.Checked;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        RevConfig.Instance.UpdateWidget(config);
+                    }
 
                 });   
 
