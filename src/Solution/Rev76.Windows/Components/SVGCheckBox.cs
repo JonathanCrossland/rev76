@@ -16,22 +16,22 @@ namespace Rev76.Windows.Components
             _Checkmark = Element.Children.FirstOrDefault(c => c.GetType().Name  == "SvgPath") as SvgPath;
         }
 
-        public override void SVGCheckBox_Clicked(object sender, EventArgs e)
+        public override void SVGComponent_Clicked(object sender, EventArgs e)
         {
             Checked = !Checked;
-            base.SVGCheckBox_Clicked(sender, e);
+            base.SVGComponent_Clicked(sender, e);
         }
 
-        public override void SVGCheckBox_MouseOut(object sender, EventArgs e)
+        public override void SVGComponent_MouseOut(object sender, EventArgs e)
         {
            
-            base.SVGCheckBox_MouseOut(sender, e);
+            base.SVGComponent_MouseOut(sender, e);
         }
 
-        public override void SVGCheckBox_MouseOver(object sender, EventArgs e)
+        public override void SVGComponent_MouseOver(object sender, EventArgs e)
         {
            
-            base.SVGCheckBox_MouseOver(sender, e);
+            base.SVGComponent_MouseOver(sender, e);
         }
 
 
