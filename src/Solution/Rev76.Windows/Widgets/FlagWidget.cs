@@ -15,9 +15,9 @@ namespace Rev76.Windows.Widgets
         public override string Title => "Flags";
 
         public override bool Visible { get =>
-                GameData.Instance.GameState.Status == GameStatus.LIVE;
+                GameData.Snapshot.GameState.Status == GameStatus.LIVE;
                 //&& 
-                //GameData.Instance.Session.Flag != FlagType.NO_FLAG; 
+                //GameData.Snapshot.Session.Flag != FlagType.NO_FLAG; 
         }
 
 
@@ -37,7 +37,7 @@ namespace Rev76.Windows.Widgets
 
             SvgPaintServer ret = null;
 
-            switch (GameData.Instance.Session.Flag)
+            switch (GameData.Snapshot.Session.Flag)
             {
                 case FlagType.NO_FLAG:
                     ret = new SvgColourServer(Color.Transparent);
@@ -69,23 +69,23 @@ namespace Rev76.Windows.Widgets
             }
 
 
-            if (GameData.Instance.Session.GlobalGreen == 1)
+            if (GameData.Snapshot.Session.GlobalGreen == 1)
             {
                 ret = new SvgColourServer(Color.LightGreen);
             }
-            if (GameData.Instance.Session.GlobalYellow == 1)
+            if (GameData.Snapshot.Session.GlobalYellow == 1)
             {
                 ret = new SvgColourServer(Color.Yellow);
             }
-            if (GameData.Instance.Session.GlobalWhite == 1)
+            if (GameData.Snapshot.Session.GlobalWhite == 1)
             {
                 ret = new SvgColourServer(Color.White);
             }
-            if (GameData.Instance.Session.GlobalRed == 1)
+            if (GameData.Snapshot.Session.GlobalRed == 1)
             {
                 ret = new SvgColourServer(Color.Red);
             }
-            if (GameData.Instance.Session.GlobalChequered == 1)
+            if (GameData.Snapshot.Session.GlobalChequered == 1)
             {
                 ret = new SvgDeferredPaintServer("url(#chequeredFlag)");
             }
@@ -126,13 +126,13 @@ namespace Rev76.Windows.Widgets
                        switch (element.ID)
                        {
                            case "flagtext1":
-                               if (GameData.Instance.Session.FlagSector1 == 1) text.Fill = new SvgColourServer(Color.Black);
+                               if (GameData.Snapshot.Session.FlagSector1 == 1) text.Fill = new SvgColourServer(Color.Black);
                                break;
                            case "flagtext2":
-                               if (GameData.Instance.Session.FlagSector2 == 1) text.Fill = new SvgColourServer(Color.Black);
+                               if (GameData.Snapshot.Session.FlagSector2 == 1) text.Fill = new SvgColourServer(Color.Black);
                                break;
                            case "flagtext3":
-                               if (GameData.Instance.Session.FlagSector3 == 1) text.Fill = new SvgColourServer(Color.Black);
+                               if (GameData.Snapshot.Session.FlagSector3 == 1) text.Fill = new SvgColourServer(Color.Black);
                                break;
                            default:
                                break;

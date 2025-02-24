@@ -40,7 +40,7 @@ namespace Rev76
         private static SystemTrayIcon _SystemTrayIcon = new SystemTrayIcon();
         private static ACCListener _SharedMemClient = new ACCListener();
         private static ACCBroadcastListener _ACCBroadcastListener = new ACCBroadcastListener();
-        private static CancellationTokenSource cts = new CancellationTokenSource();
+        private static CancellationTokenSource _cts = new CancellationTokenSource();
 
         [STAThread]
         private static async Task Main(string[] args)
@@ -58,8 +58,9 @@ namespace Rev76
 
             CreateSystemTrayIcon(icon);
 
-            SharedMemory(cts);
-            Udp(cts);
+            SharedMemory(_cts);
+            Udp(_cts);
+            GameDataUpdateQueue(_cts);
 
             Trace.WriteLine("Handing over to game.");
 
@@ -79,7 +80,7 @@ namespace Rev76
                 Console.WriteLine("Game not found");
             }
 
-            while (!cts.Token.IsCancellationRequested)
+            while (!_cts.Token.IsCancellationRequested)
             {
                 await Task.Delay(10); // Adjust delay as needed
             }
@@ -155,7 +156,7 @@ namespace Rev76
                 _SystemTrayIcon.AddMenuItem("Quit", false, () =>
                 {
                     Win32.PostQuitMessage(0);
-                    cts.CancelAfter(50);
+                    _cts.CancelAfter(50);
                 });
 
                 _SystemTrayIcon.Show();
@@ -168,7 +169,7 @@ namespace Rev76
         {
             Task.Run(async () =>
             {
-                await _ACCBroadcastListener.Listen(cts);
+                await _ACCBroadcastListener.Listen(cts.Token);
 
             }).Wait();
         }
@@ -180,6 +181,20 @@ namespace Rev76
                 await _SharedMemClient.Listen(cts.Token);
             });
         }
+
+        private static void GameDataUpdateQueue(CancellationTokenSource cts)
+        {
+            Task.Run(async () =>
+            {
+                await GameData.Snapshot.ProcessQueue(cts.Token);
+            });
+    
+           
+        }
+
+
+     
+      
 
         private static Icon GetIcon()
         {
@@ -198,7 +213,7 @@ namespace Rev76
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
-            cts.Cancel();
+            _cts.Cancel();
             
             _ACCBroadcastListener?.Dispose();
             _SharedMemClient.Dispose();

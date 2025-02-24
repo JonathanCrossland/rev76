@@ -284,6 +284,7 @@ namespace Rev76.DataModels.Listeners
 
         public void Dispose()
         {
+
             _AccMemory?.Dispose();
         }
     }

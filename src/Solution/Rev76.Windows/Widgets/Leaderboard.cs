@@ -28,10 +28,7 @@ namespace Rev76.Windows.Widgets
 
         public override string Title => "Leaderboard";
 
-        public override bool Visible { get => GameData.Instance.GameState.Status == GameStatus.LIVE; }
-
-
-     
+        public override bool Visible { get => GameData.Snapshot.GameState.Status == GameStatus.LIVE; }
 
        
         protected override void OnRender(System.Drawing.Graphics gfx)
@@ -43,8 +40,7 @@ namespace Rev76.Windows.Widgets
                 _InRender = true;
 
                 //if (carList == null || carList.Count() == 0) // TODO: ADD timer to only do this every so often as its a performance hit.
-                    carList = new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values).ToList();
-
+                    carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values).ToList();
 
 
                 SvgGroup template = null;
@@ -62,19 +58,19 @@ namespace Rev76.Windows.Widgets
                             switch (text.ID)
                             {
                                 case "racetype":
-                                    text.Text = $"{GameData.Instance.Session.SessionType.ToString().ToUpper()}";
+                                    text.Text = $"{GameData.Snapshot.Session.SessionType.ToString().ToUpper()}";
                                     break;
                                 case "time":
-                                    text.Text = GameData.FormatTimeLeft(GameData.Instance.Session.SessionTimeLeft);
+                                    text.Text = GameData.FormatTimeLeft(GameData.Snapshot.Session.SessionTimeLeft);
                                     
-                                    if (GameData.Instance.Session.Flag == FlagType.CHECKERED_FLAG)
+                                    if (GameData.Snapshot.Session.Flag == FlagType.CHECKERED_FLAG)
                                     {
-                                        text.Text = GameData.FormatTimeLeft(GameData.Instance.Session.SessionTimeLeft);
+                                        text.Text = GameData.FormatTimeLeft(GameData.Snapshot.Session.SessionTimeLeft);
                                     }
                                  
                                     break;
                                 case "laps":
-                                    text.Text = $"Lap {GameData.Instance.Session.CompletedLaps}";
+                                    text.Text = $"Lap {GameData.Snapshot.Session.CompletedLaps}";
                                     break;
                                 default:
                                     break;
@@ -84,7 +80,7 @@ namespace Rev76.Windows.Widgets
                         {
                             if (rect.ID == "flag")
                             {
-                                if (GameData.Instance.Session.GlobalChequered == 1)
+                                if (GameData.Snapshot.Session.GlobalChequered == 1)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#chequeredFlag)");
                                     rect.Visibility = "visible";
@@ -124,11 +120,11 @@ namespace Rev76.Windows.Widgets
 
                                 pos.Text = car.Position.ToString();
 
-                                if (car.CarIndex == GameData.Instance.PlayerCarIndex || car.CarIndex == GameData.Instance.BroadcastCar.CarIndex)
+                                if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
                                 {
                                     pos.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 255, 255, 255));
                                 }
-                                else if (car.CarIndex == GameData.Instance.Session.BestSession?.CarIndex)
+                                else if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
                                 {
                                     pos.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 255, 255, 236));
                                 }
@@ -141,12 +137,12 @@ namespace Rev76.Windows.Widgets
                                    .OfType<SvgRectangle>()
                                    .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "posrect");
 
-                                if (car.CarIndex == GameData.Instance.PlayerCarIndex || car.CarIndex == GameData.Instance.BroadcastCar.CarIndex)
+                                if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
                                 {
 
                                     posRect.Fill = new SvgColourServer(System.Drawing.Color.Red);
                                 }
-                                else if (car.CarIndex == GameData.Instance.Session.BestSession?.CarIndex)
+                                else if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
                                 {
                                     posRect.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 189, 0, 236));
                                    
@@ -195,7 +191,7 @@ namespace Rev76.Windows.Widgets
                                     }
                                     else
                                     {
-                                        float postcarGap = Car.CalculateTimeGap(postCar, car, GameData.Instance.Track.TrackLength);
+                                        float postcarGap = Car.CalculateTimeGap(postCar, car, GameData.Snapshot.Track.TrackLength);
                                         if (postcarGap > 0)
                                         {
                                             offsettime.Text = $"+{GameData.GetFormattedGap(postcarGap)}";
@@ -243,21 +239,21 @@ namespace Rev76.Windows.Widgets
         {
             if (template == null) return;
 
-            if (GameData.Instance.Track.Cars.Count() <= 0 ) return; 
+            if (GameData.Snapshot.Track.Cars.Count() <= 0 ) return; 
 
-            if (GameData.Instance.Track.Cars.Count() != GameData.Instance.Track.NumberOfCars)
+            if (GameData.Snapshot.Track.Cars.Count() != GameData.Snapshot.Track.NumberOfCars)
             {
                 parentGroup.Children.Clear();
                 _DriversAdded = false;
 
             }
 
-            if (parentGroup.ID == "DriverRows" && GameData.Instance.Track.Cars.Count() > 1 && _DriversAdded == false)
+            if (parentGroup.ID == "DriverRows" && GameData.Snapshot.Track.Cars.Count() > 1 && _DriversAdded == false)
             {
-                ConcurrentBag<Car> carList = new ConcurrentBag<Car>(GameData.Instance.Track.Cars.Values);
+                ConcurrentBag<Car> carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values);
                 List<Car> cars = carList.OrderBy(car => car.Position).ToList<Car>();
 
-                for (int i = 0; i < GameData.Instance.Track.Cars.Count; i++)
+                for (int i = 0; i < GameData.Snapshot.Track.Cars.Count; i++)
                 {
                     Car car = cars[i];
                     

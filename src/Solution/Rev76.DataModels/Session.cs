@@ -6,14 +6,14 @@ namespace Rev76.DataModels
     public class Session
     {
         public LapInfo BestSession { get; set; }
-        public BroadcastingCarEventType EventType { get; internal set; }
+        public BroadcastingCarEventType EventType { get; set; }
       
 
 
-        public SessionPhase Phase { get; internal set; }
+        public SessionPhase Phase { get; set; }
 
-        public SessionType SessionType { get; internal set; }
-        public float SessionTimeLeft { get; internal set; }
+        public SessionType SessionType { get; set; }
+        public float SessionTimeLeft { get; set; }
 
         /// <summary>
         /// In the garage, during a race, getting tires changed/fuel added etc.
@@ -35,13 +35,13 @@ namespace Rev76.DataModels
         public FlagType Flag { get; set; }
 
         public int GlobalYellow { get; set; }
-        public int FlagSector1 { get; internal set; }
-        public int FlagSector3 { get; internal set; }
-        public int FlagSector2 { get; internal set; }
-        public int GlobalGreen { get; internal set; }
-        public int GlobalRed { get; internal set; }
-        public int GlobalWhite { get; internal set; }
-        public int GlobalChequered { get; internal set; }
-        public int CompletedLaps { get; internal set; }
+        public int FlagSector1 { get; set; }
+        public int FlagSector3 { get; set; }
+        public int FlagSector2 { get; set; }
+        public int GlobalGreen { get; set; }
+        public int GlobalRed { get; set; }
+        public int GlobalWhite { get; set; }
+        public int GlobalChequered { get; set; }
+        public int CompletedLaps { get; set; }
     }
 }

@@ -10,39 +10,39 @@
             RearRight
         }
 
-        public string TyreCompound { get; internal set; }
-        public float MfdTyrePressureLF { get; internal set; }
-        public float MfdTyrePressureRF { get; internal set; }
-        public float MfdTyrePressureLR { get; internal set; }
-        public float MfdTyrePressureRR { get; internal set; }
-        public int RainTyres { get; internal set; }
-        public int MfdTyreSet { get; internal set; }
-        public int CurrentTyreSet { get; internal set; }
-        public int StrategyTyreSet { get; internal set; }
+        public string TyreCompound { get; set; }
+        public float MfdTyrePressureLF { get; set; }
+        public float MfdTyrePressureRF { get; set; }
+        public float MfdTyrePressureLR { get; set; }
+        public float MfdTyrePressureRR { get; set; }
+        public int RainTyres { get; set; }
+        public int MfdTyreSet { get; set; }
+        public int CurrentTyreSet { get; set; }
+        public int StrategyTyreSet { get; set; }
 
         // Additional tyre-related properties
-        //public TyreStat WheelSlip { get; internal set; }
-        //public TyreStat WheelLoad { get; internal set; }
-        public TyreStat WheelsPressure { get; internal set; }
-        //public TyreStat WheelAngularSpeed { get; internal set; }
-        public TyreStat TyreWear { get; internal set; }
-        public TyreStat TyreDirtyLevel { get; internal set; }
-        public TyreStat TyreCoreTemperature { get; internal set; }
-        //public TyreStat CamberRad { get; internal set; }
-        //public TyreStat SuspensionTravel { get; internal set; }
-        public TyreStat BrakeTemp { get; internal set; }
-        //public TyreStat TyreTempI { get; internal set; }
-        //public TyreStat TyreTempM { get; internal set; }
-        //public TyreStat TyreTempO { get; internal set; }
-        //public TyreStat SuspensionDamage { get; internal set; }
-        public TyreStat TyreTemp { get; internal set; }
-        public TyreStat BrakePressure { get; internal set; }
+        //public TyreStat WheelSlip { get; set; }
+        //public TyreStat WheelLoad { get; set; }
+        public TyreStat WheelsPressure { get; set; }
+        //public TyreStat WheelAngularSpeed { get; set; }
+        public TyreStat TyreWear { get; set; }
+        public TyreStat TyreDirtyLevel { get; set; }
+        public TyreStat TyreCoreTemperature { get; set; }
+        //public TyreStat CamberRad { get; set; }
+        //public TyreStat SuspensionTravel { get; set; }
+        public TyreStat BrakeTemp { get; set; }
+        //public TyreStat TyreTempI { get; set; }
+        //public TyreStat TyreTempM { get; set; }
+        //public TyreStat TyreTempO { get; set; }
+        //public TyreStat SuspensionDamage { get; set; }
+        public TyreStat TyreTemp { get; set; }
+        public TyreStat BrakePressure { get; set; }
         
-        public TyreStat DiscLife { get; internal set; }
-        public float SteerAngle { get; internal set; }
-        public int FrontBrakeCompound { get; internal set; }
-        public int RearBrakeCompound { get; internal set; }
-        public float Brake { get; internal set; }
+        public TyreStat DiscLife { get; set; }
+        public float SteerAngle { get; set; }
+        public int FrontBrakeCompound { get; set; }
+        public int RearBrakeCompound { get; set; }
+        public float Brake { get; set; }
        
         private float _brakeBias;
         private bool _isBrakeBiasDefaultSet = false; // Tracks if the default has been set
@@ -56,7 +56,7 @@
         public float BrakeBias
         {
             get => _brakeBias;
-            internal set
+            set
             {
                
                     // Only set BrakeBiasDefault if it has not been set and the value is non-zero
@@ -80,7 +80,7 @@
         public TyreStat PadLife
         {
             get => _padLife;
-            internal set 
+            set 
             {
                 // Set the default only once
                 if (!_isPadLifeDefaultSet && value.RearLeft > 0 && value.RearRight > 0)
@@ -94,12 +94,12 @@
         }
 
 
-        public float AbsVibrations { get; internal set; }
-        public float TCInAction { get; internal set; }
+        public float AbsVibrations { get; set; }
+        public float TCInAction { get; set; }
     
-        public int TC { get; internal set; }
-        public int ABS { get; internal set; }
-        public TyreStat WheelSlip { get; internal set; }
+        public int TC { get; set; }
+        public int ABS { get; set; }
+        public TyreStat WheelSlip { get; set; }
 
         public float GetPadLifePercentage(Position position)
         {
@@ -132,11 +132,11 @@
 
 
 
-        //public TyreStat Mz { get; internal set; }
-        //public TyreStat Fx { get; internal set; }
-        //public TyreStat Fy { get; internal set; }
-        //public TyreStat SlipRatio { get; internal set; }
-        //public TyreStat SlipAngle { get; internal set; }
+        //public TyreStat Mz { get; set; }
+        //public TyreStat Fx { get; set; }
+        //public TyreStat Fy { get; set; }
+        //public TyreStat SlipRatio { get; set; }
+        //public TyreStat SlipAngle { get; set; }
 
         public string GetBrakeString()
         {

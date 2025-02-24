@@ -3,7 +3,6 @@ using Assetto.Data.Broadcasting;
 using Assetto.Data.Broadcasting.Structs;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 
 namespace Rev76.DataModels

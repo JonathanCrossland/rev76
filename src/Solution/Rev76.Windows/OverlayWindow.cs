@@ -1,4 +1,5 @@
-﻿using Rev86.Core.Config;
+﻿using Rev76.DataModels;
+using Rev86.Core.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,11 +64,13 @@ namespace Rev76.Windows
             }
         }
 
+        public GameData Data { get; set; }
 
         public abstract string Title { get; }
         public abstract bool Visible { get; }
         protected virtual void OnMouseClick(PointF position) { }
         protected virtual bool HitTest(PointF position) => false;
+
 
         private WndProcDelegate _wndProcDelegate;
         private string _ClassName;
