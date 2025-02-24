@@ -1,19 +1,18 @@
 ﻿using Svg;
+using System;
+using System.Drawing;
 
 namespace Rev76.Windows.Components
 {
-    public class SVGButton : ISVGComponent
+    public class SVGButton : SVGComponent
     {
         private SvgElement _Checkmark;
         
 
-        public SVGButton(SvgElement el)
+        public SVGButton(SvgElement el) : base(el)
         {
             Element = el;
-          
         }
-
-        
-
+    
     }
 }

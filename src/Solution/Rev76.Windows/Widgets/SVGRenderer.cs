@@ -20,8 +20,6 @@ namespace Rev76.Windows.Widgets
         
         private Action<ISVGComponent> svgClickHandler = null;
         
-
-
         public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<dynamic> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
@@ -63,7 +61,6 @@ namespace Rev76.Windows.Widgets
         private object WireComponent(SvgElement element)
         { 
             object el = element;
-
           
 
             if (element is SvgVisualElement rect)

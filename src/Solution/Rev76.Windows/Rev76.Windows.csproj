@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Components\ISVGComponent.cs" />
     <Compile Include="Components\SVGButton.cs" />
+    <Compile Include="Components\SVGComponent.cs" />
     <Compile Include="Components\SVGCheckBox.cs" />
     <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="SystemTrayIcon.cs" />
