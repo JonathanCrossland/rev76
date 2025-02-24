@@ -2,6 +2,7 @@
 using Rev76.Windows.Components;
 using Svg;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Rev76.Windows.Widgets
@@ -53,8 +54,9 @@ namespace Rev76.Windows.Widgets
                 });   
 
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                Trace.WriteLine($"Rev76 Render: {ex.Message}");
                 throw;
             }
             finally
