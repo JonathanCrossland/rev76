@@ -12,13 +12,7 @@
 		#driverRows{
 			fill: rgba(220,0,0,0);
 		}
-		text.drivername, text.lastlaptime, text.offsettime {
-			fill: #ddd;
-			font-size: 9pt;
-			font-weight: 600;
-			
-		}
-		#title{
+			#title{
 			fill:#fff;
 			stroke:#fff;
 		}
@@ -29,6 +23,24 @@
 		#time{
 			font-size:20pt;
 		}
+
+		text.drivername{
+			fill: #eee;
+			font-size: 9pt;
+			font-weight: 300;
+			font-family: sans-serif;
+		}
+		text.lastlaptime, text.offsettime {
+			fill: #ddd;
+			font-size: 9pt;
+			font-weight: 300;
+			
+		}
+	
+		
+		rect.numberrect{
+			fill: #555;
+		}
 		text.pos,text.number,text.pit{
 			text-anchor: middle;
 			fill: #000;
@@ -37,10 +49,15 @@
 			fill: #000;
 			font-weight: 900;
 			stroke: #000;
+			text-anchor: middle;
+		}
+		text.lastlaptime{
+			text-anchor: middle;
 		}
 		text.offsettime{
 			fill: #fff781;
-			font-size: 11pt;
+			font-size: 8pt;
+			text-anchor: middle;
 		}
 	
 	</style>
@@ -60,16 +77,16 @@
 		<text id="laps" x="365" y="30" text-anchor="end">Lap 1</text>
 	</g>
 
-	<g id="template" transform="translate(10, 100)" visibility="hidden">
+	<g id="template" transform="translate(10, 100)" visibility="hidden1">
 			<rect width="320" height="25" fill="rgba(0,0,0,0.75)"  />
-			<rect x="320" width="58" height="25" fill="rgba(0,0,0,0.50)"  />
+			<rect x="320" width="60" height="25" fill="rgba(0,0,0,0.50)"  />
 			<rect class="posrect" width="38" height="25" fill="rgba(255,255,255,.8)"  />
-			<rect x="200" width="37" height="25" rx="22" fill="rgba(255,255,255,.8)"  />
-		<text x="16" y="16" class="pos">#</text>
-			<text x="50" y="16" class="drivername">n/a</text>
-			<text x="219" y="17" class="number">0</text>
-			<text x="250" y="16" class="lastlaptime">00:00</text>
-			<text x="336" y="16" class="offsettime"></text>
+			<rect class="numberrect" x="200" width="37" height="25" rx="22" fill="rgba(255,255,255,.8)"  />
+			<text x="18" y="17" class="pos">72</text>
+			<text x="50" y="17" class="drivername">sdasd-</text>
+			<text x="218" y="17" class="number">-</text>
+			<text x="280" y="17" class="lastlaptime">--:--:--</text>
+			<text x="350" y="17" class="offsettime"></text>
 			<g visibility="hidden" class="pit">
 				<rect x="380" y="0" width="10" height="25" fill="#fff" rx="0"/>
 				<text x="381" y="18">P</text>

@@ -73,13 +73,14 @@ namespace Rev76.DataModels
         public FuelTank FuelTank { get; set; } = new FuelTank();
 
         public ConcurrentDictionary<int,DriverInfo> Drivers { get; } = new ConcurrentDictionary<int,DriverInfo>();
-        public int GapAhead { get; internal set; }
-        public int GapBehind { get; internal set; }
+        public int GapAhead { get; set; }
+        public int GapBehind { get; set; }
 
         public ConcurrentDictionary<int,LapInfo> LapTimes = new ConcurrentDictionary<int,LapInfo>();
 
         public bool IsInAccident { get; set; }
-        public FlagType Flag { get; internal set; }
+        public FlagType Flag { get; set; }
+        public CarClass CarClass { get; set; }
 
         public static float CalculateGap(Car car1,  Car car2, float trackMeters)
         {

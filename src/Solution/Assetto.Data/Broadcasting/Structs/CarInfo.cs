@@ -61,10 +61,6 @@ namespace Assetto.Data.Broadcasting.Structs
             return null;
         }
 
-        public void SetCarClassColor()
-        {
-            // Implementation for car class visualization
-        }
     }
 
 }

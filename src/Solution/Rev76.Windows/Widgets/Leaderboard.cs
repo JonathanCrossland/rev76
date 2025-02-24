@@ -1,4 +1,5 @@
-﻿using Assetto.Data.Broadcasting.Structs;
+﻿using Assetto.Data.Broadcasting;
+using Assetto.Data.Broadcasting.Structs;
 using ExCSS;
 using Rev76.DataModels;
 using Svg;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using Color = System.Drawing.Color;
 
 namespace Rev76.Windows.Widgets
 {
@@ -90,6 +92,7 @@ namespace Rev76.Windows.Widgets
                                     rect.Visibility = "hidden";
                                 }
                             }
+                         
                         }
 
                         if (element.ID == "template")
@@ -162,6 +165,13 @@ namespace Rev76.Windows.Widgets
                                     drivername.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName}";
 
                                 }
+
+                                SvgRectangle numberRect = (row as SvgGroup).Children
+                                 .OfType<SvgRectangle>()
+                                 .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "numberrect");
+
+                                numberRect.Fill = GetFillForDriverLicense(car.Drivers[car.DriverIndex].Category);
+
                                 SvgText number = (row as SvgGroup).Children
                                     .OfType<SvgText>()
                                     .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "number");
@@ -235,6 +245,53 @@ namespace Rev76.Windows.Widgets
 
         }
 
+        private SvgPaintServer GetFillForDriverLicense(DriverCategory category)
+        {
+            switch (category)
+            {
+                case DriverCategory.Platinum:
+                    return new SvgColourServer(System.Drawing.Color.Silver);
+                    
+                case DriverCategory.Gold:
+                    return new SvgColourServer(System.Drawing.Color.Gold);
+                    
+                case DriverCategory.Silver:
+                    return new SvgColourServer(System.Drawing.Color.Silver);
+                    udimen
+                case DriverCategory.Bronze:
+                    return new SvgColourServer(System.Drawing.Color.SaddleBrown);
+                    
+                case DriverCategory.Error:
+                    break;
+                default:
+                    break;
+            }
+            return new SvgColourServer(System.Drawing.Color.White);
+        }
+
+        private SvgPaintServer GetFillForDriverClass(CarClass carClass)
+        {
+            switch (carClass)
+            {
+                case CarClass.GT3:
+                    new SvgColourServer(System.Drawing.Color.White);
+                    break;
+                case CarClass.GT4:
+                    new SvgColourServer(System.Drawing.Color.White);
+                    break;
+                case CarClass.CUP:
+                    new SvgColourServer(System.Drawing.Color.White);
+                    break;
+                case CarClass.ST:
+                    new SvgColourServer(System.Drawing.Color.White);
+                    break;
+                default:
+                    break;
+            }
+
+            return new SvgColourServer(System.Drawing.Color.White);
+        }
+
         private void InitDrivers(SvgGroup parentGroup, SvgGroup template)
         {
             if (template == null) return;
@@ -286,6 +343,8 @@ namespace Rev76.Windows.Widgets
 
             base.OnGraphicsSetup(gfx);
         }
+
+        
 
 
 

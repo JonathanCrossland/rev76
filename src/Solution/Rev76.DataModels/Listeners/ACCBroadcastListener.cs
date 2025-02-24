@@ -95,6 +95,7 @@ namespace Rev76.DataModels.Listeners
                         car.Yaw = e.Yaw;
                         car.CarLocation = e.CarLocation;
                         car.CupPosition = e.CupPosition;
+                        
 
                         if (!car.LapTimes.ContainsKey(e.Laps))
                         {
@@ -190,6 +191,8 @@ namespace Rev76.DataModels.Listeners
                         car.CarLocation = c.CarLocation;
                         car.CupPosition = c.CupPosition;
                         car.Number = c.RaceNumber;
+                        car.CarClass = c.CarClass;
+                        
                         car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
                         for (int i = 0; i < c.Drivers.Count(); i++)
                         {
