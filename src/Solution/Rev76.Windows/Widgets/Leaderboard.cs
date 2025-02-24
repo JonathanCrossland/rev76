@@ -257,7 +257,7 @@ namespace Rev76.Windows.Widgets
                     
                 case DriverCategory.Silver:
                     return new SvgColourServer(System.Drawing.Color.Silver);
-                    udimen
+                    
                 case DriverCategory.Bronze:
                     return new SvgColourServer(System.Drawing.Color.SaddleBrown);
                     
