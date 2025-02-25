@@ -30,7 +30,11 @@ namespace Rev76.Windows.Widgets
 
         public override string Title => "Leaderboard";
 
-        public override bool Visible { get => GameData.Snapshot.GameState.Status == GameStatus.LIVE; }
+        public override bool Visible { get => 
+                GameData.Snapshot.GameState.Status == GameStatus.LIVE
+                &&
+                GameData.Snapshot.GameState.IsSetupMenuVisible == false;
+        }
 
        
         protected override void OnRender(System.Drawing.Graphics gfx)

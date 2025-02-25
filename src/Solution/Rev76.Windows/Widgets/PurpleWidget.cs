@@ -31,7 +31,11 @@ namespace Rev76.Windows.Widgets
         }
 
         public override string Title { get => "Purple"; }
-        public override bool Visible { get => GameData.Snapshot.GameState.Status == GameStatus.LIVE; }
+        public override bool Visible { get => 
+                GameData.Snapshot.GameState.Status == GameStatus.LIVE
+                &&
+                GameData.Snapshot.GameState.IsSetupMenuVisible == false;
+        }
       
 
         private bool DrawDriver(System.Drawing.Graphics g)

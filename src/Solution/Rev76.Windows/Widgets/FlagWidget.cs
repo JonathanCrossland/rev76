@@ -15,9 +15,9 @@ namespace Rev76.Windows.Widgets
         public override string Title => "Flags";
 
         public override bool Visible { get =>
-                GameData.Snapshot.GameState.Status == GameStatus.LIVE;
-                //&& 
-                //GameData.Snapshot.Session.Flag != FlagType.NO_FLAG; 
+                GameData.Snapshot.GameState.Status == GameStatus.LIVE
+                &&
+                GameData.Snapshot.GameState.IsSetupMenuVisible == false; 
         }
 
 
