@@ -28,8 +28,18 @@ namespace Rev76.DataModels.Listeners
             {
                 GameData.Instance.PriorityQueue.Enqueue(() =>
                 {
-                    GameData.Instance.Track.Name = e.Data.Track;
-                    GameData.Instance.Track.NumberOfCars = e.Data.NumCars;
+                    if (GameData.Instance.Track.Name != e.Data.Track)
+                    {
+                        GameData.Instance.Track.Name = e.Data.Track;
+                        GameData.Instance.Track.Cars.Clear();
+                    }
+
+                    if (GameData.Instance.Track.NumberOfCars != e.Data.NumCars)
+                    {
+                        GameData.Instance.Track.NumberOfCars = e.Data.NumCars;
+                        GameData.Instance.Track.Cars.Clear();
+                       
+                    }
                     AddPlayerDriverInfo(e);
                 });
             };
