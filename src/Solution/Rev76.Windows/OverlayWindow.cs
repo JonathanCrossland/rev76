@@ -292,6 +292,7 @@ namespace Rev76.Windows
         {
             _HDC = GetDC(HWND);
             _BufferBitmap = new Bitmap(Width * 2, Height * 2, PixelFormat.Format32bppArgb);
+            _BufferBitmap.SetResolution(90, 90); 
             _BufferGraphics = System.Drawing.Graphics.FromImage(_BufferBitmap);
 
             _BufferGraphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -300,6 +301,7 @@ namespace Rev76.Windows
             _BufferGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             _Graphics = System.Drawing.Graphics.FromHdc(_HDC);
+            
         }
 
         private void Render()

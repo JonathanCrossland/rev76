@@ -39,7 +39,7 @@ namespace Rev76.Windows.Widgets
             var originalSize = svgDocument.GetDimensions();
             var scaleX = width / originalSize.Width;
             var scaleY = height / originalSize.Height;
-
+            svgDocument.Ppi = (int)graphics.DpiX;
             var state = graphics.Save();
             graphics.TranslateTransform(x, y);
             graphics.ScaleTransform(scaleX, scaleY);
