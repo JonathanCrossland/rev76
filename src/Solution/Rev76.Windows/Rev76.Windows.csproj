@@ -126,6 +126,9 @@
     <Content Include="Assets\Settings.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\SetupMask.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Sunny.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
