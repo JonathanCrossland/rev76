@@ -1,7 +1,7 @@
 ﻿# Rev76
 
 
-![logo](cover.png)
+![logo](cover.jpg)
 
 Rev76 is a project to create a range of sim racing tools starting with some basic widgets.
 
