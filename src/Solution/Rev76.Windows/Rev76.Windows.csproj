@@ -69,6 +69,8 @@
     <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="OverlayWindow.cs" />
+    <Compile Include="Widgets\SetupMaskWidget.cs" />
+    <Compile Include="Widgets\SetupOverlayWidget.cs" />
     <Compile Include="Widgets\Leaderboard.cs" />
     <Compile Include="Widgets\FlagWidget.cs" />
     <Compile Include="Widgets\PurpleWidget.cs" />

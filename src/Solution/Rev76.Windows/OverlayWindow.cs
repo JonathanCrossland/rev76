@@ -2,6 +2,7 @@
 using Rev86.Core.Config;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -163,9 +164,13 @@ namespace Rev76.Windows
         public void Close()
         {
             _IsRunning = false;
-            
+            OnClose();
         }
 
+        public virtual void OnClose()
+        {
+
+        }
         private void UpdateTheLayeredWindow()
         {
 

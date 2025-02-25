@@ -64,6 +64,14 @@ namespace Rev76.Windows
         public const int GWL_EXSTYLE = -20;
 
 
+        // Constants for GetSystemMetrics
+        public const int SM_CXSCREEN = 0; // Width of the primary screen
+        public const int SM_CYSCREEN = 1; // Height of the primary screen
+        public const int SM_XVIRTUALSCREEN = 76; // X-coordinate of the virtual screen
+        public const int SM_YVIRTUALSCREEN = 77; // Y-coordinate of the virtual screen
+        public const int SM_CXVIRTUALSCREEN = 78; // Width of the virtual screen
+        public const int SM_CYVIRTUALSCREEN = 79; // Height of the virtual screen
+
 
         #region System Tray
 

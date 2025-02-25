@@ -52,6 +52,10 @@ namespace Rev76.Windows.Widgets
                     return new LeaderboardWidget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
                 case "Rev76Widget":
                     return new Rev76Widget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
+                case "SetupOverlayWidget":
+                    return new SetupOverlayWidget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
+                    
+
                     //case "GameStateWidget":
                     //return new GameStateWidget(config.X, config.Y, config.Width, config.Height) { FPS = config.FPS };
                     // Add more cases for other widget types

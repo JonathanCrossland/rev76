@@ -73,6 +73,14 @@ namespace Rev76.Windows
             public int CX;
             public int CY;
         }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
 
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]

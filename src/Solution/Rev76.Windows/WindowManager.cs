@@ -22,12 +22,34 @@ namespace Rev76.Windows
             {
                 get
                 {
-                    int screenWidth = Win32.GetSystemMetrics(0);  // SM_CXSCREEN
-                    int screenHeight = Win32.GetSystemMetrics(1); // SM_CYSCREEN
+                    int screenWidth = Win32.GetSystemMetrics(Win32.SM_CXSCREEN);
+                    int screenHeight = Win32.GetSystemMetrics(Win32.SM_CYSCREEN);
 
                     return new Win32.SIZE() { CX = screenWidth, CY = screenHeight };
                 }
+                
             }
+
+            /// <summary>
+            /// the entire screen with monitors.
+            /// </summary>
+            /// <returns></returns>
+            public static Win32.RECT VirtualScreen
+            {
+                get{
+
+                    Win32.RECT virtualScreen = new Win32.RECT
+                    {
+                        Left = Win32.GetSystemMetrics(Win32.SM_XVIRTUALSCREEN),
+                        Top = Win32.GetSystemMetrics(Win32.SM_YVIRTUALSCREEN),
+                        Right = Win32.GetSystemMetrics(Win32.SM_CXVIRTUALSCREEN),
+                        Bottom = Win32.GetSystemMetrics(Win32.SM_CYVIRTUALSCREEN)
+                    };
+
+                    return virtualScreen;
+                }
+            }
+
         }
      
         public static bool HandOverToGame()
