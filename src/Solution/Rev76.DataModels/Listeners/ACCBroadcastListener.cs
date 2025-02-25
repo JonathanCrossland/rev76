@@ -72,10 +72,9 @@ namespace Rev76.DataModels.Listeners
             {
                 GameData.Instance.CommandQueue.Enqueue(() =>
                 {
-                    if (GameData.Instance.Track.Cars.Count == 0)
-                    {
-                        LoadCarsFromEntryList();
-                    }
+                    
+                    LoadCarsFromEntryList();
+                  
 
                     if (GameData.Instance.Track.Cars.TryGetValue(e.CarIndex, out Car car))
                     {
