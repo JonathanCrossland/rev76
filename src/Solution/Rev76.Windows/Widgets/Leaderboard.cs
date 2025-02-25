@@ -305,7 +305,7 @@ namespace Rev76.Windows.Widgets
 
             }
 
-            if (parentGroup.ID == "DriverRows" && GameData.Snapshot.Track.Cars.Count() > 1 && _DriversAdded == false)
+            if (parentGroup.ID == "DriverRows" && GameData.Snapshot.Track.Cars.Count() >= 1 && _DriversAdded == false)
             {
                 ConcurrentBag<Car> carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values);
                 List<Car> cars = carList.OrderBy(car => car.Position).ToList<Car>();
