@@ -267,9 +267,9 @@ namespace Assetto.Data.Broadcasting
                             // the concept is: "don't know a car or driver? ask for an entry list update"
                             var carEntry = _entryListCars.FirstOrDefault(x => x.CarIndex == carUpdate.CarIndex);
 
-                            if (carEntry == null && _entryListCars.Count() == 0)
+                            if (carEntry == null)
                             {
-                                //this.RequestEntryList();
+                                this.RequestEntryList();
                             }
                             else
                             {
@@ -499,7 +499,7 @@ namespace Assetto.Data.Broadcasting
 
             if (_entryListCars != null && _entryListCars.Count > 0) return;
 
-            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds < 60) return;
+            if ((DateTime.Now - lastEntrylistRequest).TotalSeconds < 3) return;
 
 
             using (var ms = new MemoryStream())
