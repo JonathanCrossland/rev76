@@ -213,10 +213,36 @@ namespace Rev76.Windows.Widgets
                                 SvgGroup pit = (row as SvgGroup).Children
                                    .OfType<SvgGroup>()
                                    .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "pit");
-                                
+
+                                SvgRectangle pitRect = pit.Children.OfType<SvgRectangle>().FirstOrDefault();
+                                SvgText pitText = pit.Children.OfType<SvgText>().FirstOrDefault();
+
+
+                                pit.Visibility = "true";
+                                if (GameData.Snapshot.Session.MissingMandatoryPits == 1 && GameData.Snapshot.Session.MandatoryPitDone == 0)
+                                {
+                                    pitRect.Fill = new SvgColourServer(Color.DarkOrange);
+                                    pitText.Text = "0";
+                                }
+                                else if (GameData.Snapshot.Session.MissingMandatoryPits == 0 && GameData.Snapshot.Session.MandatoryPitDone == 1)
+                                {
+                                    pitRect.Fill = new SvgColourServer(Color.Green);
+                                    pitText.Text = "1";
+                                }
+                                else if (car.InPits == true)
+                                {
+                                    pitRect.Fill = new SvgColourServer(Color.White);
+                                    pitText.Text = "P";
+                                }
+                                else
+                                {
+                                    pit.Visibility = "hidden";
+                                }
+
                                
-                                  pit.Visibility = car.InPits ? "visible" : "hidden";
-                                                               
+
+
+
                             }
                         }
 

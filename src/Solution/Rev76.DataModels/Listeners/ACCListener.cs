@@ -71,7 +71,6 @@ namespace Rev76.DataModels.Listeners
             {
 
               
-
                 GameData.Instance.PriorityQueue.Enqueue(() =>
                 {
                     GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;
@@ -83,6 +82,9 @@ namespace Rev76.DataModels.Listeners
                     GameData.Instance.Session.SessionTimeLeft = e.Data.SessionTimeLeft;
                     GameData.Instance.Session.CompletedLaps = e.Data.CompletedLaps;
                     GameData.Instance.Session.SessionType = e.Data.Session;
+                    GameData.Instance.Session.MandatoryPitDone = e.Data.MandatoryPitDone;
+                    GameData.Instance.Session.MissingMandatoryPits = e.Data.MissingMandatoryPits;
+
                 });
 
                 if (GameData.Instance.GameState.Status == GameStatus.OFF) return;
