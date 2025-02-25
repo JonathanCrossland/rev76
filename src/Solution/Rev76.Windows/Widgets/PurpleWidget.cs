@@ -616,7 +616,7 @@ namespace Rev76.Windows.Widgets
                 });
 
             _Brushes["white"] = new SolidBrush(Color.FromArgb(250, 255, 255, 255));
-            _Fonts["consolas"] = new Font("Consolas", 9, FontStyle.Regular);
+          
 
             base.OnGraphicsSetup(g);
         }

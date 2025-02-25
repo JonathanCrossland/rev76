@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Rev76.Windows.Widgets
 {
@@ -19,7 +20,11 @@ namespace Rev76.Windows.Widgets
         private Dictionary<ISVGComponent, RectangleF> _ElementsClickEvent = new Dictionary<ISVGComponent, RectangleF>();
         
         private Action<ISVGComponent> svgClickHandler = null;
-        
+
+        const string NamespaceUri = "https://www.lucidocean.com/svgui";
+
+        const float precisionThreshold = 0.1f;
+
         public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<dynamic> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
@@ -65,7 +70,7 @@ namespace Rev76.Windows.Widgets
 
             if (element is SvgVisualElement rect)
             {
-                element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:checkbox", out var checkbox);
+                element.CustomAttributes.TryGetValue($"{NamespaceUri}:checkbox", out var checkbox);
 
                 if (checkbox != null)
                 {
@@ -74,7 +79,7 @@ namespace Rev76.Windows.Widgets
                     _ElementsClickEvent[el as ISVGComponent] = rect.Bounds;
                 }
 
-                element.CustomAttributes.TryGetValue("https://www.lucidocean.com/svgui:button", out var button);
+                element.CustomAttributes.TryGetValue($"{NamespaceUri}:button", out var button);
 
                 if (button != null)
                 {
@@ -148,5 +153,47 @@ namespace Rev76.Windows.Widgets
             }
         }
 
+        public void TweenAnimation(SvgImage element, int fps)
+        {
+            if (!element.CustomAttributes.TryGetValue($"{NamespaceUri}:targetx", out var targetx) ||
+                !element.CustomAttributes.TryGetValue($"{NamespaceUri}:targety", out var targety) ||
+                !element.CustomAttributes.TryGetValue($"{NamespaceUri}:tweenspeed", out var tweenSpeed))
+            {
+                return;
+            }
+
+            if (!float.TryParse(targetx, out float targetX) ||
+                !float.TryParse(targety, out float targetY) ||
+                !float.TryParse(tweenSpeed, out float duration))
+            {
+                return;
+            }
+
+            float t = 1f / (duration * fps); // fps is controlled externally
+
+            // Apply easing to the interpolation factor (t)
+            float easedT = EaseInOutQuad(t);
+
+            element.X = Lerp(element.X, targetX, easedT);
+            element.Y = Lerp(element.Y, targetY, easedT);
+
+            if (Math.Abs(element.X - targetX) <= precisionThreshold &&
+                Math.Abs(element.Y - targetY) <= precisionThreshold)
+            {
+                element.X = targetX;
+                element.Y = targetY;
+            }
+        }
+
+        private float Lerp(float start, float end, float t)
+        {
+            return start + (end - start) * t;
+        }
+
+        private float EaseInOutQuad(float t)
+        {
+            // Easing function: smooth acceleration and deceleration
+            return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;
+        }
     }
 }

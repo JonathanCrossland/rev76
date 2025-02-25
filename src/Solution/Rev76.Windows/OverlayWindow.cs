@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using static Rev76.Windows.Win32;
 
@@ -15,7 +16,6 @@ namespace Rev76.Windows
 {
     public abstract class OverlayWindow : IDisposable
     {
-        
         public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
         public IntPtr HWND;
@@ -23,13 +23,14 @@ namespace Rev76.Windows
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        
-        public Icon Icon { get;  }
 
-        public Rectangle Size { 
+        public Icon Icon { get; }
+
+        public Rectangle Size
+        {
             get
             {
-                return new Rectangle(X,Y, Width, Height);
+                return new Rectangle(X, Y, Width, Height);
             }
         }
 
@@ -59,7 +60,8 @@ namespace Rev76.Windows
         public bool ShowInTaskbar
         {
             get { return _ShowInTaskbar; }
-            set { 
+            set
+            {
                 _ShowInTaskbar = value;
                 ShowWindowInTaskbar(value);
             }
@@ -72,7 +74,6 @@ namespace Rev76.Windows
         protected virtual void OnMouseClick(PointF position) { }
         protected virtual bool HitTest(PointF position) => false;
 
-
         private WndProcDelegate _wndProcDelegate;
         private string _ClassName;
 
@@ -82,7 +83,7 @@ namespace Rev76.Windows
         private System.Drawing.Graphics _BufferGraphics;
 
         private bool _IsRunning = true;
-        private int _FPS = 4;
+        private int _FPS = 10;
         private bool _NeedsRedraw = true;
 
         private bool _Disposing = false;
@@ -98,21 +99,19 @@ namespace Rev76.Windows
 
             Width = (int)(width * scale);
             Height = (int)(height * scale);
-            
+
             Scale = scale;
             _ClassName = $"OverlayWindow_{Guid.NewGuid()}";
 
             RegisterWindowClass();
             CreateLayeredWindow();
             InitializeGraphics();
-
         }
 
         private void RegisterWindowClass()
         {
-
             _wndProcDelegate = WndProc;
-            IntPtr iconHandle = Icon!= null ? Icon.Handle : IntPtr.Zero;
+            IntPtr iconHandle = Icon != null ? Icon.Handle : IntPtr.Zero;
 
             Win32.WNDCLASSEX wndClass = new Win32.WNDCLASSEX
             {
@@ -155,6 +154,7 @@ namespace Rev76.Windows
             Win32.ShowWindow(HWND, 1);
             Win32.UpdateWindow(HWND);
         }
+
         public void Show()
         {
             _IsRunning = true;
@@ -169,12 +169,11 @@ namespace Rev76.Windows
 
         public virtual void OnClose()
         {
-
         }
+
         private void UpdateTheLayeredWindow()
         {
-
-            IntPtr hBitmap = _BufferBitmap.GetHbitmap(Color.FromArgb(0, 0, 0, 0)); 
+            IntPtr hBitmap = _BufferBitmap.GetHbitmap(Color.FromArgb(0, 0, 0, 0));
 
             try
             {
@@ -184,9 +183,8 @@ namespace Rev76.Windows
                     return;
                 }
                 Win32.SIZE size = new Win32.SIZE { CX = Width, CY = Height };
-                Win32.POINT pointSource = new Win32.POINT { X = 0, Y = 0 }; 
-                Win32.POINT pointDest = new Win32.POINT { X = X, Y = Y }; 
-
+                Win32.POINT pointSource = new Win32.POINT { X = 0, Y = 0 };
+                Win32.POINT pointDest = new Win32.POINT { X = X, Y = Y };
 
                 Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION
                 {
@@ -195,7 +193,6 @@ namespace Rev76.Windows
                     SourceConstantAlpha = 255,
                     AlphaFormat = AC_SRC_ALPHA
                 };
-
 
                 IntPtr screenDC = Win32.GetDC(IntPtr.Zero);
                 IntPtr memDC = Win32.CreateCompatibleDC(screenDC);
@@ -232,6 +229,7 @@ namespace Rev76.Windows
                 Win32.DeleteObject(hBitmap);
             }
         }
+
         private static IntPtr WndProc(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
             int mouseX;
@@ -248,19 +246,17 @@ namespace Rev76.Windows
                         Win32.PostQuitMessage(0);
                         return IntPtr.Zero;
 
-
                     case Win32.WM_NCHITTEST:
                         mouseX = lParam.ToInt32() & 0xFFFF;
                         mouseY = (lParam.ToInt32() >> 16) & 0xFFFF;
                         point = new PointF(mouseX - instance.X, mouseY - instance.Y);
 
-                        
                         if (instance.HitTest(point))
                         {
-                            return (IntPtr)Win32.HTCLIENT; 
+                            return (IntPtr)Win32.HTCLIENT;
                         }
 
-                        return (IntPtr)Win32.HTCAPTION; 
+                        return (IntPtr)Win32.HTCAPTION;
 
                     case WM_WINDOWPOSCHANGED:
                         Win32.WINDOWPOS pos = Marshal.PtrToStructure<Win32.WINDOWPOS>(lParam);
@@ -270,7 +266,6 @@ namespace Rev76.Windows
                         instance.Height = pos.cy;
 
                         Win32.SetWindowPos(hwnd, Win32.HWND_TOPMOST, 0, 0, 0, 0, Win32.SWP_NOACTIVATE | Win32.SWP_NOMOVE | Win32.SWP_NOSIZE);
-                       
                         return IntPtr.Zero;
 
                     case WM_EXITSIZEMOVE:
@@ -283,10 +278,7 @@ namespace Rev76.Windows
                         mouseY = (lParam.ToInt32() >> 16) & 0xFFFF;
                         point = new PointF(mouseX, mouseY);
                         instance.OnMouseClick(point);
-
                         return IntPtr.Zero;
-
-
                 }
             }
 
@@ -296,8 +288,12 @@ namespace Rev76.Windows
         private void InitializeGraphics()
         {
             _HDC = GetDC(HWND);
-            _BufferBitmap = new Bitmap(Width * 2, Height * 2, PixelFormat.Format32bppArgb);
-            _BufferBitmap.SetResolution(90, 90); 
+            if (_BufferBitmap == null)
+            {
+                _BufferBitmap = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                _BufferBitmap.SetResolution(90, 90);
+            }
+         
             _BufferGraphics = System.Drawing.Graphics.FromImage(_BufferBitmap);
 
             _BufferGraphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -306,7 +302,6 @@ namespace Rev76.Windows
             _BufferGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             _Graphics = System.Drawing.Graphics.FromHdc(_HDC);
-            
         }
 
         private void Render()
@@ -317,6 +312,9 @@ namespace Rev76.Windows
 
             long frameTime = 1000 / FPS;  // Time per frame in milliseconds
             long lastFrameTime = 0;
+            int frameCount = 0;
+            long lastFpsUpdateTime = 0;
+            int currentFps = 0;
 
             OnGraphicsSetup(_BufferGraphics);
 
@@ -327,17 +325,18 @@ namespace Rev76.Windows
                 long timeDiff = currentTime - lastFrameTime;
 
                 Task.Delay(1000 / FPS);
-              
+
                 if (timeDiff >= frameTime)
                 {
                     lastFrameTime = currentTime;
+                    frameCount++;
 
                     _BufferGraphics.Clear(Color.Transparent);
 
                     MSG msg;
                     while (PeekMessage(out msg, IntPtr.Zero, 0, 0, Win32.PM_REMOVE))
                     {
-                        if (!_IsRunning) return; 
+                        if (!_IsRunning) return;
 
                         TranslateMessage(ref msg);
 
@@ -361,15 +360,43 @@ namespace Rev76.Windows
                     {
                         OnRender(_BufferGraphics);
                     }
-                    else
+
+                    // Calculate and display FPS
+                    if (currentTime - lastFpsUpdateTime >= 1000)
                     {
-                        Task.Delay(100);
+                        currentFps = frameCount;
+                        frameCount = 0;
+                        lastFpsUpdateTime = currentTime;
                     }
 
+                    DrawFps(_BufferGraphics, currentFps);
+
                     UpdateTheLayeredWindow();
+
+                    // Calculate the remaining time until the next frame
+                    long renderTime = stopwatch.ElapsedMilliseconds - currentTime;
+                    long remainingTime = frameTime - renderTime;
+
+                    if (remainingTime > 0)
+                    {
+                        Thread.Sleep((int)remainingTime);
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(1); // yield CPU to other processes.
                 }
             }
         }
+
+        private void DrawFps(System.Drawing.Graphics graphics, int fps)
+        {
+          
+           
+            graphics.DrawString($"FPS: {fps}", _Fonts["consolas"], _Brushes["fps"], 10, 10); // Draw FPS at top-left
+            
+        }
+
         private void DrawWindowBackground()
         {
             using (GraphicsPath path = new GraphicsPath())
@@ -403,16 +430,18 @@ namespace Rev76.Windows
                 }
             }
         }
-      
+
         protected virtual void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
             _Brushes["background"] = new SolidBrush(Color.FromArgb(60, 20, 20, 0));
+            _Brushes["fps"] = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
+            _Fonts["consolas"] = new Font("Consolas", 9, FontStyle.Regular);
         }
 
         protected virtual void OnRender(System.Drawing.Graphics gfx)
         {
             DrawWindowBackground();
-            DrawWindowOutline();
+            //DrawWindowOutline();
         }
 
         protected virtual void OnHandOverToGame()
@@ -430,7 +459,6 @@ namespace Rev76.Windows
 
         private void ShowWindowInTaskbar(bool show)
         {
-            
             int exStyle = Win32.GetWindowLong(this.HWND, Win32.GWL_EXSTYLE);
 
             if (show)
@@ -449,7 +477,6 @@ namespace Rev76.Windows
             Win32.SetWindowLong(this.HWND, Win32.GWL_EXSTYLE, exStyle);
         }
 
-
         public void Dispose()
         {
             _IsRunning = false;
@@ -459,8 +486,6 @@ namespace Rev76.Windows
             _Disposing = true;
 
             Task.Delay(1000).Wait();
-
-          
 
             OnGraphicsDestroyed(_BufferGraphics);
 

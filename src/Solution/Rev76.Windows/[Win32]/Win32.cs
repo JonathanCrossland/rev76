@@ -143,6 +143,10 @@ namespace Rev76.Windows
         public static extern bool PeekMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
 
         [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint MsgWaitForMultipleObjects(uint nCount,IntPtr pHandles, bool bWaitAll, uint dwMilliseconds, uint dwWakeMask);
+
+
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern bool GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
         [DllImport("user32.dll", SetLastError = true)]

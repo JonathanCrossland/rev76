@@ -73,7 +73,7 @@ namespace Rev76
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_ProcessExit;
            
 
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
 
             if (!ret)
             {
@@ -139,7 +139,7 @@ namespace Rev76
                     {
                         WidgetConfig wconfig = RevConfig.Instance.Widgets.Find(wc => wc.Name == "Rev76Widget");
                         w = WidgetFactory.CreateWidget(wconfig, icon);
-                        w.FPS = 4;
+                        
                        
                         _SystemTrayIcon.SetMenuItemChecked(w.Title, false);
                         w.Show();

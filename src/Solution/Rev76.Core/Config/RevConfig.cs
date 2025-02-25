@@ -9,7 +9,7 @@ namespace Rev86.Core.Config
     public class WidgetConfig
     {
         public string Name { get; set; } = "Widget";
-        public int FPS { get; set; } = 4;
+        public int FPS { get; set; } = 10;
         public int X { get; set; } = 1;
         public int Y { get; set; } = 1;
         public int Width { get; set; } = 100;

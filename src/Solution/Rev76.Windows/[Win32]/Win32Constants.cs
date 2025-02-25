@@ -72,6 +72,10 @@ namespace Rev76.Windows
         public const int SM_CXVIRTUALSCREEN = 78; // Width of the virtual screen
         public const int SM_CYVIRTUALSCREEN = 79; // Height of the virtual screen
 
+        public const uint QS_ALLEVENTS = 0x04BF;
+        public const uint QS_ALLINPUT = 0x04FF;
+
+
 
         #region System Tray
 

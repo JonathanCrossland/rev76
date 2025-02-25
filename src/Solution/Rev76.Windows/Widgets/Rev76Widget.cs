@@ -2,6 +2,7 @@
 using Rev76.Windows.Components;
 using Rev86.Core.Config;
 using Svg;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -23,7 +24,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnRender(System.Drawing.Graphics gfx)
         {
-
+     
             try
             {
          
@@ -41,7 +42,7 @@ namespace Rev76.Windows.Widgets
                         }
                     }
 
-                   if (element is SVGCheckBox checkbox) {
+                    if (element is SVGCheckBox checkbox) {
                         WidgetConfig config = config = RevConfig.Instance.Widgets.Find(w => w.Name == element.Element.Parent.ID);
 
                         switch (checkbox.Name)
@@ -55,9 +56,14 @@ namespace Rev76.Windows.Widgets
                             default:
                                 break;
                         }
-
-                        
                     }
+
+                    if (element is SvgImage image)
+                    {
+                        SVG.TweenAnimation(image, this.FPS);
+                    }
+
+
 
                 },
                 clickElement =>
@@ -95,6 +101,8 @@ namespace Rev76.Windows.Widgets
 
             
         }
+
+        
 
         private void Element_MouseOut(object sender, MouseArg e)
         {
