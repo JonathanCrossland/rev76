@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
+
 using Color = System.Drawing.Color;
 
 namespace Rev76.Windows.Widgets
@@ -39,6 +39,7 @@ namespace Rev76.Windows.Widgets
        
         protected override void OnRender(System.Drawing.Graphics gfx)
         {
+          
             try
             {
                 if (_InRender == true) return;
@@ -243,17 +244,12 @@ namespace Rev76.Windows.Widgets
                                     pit.Visibility = "hidden";
                                 }
 
-                               
-
-
 
                             }
                         }
 
                     }
                 );
-
-          
 
             }
             catch (System.Exception ex)
@@ -265,13 +261,7 @@ namespace Rev76.Windows.Widgets
             {
                 base.OnRender(gfx);
                 _InRender = false;
-                Random rnd = new Random();
-               
-               // _Brushes["background"] = new SolidBrush(System.Drawing.Color.FromArgb(100, rnd.Next(256), rnd.Next(256), rnd.Next(256)));
-
-
             }
-
 
         }
 
@@ -373,10 +363,6 @@ namespace Rev76.Windows.Widgets
 
             base.OnGraphicsSetup(gfx);
         }
-
-        
-
-
 
     }
 }

@@ -31,6 +31,8 @@ namespace Rev86.Core.Config
 
         public List<WidgetConfig> Widgets { get; set; }
 
+        public bool ShowFPS { get; set; }
+
         private RevConfig() { }
 
         public static RevConfig Instance

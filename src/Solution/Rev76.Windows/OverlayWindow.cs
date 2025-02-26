@@ -369,7 +369,10 @@ namespace Rev76.Windows
                         lastFpsUpdateTime = currentTime;
                     }
 
-                    DrawFps(_BufferGraphics, currentFps);
+                    if (RevConfig.Instance.ShowFPS)
+                    {
+                        DrawFps(_BufferGraphics, currentFps);
+                    }
 
                     UpdateTheLayeredWindow();
 
