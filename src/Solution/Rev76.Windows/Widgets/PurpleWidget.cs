@@ -116,7 +116,7 @@ namespace Rev76.Windows.Widgets
                      {
 
                          case "PreDriverRect":
-
+                             if (preCar == null) return;
                              if (preCar?.Delta > 0)
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltared"); // new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
@@ -171,6 +171,7 @@ namespace Rev76.Windows.Widgets
                              break;
 
                          case "PostDriverRect":
+                             if (postCar == null) return;
                              if (postCar?.Delta > 0)
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltared"); //new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
@@ -200,7 +201,7 @@ namespace Rev76.Windows.Widgets
 
                  if (element is SvgText el)
                  {
-
+                     el.Text = "-";
                      switch (el.ID)
                      {
                          case "PreTimeDiff":
