@@ -7,11 +7,11 @@ namespace Assetto.Data.Broadcasting.Structs
     {
         public int? LaptimeMS { get; set; }
         public List<int?> Splits { get; } = new List<int?>();
-        public ushort CarIndex { get; internal set; }
-        public ushort DriverIndex { get; internal set; }
-        public bool IsInvalid { get; internal set; }
-        public bool IsValidForBest { get; internal set; }
-        public LapType Type { get; internal set; }
+        public ushort CarIndex { get; set; }
+        public ushort DriverIndex { get; set; }
+        public bool IsInvalid { get; set; }
+        public bool IsValidForBest { get; set; }
+        public LapType Type { get; set; }
 
         public int LapNumber { get; set; }
 
