@@ -1,16 +1,15 @@
 {
-  "ShowFPS": false,
   "Widgets": [
     {
       "Name": "TyreWidgetEx",
       "FPS": 20,
-      "X": 2852,
-      "Y": 941,
+      "X": 2853,
+      "Y": 932,
       "Width": 325,
       "Height": 450,
       "Enable": true,
-      "ShowInTaskBar": true,
       "Scale": 0.75,
+      "ShowInTaskBar": true,
       "Settings": {
         "Kind": "extended"
       }
@@ -18,29 +17,28 @@
     {
       "Name": "PurpleWidget",
       "FPS": 20,
-      "X": 3086,
-      "Y": 929,
+      "X": 3122,
+      "Y": 925,
       "Width": 435,
       "Height": 235,
       "Enable": true,
-      "ShowInTaskBar": true,
       "Scale": 1.1,
+      "ShowInTaskBar": true,
       "Settings": {
         "Kind": "relative"
       }
     },
     {
       "Name": "LeaderboardWidget",
-      "FPS": 20,
-      "X": 1000,
-      "Y": 329,
+      "FPS": 1,
+      "X": 4256,
+      "Y": 205,
       "Width": 435,
-      "Height": 850,
+      "Height": 1050,
       "Enable": true,
+      "Scale": 1.3,
       "ShowInTaskBar": true,
-      "Scale": 1.5,
-      "Settings": {
-      }
+      "Settings": {}
     },
     {
       "Name": "Rev76Widget",
@@ -50,8 +48,8 @@
       "Width": 300,
       "Height": 550,
       "Enable": false,
+      "Scale": 1.0,
       "ShowInTaskBar": true,
-      "Scale": 1,
       "Settings": {}
     },
     {
@@ -74,8 +72,9 @@
       "Width": 1800,
       "Height": 1000,
       "Enable": true,
+      "Scale": 1.0,
       "ShowInTaskBar": true,
-      "Scale": 1
+      "Settings": {}
     },
     {
       "Name": "SessionClockWidget",
@@ -85,6 +84,8 @@
       "Width": 200,
       "Height": 100,
       "Enable": false,
+      "Scale": 1.0,
+      "ShowInTaskBar": false,
       "Settings": {}
     },
     {
@@ -95,6 +96,8 @@
       "Width": 200,
       "Height": 240,
       "Enable": false,
+      "Scale": 1.0,
+      "ShowInTaskBar": false,
       "Settings": {}
     },
     {
@@ -105,6 +108,8 @@
       "Width": 300,
       "Height": 500,
       "Enable": false,
+      "Scale": 1.0,
+      "ShowInTaskBar": false,
       "Settings": {}
     },
     {
@@ -115,7 +120,10 @@
       "Width": 500,
       "Height": 300,
       "Enable": false,
+      "Scale": 1.0,
+      "ShowInTaskBar": false,
       "Settings": {}
     }
-  ]
+  ],
+  "ShowFPS": false
 }

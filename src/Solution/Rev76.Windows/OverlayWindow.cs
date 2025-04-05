@@ -21,8 +21,35 @@ namespace Rev76.Windows
         public IntPtr HWND;
         public int X { get; set; }
         public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+
+
+        private int width;
+        public int Width
+        {
+            get { return width; }
+            set
+            {
+                if (width != value)
+                {
+                    width = (int)(value * this.Scale) ;
+                    ResizeWindow();
+                }
+            }
+        }
+
+        private int height;
+        public int Height
+        {
+            get { return height; }
+            set
+            {
+                if (height != value)
+                {
+                    height = (int)(value * this.Scale);
+                    ResizeWindow();
+                }
+            }
+        }
 
         public Icon Icon { get; }
 
@@ -97,10 +124,11 @@ namespace Rev76.Windows
             X = x;
             Y = y;
 
-            Width = (int)(width * scale);
-            Height = (int)(height * scale);
-
             Scale = scale;
+            Width = (int)(width);
+            Height = (int)(height);
+
+           
             _ClassName = $"OverlayWindow_{Guid.NewGuid()}";
 
             RegisterWindowClass();
@@ -169,6 +197,14 @@ namespace Rev76.Windows
 
         public virtual void OnClose()
         {
+        }
+
+
+        private void ResizeWindow()
+        {
+            // Resize the window using SetWindowPos
+            //SetWindowPos(this.HWND, IntPtr.Zero, this.X, this.Y, width, height, Win32.SWP_NOMOVE | Win32.SWP_NOZORDER | Win32.SWP_SHOWWINDOW);
+            //Win32.SetWindowPos(hwnd, Win32.HWND_TOPMOST, 0, 0, 0, 0, Win32.SWP_NOACTIVATE | Win32.SWP_NOMOVE | Win32.SWP_NOSIZE);
         }
 
         private void UpdateTheLayeredWindow()

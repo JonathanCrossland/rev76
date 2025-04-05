@@ -19,6 +19,8 @@ namespace Rev76.Windows.Widgets
         private SVGRenderer SVG = new SVGRenderer();
         private bool _DriversAdded = false;
 
+        private bool _CreatingLeaderboard = false;
+
         private bool _InRender = false;
 
         List<Car> carList = null;
@@ -49,6 +51,7 @@ namespace Rev76.Windows.Widgets
                 //if (carList == null || carList.Count() == 0) // TODO: ADD timer to only do this every so often as its a performance hit.
                     carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values).ToList();
 
+               
 
                 SvgGroup template = null;
 
@@ -103,6 +106,7 @@ namespace Rev76.Windows.Widgets
                         if (element.ID == "template")
                         {
                             template = element.Clone();
+                            this.Height = 200 + (carList.Count() * (int)template.Bounds.Height);
                         }
 
                         if (element.ID == "DriverRows")
@@ -128,13 +132,13 @@ namespace Rev76.Windows.Widgets
 
                                 pos.Text = car.Position.ToString();
 
-                                if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
-                                {
-                                    pos.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 255, 255, 255));
-                                }
-                                else if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
+                                if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
                                 {
                                     pos.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 255, 255, 236));
+                                }
+                                else if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
+                                {
+                                    pos.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 255, 255, 255));
                                 }
                                 else
                                 {
@@ -145,15 +149,16 @@ namespace Rev76.Windows.Widgets
                                    .OfType<SvgRectangle>()
                                    .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "posrect");
 
-                                if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
-                                {
-
-                                    posRect.Fill = new SvgColourServer(System.Drawing.Color.Red);
-                                }
-                                else if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
+                               
+                                if (car.CarIndex == GameData.Snapshot.Session.BestSession?.CarIndex)
                                 {
                                     posRect.Fill = new SvgColourServer(System.Drawing.Color.FromArgb(255, 189, 0, 236));
                                    
+                                }
+                                else if (car.CarIndex == GameData.Snapshot.PlayerCarIndex || car.CarIndex == GameData.Snapshot.BroadcastCar.CarIndex)
+                                {
+
+                                    posRect.Fill = new SvgColourServer(System.Drawing.Color.Red);
                                 }
                                 else
                                 {
@@ -175,7 +180,7 @@ namespace Rev76.Windows.Widgets
                                  .OfType<SvgRectangle>()
                                  .FirstOrDefault(t => t.CustomAttributes.TryGetValue("class", out var value) && value == "numberrect");
 
-                                numberRect.Fill = GetFillForDriverLicense(car.Drivers[car.DriverIndex].Category);
+                                if (car.Drivers.Count > 0) numberRect.Fill = GetFillForDriverLicense(car.Drivers[car.DriverIndex].Category);
 
                                 SvgText number = (row as SvgGroup).Children
                                     .OfType<SvgText>()
@@ -251,6 +256,8 @@ namespace Rev76.Windows.Widgets
                     }
                 );
 
+              
+
             }
             catch (System.Exception ex)
             {
@@ -259,6 +266,7 @@ namespace Rev76.Windows.Widgets
             }
             finally
             {
+               
                 base.OnRender(gfx);
                 _InRender = false;
             }
@@ -315,15 +323,18 @@ namespace Rev76.Windows.Widgets
         private void InitDrivers(SvgGroup parentGroup, SvgGroup template)
         {
             if (template == null) return;
+            if (_CreatingLeaderboard) return;
 
-            if (GameData.Snapshot.Track.Cars.Count() <= 0 ) return; 
+            //if (GameData.Snapshot.Track.Cars.Count() <= 1 ) return; 
 
-            if (GameData.Snapshot.Track.Cars.Count() != GameData.Snapshot.Track.NumberOfCars)
+            if ((GameData.Snapshot.Track.Cars.Count() != GameData.Snapshot.Track.NumberOfCars) && (parentGroup.Children.Count() != GameData.Snapshot.Track.NumberOfCars))
             {
                 parentGroup.Children.Clear();
                 _DriversAdded = false;
 
             }
+
+          
 
             if (parentGroup.ID == "DriverRows" && GameData.Snapshot.Track.Cars.Count() >= 1 && _DriversAdded == false)
             {
@@ -332,6 +343,7 @@ namespace Rev76.Windows.Widgets
 
                 for (int i = 0; i < GameData.Snapshot.Track.Cars.Count; i++)
                 {
+                    _CreatingLeaderboard = true;
                     Car car = cars[i];
                     
 
@@ -351,6 +363,8 @@ namespace Rev76.Windows.Widgets
                 }
                 _DriversAdded = true;
             }
+           
+            _CreatingLeaderboard = false;
         }
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)

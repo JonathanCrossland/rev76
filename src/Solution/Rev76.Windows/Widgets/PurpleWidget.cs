@@ -225,7 +225,9 @@ namespace Rev76.Windows.Widgets
                                  {
                                      numberText = preCar?.Number.ToString() + "";
                                      if (numberText.Length > 0) numberText = "#" + numberText;
-                                     el.Text = $"{preDriver.FirstName[0].ToString().ToUpper()} {preDriver.LastName} {numberText}";
+                                     var fname = preDriver.FirstName.Length >= 1 ? preDriver.FirstName[0].ToString().ToUpper() : "";
+
+                                     el.Text = $"{fname} {preDriver.LastName} {numberText}";
                                      el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
                                  }
                              }

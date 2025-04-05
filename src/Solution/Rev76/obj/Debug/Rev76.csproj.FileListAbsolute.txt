@@ -5,8 +5,11 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\flags.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Purple.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\graphic.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\PartlyCloudy.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Settings.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\SetupMask.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Sunny.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\ThunderStorm.svg
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Leaderboard.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\TyrePanel.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\TyreWidget.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\revconfig.json
@@ -41,6 +44,3 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompi
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.exe
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.pdb
-C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Settings.svg
-C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Leaderboard.svg
-C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\SetupMask.svg

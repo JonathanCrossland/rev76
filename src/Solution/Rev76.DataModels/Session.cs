@@ -43,7 +43,7 @@ namespace Rev76.DataModels
         public int GlobalWhite { get; set; }
         public int GlobalChequered { get; set; }
         public int CompletedLaps { get; set; }
-        public int MandatoryPitDone { get; internal set; }
-        public int MissingMandatoryPits { get; internal set; }
+        public int MandatoryPitDone { get; set; }
+        public int MissingMandatoryPits { get; set; }
     }
 }

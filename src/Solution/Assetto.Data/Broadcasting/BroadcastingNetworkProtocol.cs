@@ -497,7 +497,7 @@ namespace Assetto.Data.Broadcasting
                 return;
             }
 
-            if (_entryListCars != null && _entryListCars.Count > 0) return;
+            //if (_entryListCars != null && _entryListCars.Count > 0) return;
 
             if ((DateTime.Now - lastEntrylistRequest).TotalSeconds < 3) return;
 

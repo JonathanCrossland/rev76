@@ -38,7 +38,7 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnRealtimeUpdate += (sender, e) =>
             {
-                GameData.Instance.CommandQueue.Enqueue(() =>
+                GameData.Instance.PriorityQueue.Enqueue(() =>
                 {
                     GameData.Instance.Session.Phase = e.Phase;
 
@@ -167,6 +167,8 @@ namespace Rev76.DataModels.Listeners
         {
             try
             {
+                
+                    
                 foreach (var c in _UDPClient.MessageHandler._entryListCars)
                 {
                     if (GameData.Instance.Track.Cars.TryGetValue(c.CarIndex, out Car car))
@@ -208,11 +210,25 @@ namespace Rev76.DataModels.Listeners
                         }
                         GameData.Instance.Track.Cars[car.CarIndex] = car;
                     }
+
                     if (GameData.Instance.Session.BestSession == null)
                     {
                         if (c.Position == 0) GameData.Instance.Session.BestSession = c.BestSessionLap;
                     }
+
+                    TryAssignBestSession(car.BestSessionLap);
+
+                   
+
                 }
+
+                if (GameData.Instance.Track.NumberOfCars != _UDPClient.MessageHandler._entryListCars.Count())
+                {
+                    GameData.Instance.Track.NumberOfCars = _UDPClient.MessageHandler._entryListCars.Count();
+                   
+                }
+                GameData.Instance.UpdateSnapshot();
+
             }
             catch (Exception ex)
             {

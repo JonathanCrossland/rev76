@@ -34,12 +34,12 @@ namespace Rev76.DataModels.Listeners
                         GameData.Instance.Track.Cars.Clear();
                     }
 
-                    if (GameData.Instance.Track.NumberOfCars != e.Data.NumCars)
-                    {
-                        GameData.Instance.Track.NumberOfCars = e.Data.NumCars;
-                        GameData.Instance.Track.Cars.Clear();
+                    //if (GameData.Instance.Track.NumberOfCars != e.Data.NumCars)
+                    //{
+                    //    GameData.Instance.Track.NumberOfCars = e.Data.NumCars;
+                    //    GameData.Instance.Track.Cars.Clear();
                        
-                    }
+                    //}
                     AddPlayerDriverInfo(e);
                 });
             };

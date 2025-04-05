@@ -77,7 +77,7 @@
 		<text id="laps" x="365" y="30" text-anchor="end">Lap 1</text>
 	</g>
 
-	<g id="template" transform="translate(10, 100)" visibility="hidden1">
+	<g id="template" transform="translate(10, 100)" visibility="hidden">
 			<rect width="320" height="25" fill="rgba(0,0,0,0.75)"  />
 			<rect x="320" width="60" height="25" fill="rgba(0,0,0,0.50)"  />
 			<rect class="posrect" width="38" height="25" fill="rgba(255,255,255,.8)"  />
