@@ -2,11 +2,11 @@
   "Widgets": [
     {
       "Name": "TyreWidgetEx",
-      "FPS": 20,
+      "FPS": 120,
       "X": 2853,
       "Y": 932,
       "Width": 325,
-      "Height": 450,
+      "Height": 550,
       "Enable": true,
       "Scale": 0.75,
       "ShowInTaskBar": true,
@@ -16,7 +16,7 @@
     },
     {
       "Name": "PurpleWidget",
-      "FPS": 20,
+      "FPS": 120,
       "X": 3122,
       "Y": 925,
       "Width": 435,
@@ -30,7 +30,7 @@
     },
     {
       "Name": "LeaderboardWidget",
-      "FPS": 1,
+      "FPS": 120,
       "X": 4256,
       "Y": 205,
       "Width": 435,
@@ -54,7 +54,7 @@
     },
     {
       "Name": "FlagWidget",
-      "FPS": 10,
+      "FPS": 120,
       "X": 2348,
       "Y": 132,
       "Width": 320,
@@ -125,5 +125,5 @@
       "Settings": {}
     }
   ],
-  "ShowFPS": false
+  "ShowFPS": true
 }

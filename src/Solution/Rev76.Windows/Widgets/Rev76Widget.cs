@@ -1,5 +1,6 @@
 ﻿using Rev76.DataModels;
 using Rev76.Windows.Components;
+using Rev76.Windows.Rendering;
 using Rev86.Core.Config;
 using Svg;
 using System;

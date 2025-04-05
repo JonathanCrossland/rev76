@@ -1,6 +1,7 @@
 ﻿using Assetto.Data.Broadcasting.Structs;
 using Rev76.DataModels;
 using Rev76.Windows.Helpers;
+using Rev76.Windows.Rendering;
 using Svg;
 using System;
 using System.Collections.Concurrent;
@@ -14,7 +15,8 @@ namespace Rev76.Windows.Widgets
 {
     public class PurpleWidget : OverlayWindow
     {
-        private SVGRenderer SVG = new SVGRenderer();
+        //private SVGRenderer _renderer = new SVGRenderer();
+        private DirectXRenderer _renderer = new DirectXRenderer();
         private Stopwatch _Stopwatch = new Stopwatch();
         private int _StateChangeInterval = 4500;
         private DrawState _DrawState = DrawState.State1;
@@ -97,7 +99,7 @@ namespace Rev76.Windows.Widgets
 
            
 
-            SVG.DrawSvg(
+            _renderer.DrawSvg(
              g,
              0,
              5, 5, 435 * Scale, 230 * Scale,
@@ -612,7 +614,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics g)
         {
-            this.SVG.LoadSvgFiles(
+            this._renderer.LoadSvgFiles(
                 new List<string>
                 {
                     "Assets/Purple.svg",
@@ -633,7 +635,7 @@ namespace Rev76.Windows.Widgets
         {
             float scaledX = position.X * Scale;
             float scaledY = position.Y * Scale;
-            return SVG.IsMouseOverInteractiveElement(new PointF(scaledX, scaledY));
+            return _renderer.IsMouseOverInteractiveElement(new PointF(scaledX, scaledY));
         }
 
         protected override void OnMouseClick(PointF clickPoint)
@@ -643,7 +645,7 @@ namespace Rev76.Windows.Widgets
             float scaledX = clickPoint.X * Scale;
             float scaledY = clickPoint.Y * Scale;
             // Handle the click on the SVG
-            SVG.HandleSvgClick(clickPoint);
+            _renderer.HandleSvgClick(clickPoint);
         }
 
 

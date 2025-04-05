@@ -1,5 +1,6 @@
 ﻿
 using Rev76.DataModels;
+using Rev76.Windows.Rendering;
 using Svg;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ namespace Rev76.Windows.Widgets
 {
     public class TyreWidgetEx : OverlayWindow
     {
-        SVGRenderer SVG = new SVGRenderer();
+        private DirectXRenderer _renderer = new DirectXRenderer();
+        //SVGRenderer _renderer = new SVGRenderer();
         public TyreWidgetEx(int x, int y, int width, int height, float scale, Icon icon = null) : base(x, y, width, height, scale, icon)
         {
         }
@@ -36,7 +38,7 @@ namespace Rev76.Windows.Widgets
                 if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "extended")
                 {
                     DrawTyrePanel(gfx, 0, 0);
-                    DrawTyreWidget(gfx, 0, (int) (65 * Scale));
+                    DrawTyreWidget(gfx, 0, (int) (35 * Scale));
                 }
                 else
                 {
@@ -57,7 +59,7 @@ namespace Rev76.Windows.Widgets
             var dynamicFillColor = Color.Green;
          
 
-            SVG.DrawSvg(
+            _renderer.DrawSvg(
                 g,
                 1,
                 x, y, 325 * Scale, 60 * Scale,
@@ -126,7 +128,7 @@ namespace Rev76.Windows.Widgets
             var offset = y;
             
             
-            SVG.DrawSvg(
+            _renderer.DrawSvg(
                 g,
                 0,
                 x, y, 320 * Scale, 350 * Scale,
@@ -349,7 +351,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            SVG.LoadSvgFiles(new List<string>
+            _renderer.LoadSvgFiles(new List<string>
             {
                 "Assets/TyreWidget.svg",
                 "Assets/TyrePanel.svg"

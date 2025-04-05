@@ -432,7 +432,7 @@ namespace Rev76.Windows
         {
           
            
-            graphics.DrawString($"FPS: {fps}", _Fonts["consolas"], _Brushes["fps"], 10, 10); // Draw FPS at top-left
+            graphics.DrawString($"FPS: {fps}", _Fonts["consolas"], _Brushes["fps"], 0, 0); // Draw FPS at top-left
             
         }
 
@@ -473,8 +473,8 @@ namespace Rev76.Windows
         protected virtual void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
             _Brushes["background"] = new SolidBrush(Color.FromArgb(60, 20, 20, 0));
-            _Brushes["fps"] = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
-            _Fonts["consolas"] = new Font("Consolas", 9, FontStyle.Regular);
+            _Brushes["fps"] = new SolidBrush(Color.FromArgb(255, 255, 255, 0));
+            _Fonts["consolas"] = new Font("Consolas", 16, FontStyle.Bold);
         }
 
         protected virtual void OnRender(System.Drawing.Graphics gfx)
@@ -516,7 +516,7 @@ namespace Rev76.Windows
             Win32.SetWindowLong(this.HWND, Win32.GWL_EXSTYLE, exStyle);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _IsRunning = false;
 

@@ -1,3 +1,7 @@
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.AssemblyReference.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.AppResources.resources
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.GenerateResource.cache
+C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\Cloudy.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\CloudyRain.svg
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assets\CloudyRainShowers.svg
@@ -19,6 +23,11 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.Core.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.DataModels.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.Windows.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct2D1.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct3D11.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.DXGI.dll
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Mathematics.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Newtonsoft.Json.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assetto.Data.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Svg.dll
@@ -30,6 +39,16 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Buffers.dll
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.Core.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.DataModels.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.Windows.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Rev76.Windows.dll.config
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct2D1.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct2D1.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct3D11.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Direct3D11.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.DXGI.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.DXGI.xml
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Mathematics.pdb
+C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\SharpDX.Mathematics.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Newtonsoft.Json.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Assetto.Data.pdb
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\Svg.xml
@@ -37,10 +56,6 @@ C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Memory.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Numerics.Vectors.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\coding\csharpsource\rev76\src\Solution\Rev76\bin\Debug\System.Buffers.xml
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.AssemblyReference.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.AppResources.resources
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.GenerateResource.cache
-C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.CoreCompileInputs.cache
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.csproj.Up2Date
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.exe
 C:\coding\csharpsource\rev76\src\Solution\Rev76\obj\Debug\Rev76.pdb

@@ -1,4 +1,5 @@
 ﻿using Rev76.DataModels;
+using Rev76.Windows.Rendering;
 using Svg;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +8,8 @@ namespace Rev76.Windows.Widgets
 {
     public class FlagWidget : OverlayWindow
     {
-        private SVGRenderer SVG = new SVGRenderer();
+        private DirectXRenderer _renderer = new DirectXRenderer();
+        //private SVGRenderer _renderer = new SVGRenderer();
         public FlagWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
         }
@@ -23,7 +25,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            this.SVG.LoadSvgFiles(
+            _renderer.LoadSvgFiles(
                new List<string>
                {
                     "Assets/Flags.svg",
@@ -96,7 +98,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnRender(System.Drawing.Graphics gfx)
         {
-            SVG.DrawSvg(
+            _renderer.DrawSvg(
               gfx,
               0,
                5 , 5, 310 * Scale, 60 * Scale,
@@ -143,7 +145,13 @@ namespace Rev76.Windows.Widgets
             base.OnRender(gfx);
         }
 
-       
-
+        public override void Dispose()
+        {
+          
+             _renderer?.Dispose();
+            
+            
+            base.Dispose();
+        }
     }
 }

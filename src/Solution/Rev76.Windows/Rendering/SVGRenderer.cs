@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 
-namespace Rev76.Windows.Widgets
+
+namespace Rev76.Windows.Rendering
 {
-    public class SVGRenderer
+    public class SVGRenderer :IDisposable
     {
         public List<SvgDocument> _SVGDocuments = new List<SvgDocument>();
         public float X { get; set; }
@@ -194,6 +194,11 @@ namespace Rev76.Windows.Widgets
         {
             // Easing function: smooth acceleration and deceleration
             return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

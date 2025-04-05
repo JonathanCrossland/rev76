@@ -2,6 +2,7 @@
 using Assetto.Data.Broadcasting.Structs;
 using ExCSS;
 using Rev76.DataModels;
+using Rev76.Windows.Rendering;
 using Svg;
 using System;
 using System.Collections.Concurrent;
@@ -16,7 +17,9 @@ namespace Rev76.Windows.Widgets
 {
     public class LeaderboardWidget : OverlayWindow
     {
-        private SVGRenderer SVG = new SVGRenderer();
+        //private SVGRenderer _renderer = new SVGRenderer();
+        private DirectXRenderer _renderer = new DirectXRenderer();
+
         private bool _DriversAdded = false;
         private bool _CreatingLeaderboard = false;
         private bool _InRender = false;
@@ -59,7 +62,7 @@ namespace Rev76.Windows.Widgets
 
                 SvgGroup template = null;
 
-                SVG.DrawSvg
+                _renderer.DrawSvg
                 (
                     gfx,
                     0,
@@ -368,7 +371,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            this.SVG.LoadSvgFiles(
+            this._renderer.LoadSvgFiles(
                new List<string>
                {
                     "Assets/Leaderboard.svg",

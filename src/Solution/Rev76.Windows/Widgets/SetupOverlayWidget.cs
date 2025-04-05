@@ -1,4 +1,5 @@
 ﻿using Rev76.DataModels;
+using Rev76.Windows.Rendering;
 using Rev86.Core.Config;
 using Svg;
 using System.Collections.Generic;
