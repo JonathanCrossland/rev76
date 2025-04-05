@@ -18,13 +18,11 @@ namespace Rev76.Windows.Widgets
     {
         private SVGRenderer SVG = new SVGRenderer();
         private bool _DriversAdded = false;
-
         private bool _CreatingLeaderboard = false;
-
         private bool _InRender = false;
-
-        List<Car> carList = null;
-
+        private List<Car> carList = new List<Car>();
+        private DateTime _lastCarListUpdate = DateTime.MinValue;
+        private const int CAR_LIST_UPDATE_INTERVAL_MS = 50; // Update car list every 50ms
 
         public LeaderboardWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
@@ -48,10 +46,16 @@ namespace Rev76.Windows.Widgets
 
                 _InRender = true;
 
-                //if (carList == null || carList.Count() == 0) // TODO: ADD timer to only do this every so often as its a performance hit.
-                    carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values).ToList();
-
-               
+                // Only update car list periodically to reduce allocations
+                if ((DateTime.Now - _lastCarListUpdate).TotalMilliseconds >= CAR_LIST_UPDATE_INTERVAL_MS)
+                {
+                    carList.Clear();
+                    foreach (var car in GameData.Snapshot.Track.Cars.Values)
+                    {
+                        carList.Add(car);
+                    }
+                    _lastCarListUpdate = DateTime.Now;
+                }
 
                 SvgGroup template = null;
 
@@ -338,7 +342,6 @@ namespace Rev76.Windows.Widgets
 
             if (parentGroup.ID == "DriverRows" && GameData.Snapshot.Track.Cars.Count() >= 1 && _DriversAdded == false)
             {
-                ConcurrentBag<Car> carList = new ConcurrentBag<Car>(GameData.Snapshot.Track.Cars.Values);
                 List<Car> cars = carList.OrderBy(car => car.Position).ToList<Car>();
 
                 for (int i = 0; i < GameData.Snapshot.Track.Cars.Count; i++)
@@ -346,7 +349,6 @@ namespace Rev76.Windows.Widgets
                     _CreatingLeaderboard = true;
                     Car car = cars[i];
                     
-
                     SvgGroup row = template.Clone() as SvgGroup;
                     row.Visibility = "visible";
                     row.ID = $"car_{(i + 1).ToString()}";
@@ -356,10 +358,7 @@ namespace Rev76.Windows.Widgets
                         new Svg.Transforms.SvgTranslate(0, i * template.Bounds.Height + 1)
                     };
 
-
                     (parentGroup as SvgGroup).Children.Add(row);
-                    
-
                 }
                 _DriversAdded = true;
             }
