@@ -6,7 +6,8 @@ namespace Rev76.Windows.Widgets
 {
     internal class SetupMaskWidget : OverlayWindow
     {
-        SVGRenderer SVG = new SVGRenderer();
+        private DirectXRenderer _renderer = new DirectXRenderer();
+        //private SVGRenderer _renderer = new SVGRenderer();
         internal SetupMaskWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
             this.FPS = 4;
@@ -22,13 +23,14 @@ namespace Rev76.Windows.Widgets
             //gfx.FillRectangle(_Brushes["background"], 0, 0, Width, Height);
             _Brushes["background"] = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
             base.OnRender(gfx);
-            SVG.DrawSvg
+            _renderer.DrawSvg
             (
                 gfx,
                 0,
                 Width /4 , 0, Width /2 , Height,
                 element =>
                 {
+                    return false;
                 }
            );
 
@@ -38,7 +40,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            this.SVG.LoadSvgFiles(
+            this._renderer.LoadSvgFiles(
                 new System.Collections.Generic.List<string>
                 {
                     "Assets/SetupMask.svg",

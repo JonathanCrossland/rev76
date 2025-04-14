@@ -83,6 +83,7 @@
     <Compile Include="Components\SVGCheckBox.cs" />
     <Compile Include="Helpers\SplineUtil.cs" />
     <Compile Include="Rendering\DirectXRenderer.cs" />
+    <Compile Include="Widgets\WeatherWidget.cs" />
     <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="OverlayWindow.cs" />
     <Compile Include="Widgets\SetupMaskWidget.cs" />

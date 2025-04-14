@@ -64,7 +64,7 @@ namespace Rev76.Windows.Widgets
                         SVG.TweenAnimation(image, this.FPS);
                     }
 
-
+                     return true;
 
                 },
                 clickElement =>
@@ -86,8 +86,10 @@ namespace Rev76.Windows.Widgets
 
                         RevConfig.Instance.UpdateWidget(config);
                     }
+                   
+                });
 
-                });   
+              
 
             }
             catch (System.Exception ex)

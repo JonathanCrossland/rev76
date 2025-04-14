@@ -11,7 +11,10 @@ namespace Rev76.Windows.Widgets
 {
     public class SetupOverlayWidget : OverlayWindow
     {
-        SVGRenderer SVG = new SVGRenderer();
+
+        private DirectXRenderer _renderer = new DirectXRenderer();
+        //private SVGRenderer _renderer = new SVGRenderer();
+
         SetupMaskWidget _mask = null;
         public SetupOverlayWidget(int x, int y, int width, int height, float scale, Icon icon) : base(x, y, width, height, scale, icon)
         {
@@ -39,7 +42,7 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnGraphicsSetup(System.Drawing.Graphics gfx)
         {
-            this.SVG.LoadSvgFiles(
+            this._renderer.LoadSvgFiles(
                new System.Collections.Generic.List<string>
                {
                     "Assets/SetupMask.svg",
@@ -51,13 +54,14 @@ namespace Rev76.Windows.Widgets
 
         protected override void OnRender(System.Drawing.Graphics gfx)
         {
-            SVG.DrawSvg
+            _renderer.DrawSvg
            (
                gfx,
                0,
                0, 0, 100, 100,
                element =>
                {
+                   return false;
                }
           );
             DrawBorder(gfx);

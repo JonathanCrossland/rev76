@@ -109,16 +109,24 @@ namespace Rev76.Windows.Widgets
 
                  if (element is SvgRectangle rect)
                  {
-                     DrawLaps(preCar, preCarLaps, rect, "PreDriverRect");
-                     DrawLaps(meCar, meCarLaps, rect, "MeDriverRect");
-                     DrawLaps(postCar, postCarLaps, rect, "PostDriverRect");
-
+                     if (element.ID.StartsWith("PreDriverRect"))
+                     {
+                         DrawLap(preCar, preCarLaps, rect);
+                     }
+                     else if (element.ID.StartsWith("MeDriverRect"))
+                     {
+                         DrawLap(meCar, meCarLaps, rect);
+                     }
+                     else if (element.ID.StartsWith("PostDriverRect"))
+                     {
+                         DrawLap(postCar, postCarLaps, rect);
+                     }
 
                      switch (rect.ID)
                      {
 
                          case "PreDriverRect":
-                             if (preCar == null) return;
+                             if (preCar == null) return false;
                              if (preCar?.Delta > 0)
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltared"); // new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
@@ -173,7 +181,7 @@ namespace Rev76.Windows.Widgets
                              break;
 
                          case "PostDriverRect":
-                             if (postCar == null) return;
+                             if (postCar == null) return false;
                              if (postCar?.Delta > 0)
                              {
                                  rect.Fill = new SvgDeferredPaintServer("deltared"); //new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
@@ -349,7 +357,7 @@ namespace Rev76.Windows.Widgets
                      }
                  }
 
-
+                 return true;
              },
             click =>
             {
@@ -365,37 +373,50 @@ namespace Rev76.Windows.Widgets
             return true;
         }
 
-        private static void DrawLaps(Car meCar, List<LapInfo> meCarLaps, SvgRectangle rect, string rectName)
+        private static void DrawLap(Car car, List<LapInfo> carLaps, SvgRectangle rect)
         {
-            for (int i = 0; i < meCarLaps.Count; i++)
+            // Extract the lap index from the rectangle ID (e.g., "PreDriverRect1" -> 1)
+            if (int.TryParse(rect.ID.Substring(rect.ID.Length - 1), out int lapIndex))
             {
-
-                string meDriverRect = rectName + (i + 1).ToString();
-
-
-                if (rect.ID == meDriverRect)
+                // If we have a lap for this index
+                if (lapIndex <= carLaps.Count)
                 {
-                    if (meCarLaps.Count() >= i + 2)
+                    var currentLap = carLaps[lapIndex - 1];
+                    
+                    // Compare with next lap if available
+                    if (lapIndex < carLaps.Count)
                     {
-                        if (meCarLaps[i].LaptimeMS > meCarLaps[i + 1].LaptimeMS)
+                        if (currentLap.LaptimeMS > carLaps[lapIndex].LaptimeMS)
                         {
-                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0));
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 240, 0, 0)); // Red for slower
                         }
                         else
                         {
-                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0));
+                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0)); // Green for faster
                         }
-                        if (meCarLaps[i].LaptimeMS == meCar.BestSessionLap?.LaptimeMS)
-                        {
-                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185));
-                        }
-                        if (meCarLaps[i].IsInvalid)
-                        {
-                            rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4));
-                        }
-
+                    }
+                    else
+                    {
+                        // Last lap with no comparison
+                        rect.Fill = new SvgColourServer(Color.FromArgb(255, 0, 200, 0)); // Green for last lap
                     }
 
+                    // If this is the best lap of the session
+                    if (car?.BestSessionLap != null && currentLap.LaptimeMS == car.BestSessionLap.LaptimeMS)
+                    {
+                        rect.Fill = new SvgColourServer(Color.FromArgb(255, 148, 0, 185)); // Purple for best lap
+                    }
+                    
+                    // Invalid lap
+                    if (currentLap.IsInvalid)
+                    {
+                        rect.Fill = new SvgColourServer(Color.FromArgb(255, 249, 131, 4)); // Orange for invalid
+                    }
+                }
+                else
+                {
+                    // No lap data for this index
+                    rect.Fill = new SvgColourServer(Color.FromArgb(255, 34, 34, 34)); // Dark gray for no data
                 }
             }
         }
@@ -404,11 +425,25 @@ namespace Rev76.Windows.Widgets
 
         private static List<LapInfo> GetLastLapTimes(Car car)
         {
-            var laptimes = new ConcurrentBag<LapInfo> (car.LapTimes.Values);
-            return laptimes
-                    .OrderByDescending(lap => lap.LapNumber)
-                    .Take(6)
-                    .ToList();
+            if (car?.LapTimes == null || car.LapTimes.Count == 0)
+            {
+                return new List<LapInfo>();
+            }
+
+            try
+            {
+                var laptimes = new List<LapInfo>(car.LapTimes.Values);
+                return laptimes
+                        .Where(lap => lap != null && lap.LaptimeMS > 0)
+                        .OrderByDescending(lap => lap.LapNumber)
+                        .Take(6)
+                        .ToList();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error getting lap times: {ex.Message}");
+                return new List<LapInfo>();
+            }
         }
 
         //The ACC data take a long time to update. If we overtake, then our position should be the preCar position + 1.

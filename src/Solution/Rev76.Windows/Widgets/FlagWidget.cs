@@ -140,6 +140,8 @@ namespace Rev76.Windows.Widgets
                                break;
                        }
                    }
+
+                   return true;
                });
 
             base.OnRender(gfx);

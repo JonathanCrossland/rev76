@@ -36,8 +36,8 @@ namespace Rev76.Windows.Widgets
 
             switch (config.Name)
             {
-                //case "WeatherWidget":
-                //    return new WeatherWidget(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS };
+                case "WeatherWidget":
+                    return new WeatherWidget(config.X, config.Y, config.Width, config.Height, config.Scale, icon) { FPS = config.FPS, ShowInTaskbar = config.ShowInTaskBar, Settings = config.Settings };
                 //case "SessionClockWidget":
                 //    return new SessionClockWidget(config.X, config.Y, config.Width, config.Height, icon) { FPS = config.FPS };
                 //case "FuelTankWidget":

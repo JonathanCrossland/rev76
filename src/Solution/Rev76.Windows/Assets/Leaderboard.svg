@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:lucid="https://www.lucidocean.com/svgui"
-    width="450" height="650" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+    width="500" height="850" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
 	
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Archivo+Black');
@@ -77,7 +77,7 @@
 		<text id="laps" x="365" y="30" text-anchor="end">Lap 1</text>
 	</g>
 
-	<g id="template" transform="translate(10, 100)" visibility="hidden">
+	<g id="template" transform="translate(10, 100)" visibility="hidden2">
 			<rect width="320" height="25" fill="rgba(0,0,0,0.75)"  />
 			<rect x="320" width="60" height="25" fill="rgba(0,0,0,0.50)"  />
 			<rect class="posrect" width="38" height="25" fill="rgba(255,255,255,.8)"  />
@@ -87,10 +87,14 @@
 			<text x="218" y="17" class="number">-</text>
 			<text x="280" y="17" class="lastlaptime">--:--:--</text>
 			<text x="350" y="17" class="offsettime">-</text>
-			<g visibility="hidden" class="pit">
-				<rect x="380" y="0" width="10" height="25" fill="#fff" rx="0"/>
-				<text x="381" y="18">P</text>
+			<g visibility="visible" class="pit">
+				<rect x="380" y="0" width="10" height="25" fill="#278800" rx="0"/>
+				<text x="381" y="18"></text>
 			</g>
+			<line x1="390" y1="0" x2="390" y2="25" stroke="#0c0c0c" stroke-width="1"/>
+			<rect class="driverrect1" x="394" y="0" width="8" height="25" fill="#222" rx="2"/>
+			<rect class="driverrect2" x="405" y="0" width="8" height="25" fill="#222" rx="2"/>
+			<rect class="driverrect3" x="416" y="0" width="8" height="25" fill="#222" rx="2"/>
 	</g>	
 	<g id="DriverRows" transform="translate(10, 43)">
 	

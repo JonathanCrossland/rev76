@@ -1,5 +1,4 @@
-﻿
-using Rev76.DataModels;
+﻿using Rev76.DataModels;
 using Rev76.Windows.Rendering;
 using Svg;
 using System;
@@ -38,7 +37,7 @@ namespace Rev76.Windows.Widgets
                 if (Settings.ContainsKey("Kind") && Settings["Kind"].ToString() == "extended")
                 {
                     DrawTyrePanel(gfx, 0, 0);
-                    DrawTyreWidget(gfx, 0, (int) (35 * Scale));
+                    DrawTyreWidget(gfx, 0, (int) (45 * Scale));
                 }
                 else
                 {
@@ -53,12 +52,8 @@ namespace Rev76.Windows.Widgets
 
         private void DrawTyrePanel(System.Drawing.Graphics g, int x, int y)
         {
-          
-
-
             var dynamicFillColor = Color.Green;
          
-
             _renderer.DrawSvg(
                 g,
                 1,
@@ -67,7 +62,6 @@ namespace Rev76.Windows.Widgets
                 {
                     if (element is SvgRectangle rect)
                     {
-
                         switch (rect.ID)
                         {
                             case "tc1rect":
@@ -75,58 +69,47 @@ namespace Rev76.Windows.Widgets
                                 {
                                     //rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break;
+                                return true;
                             case "bbrect":
-                                break;
+                                return true;
                             case "absrect":
                                 if (GameData.Snapshot.Tyres.AbsVibrations > 0)
                                 {
                                     //rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break;
-
+                                return true;
                             default:
-                                break;
+                                return false;
                         }
-
                     }
 
                     if (element is SvgText el)
                     {
-                    
                         switch (el.ID)
                         { 
                             case "tc1":
                                 el.Text = GameData.Snapshot.Tyres.TC.ToString();
-                                break;
+                                return true;
                             case "bb":
                                 el.Text = $"{(GameData.Snapshot.Tyres.BrakeBias * 100).ToString("0.0")}";
-                                break;
+                                return true;
                             case "abs":
                                 el.Text = GameData.Snapshot.Tyres.ABS.ToString();
-                                break;
-
+                                return true;
                             default:
-                                break;
+                                return false;
                         }
-
-
-
-
-
                     }
 
+                    return false;
                 });
         }
 
 
         private void DrawTyreWidget(System.Drawing.Graphics g, int x, int y)
         {
-           
-            
             var dynamicFillColor = Color.Green;      
             var offset = y;
-            
             
             _renderer.DrawSvg(
                 g,
@@ -142,45 +125,39 @@ namespace Rev76.Windows.Widgets
                             case "brakebiasdefault":
                                 if (GameData.Snapshot.Tyres.BrakeBiasDefault <= 0)
                                 {
-                                    break;
+                                    return false;
                                 }
-
-                                rect.Y =   ((int)(this.Height / Scale)) / (1.0f - GameData.Snapshot.Tyres.BrakeBiasDefault) - offset;
-                                
-
-                                break;
+                                rect.Y = ((int)(this.Height / Scale)) / (1.0f - GameData.Snapshot.Tyres.BrakeBiasDefault) - offset;
+                                return true;
                             case "brakebiasrect":
                                 if (GameData.Snapshot.Tyres.BrakeBias <= 0)
                                 {
-                                    break;
+                                    return false;
                                 }
-                                rect.Y =  ((int)(this.Height / Scale)) * (1.0f - GameData.Snapshot.Tyres.BrakeBias) - offset ;
-                                
-                                break;
+                                rect.Y = ((int)(this.Height / Scale)) * (1.0f - GameData.Snapshot.Tyres.BrakeBias) - offset;
+                                return true;
                             case "leftfronttyre":
                                 rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Snapshot.Tyres.TyreTemp.FrontLeft));
                                 if (GameData.Snapshot.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-
                                 if (GameData.Snapshot.Tyres.WheelSlip.FrontLeft == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
-                                break;
+                                return true;
                             case "rightfronttyre":
                                 rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Snapshot.Tyres.TyreTemp.FrontRight));
                                 if (GameData.Snapshot.Tyres.TCInAction > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-
                                 if (GameData.Snapshot.Tyres.WheelSlip.FrontRight == 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
-                                break;
+                                return true;
                             case "leftreartyre":
                                 rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Snapshot.Tyres.TyreTemp.RearLeft));
                                 if (GameData.Snapshot.Tyres.TCInAction > 0)
@@ -191,7 +168,7 @@ namespace Rev76.Windows.Widgets
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
-                                break;
+                                return true;
                             case "rightreartyre":
                                 rect.Fill = new SvgColourServer(GetTyreTempColor(GameData.Snapshot.Tyres.TyreTemp.RearRight));
                                 if (GameData.Snapshot.Tyres.TCInAction > 0)
@@ -202,41 +179,38 @@ namespace Rev76.Windows.Widgets
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#tyreBlowOut)");
                                 }
-                                break;
-                         
+                                return true;
                             case "leftfrontbrake":
                                 rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Snapshot.Tyres.BrakeTemp.FrontLeft));
-                                
                                 if (GameData.Snapshot.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break;
+                                return true;
                             case "rightfrontbrake":
                                 rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Snapshot.Tyres.BrakeTemp.FrontRight));
                                 if (GameData.Snapshot.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break;
+                                return true;
                             case "leftrearbrake":
                                 rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Snapshot.Tyres.BrakeTemp.RearLeft));
                                 if (GameData.Snapshot.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break; 
+                                return true;
                             case "rightrearbrake":
                                 rect.Fill = new SvgColourServer(GetBrakeTempColor(GameData.Snapshot.Tyres.BrakeTemp.RearRight));
                                 if (GameData.Snapshot.Tyres.AbsVibrations > 0)
                                 {
                                     rect.Fill = new SvgDeferredPaintServer("url(#stripedPattern)");
                                 }
-                                break;
+                                return true;
                             default:
-                                break;
+                                return false;
                         }
-
                     }
                     
                     if (element is SvgText el)
@@ -244,66 +218,65 @@ namespace Rev76.Windows.Widgets
                         switch (el.ID)
                         {
                             case "brakeset":
-                                el.Text = GameData.Snapshot.Tyres.GetBrakeString();;
-                                break;
+                                el.Text = GameData.Snapshot.Tyres.GetBrakeString();
+                                return true;
                             case "tyreset":
-                                el.Text = GameData.Snapshot.Tyres.GetTyreString(); ;
-                                break;
+                                el.Text = GameData.Snapshot.Tyres.GetTyreString();
+                                return true;
                             case "leftfrontpsi":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.WheelsPressure.FrontLeft, 1).ToString("0.0")}";
-                                break;
+                                return true;
                             case "rightfrontpsi":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.WheelsPressure.FrontRight, 1).ToString("0.0")}";
-                                break;
+                                return true;
                             case "leftrearpsi":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.WheelsPressure.RearLeft, 1).ToString("0.0")}";
-                                break;
+                                return true;
                             case "rightrearpsi":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.WheelsPressure.RearRight, 1).ToString("0.0")}";
-                                break;
+                                return true;
                             case "leftfronttemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.TyreTemp.FrontLeft, 0)}°";
-                                break;
+                                return true;
                             case "rightfronttemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.TyreTemp.FrontRight, 0)}°";
-                                break;
+                                return true;
                             case "leftreartemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.TyreTemp.RearLeft, 0)}°";
-                                break;
+                                return true;
                             case "rightreartemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.TyreTemp.RearRight, 0)}°";
-                                break;
+                                return true;
                             case "leftfrontbraketemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.BrakeTemp.FrontLeft, 0)}°";
-                                break;
+                                return true;
                             case "rightfrontbraketemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.BrakeTemp.FrontRight, 0)}°";
-                                break;
+                                return true;
                             case "leftrearbraketemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.BrakeTemp.RearLeft, 0)}°";
-                                break;
+                                return true;
                             case "rightrearbraketemp":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.BrakeTemp.RearRight, 0)}°";
-                                break;
+                                return true;
                             case "leftfrontbrakewear":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontLeft), 0)}%";
-                                break;
+                                return true;
                             case "rightfrontbrakewear":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontRight), 0)}%";
-                                break;
+                                return true;
                             case "leftrearbrakewear":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearLeft), 0)}%";
-                                break;
+                                return true;
                             case "rightrearbrakewear":
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearRight), 0)}%";
-                                break;
-                            case "brakebias":
-                                el.Text = "";//$"{(GameData.Snapshot.Tyres.BrakeBias * 100).ToString("0.0")}%";
-                                break;
+                                return true;
                             default:
-                                break;
+                                return false;
                         }
                     }
+
+                    return false;
                 });
         }
 

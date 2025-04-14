@@ -102,8 +102,10 @@ namespace Rev76.DataModels.Listeners
                             {
                                 e.LastLap.LapNumber = e.Laps;
                                 car.LapTimes[e.Laps] = e.LastLap;
+                               
                             }
                         }
+                        GameData.Instance.UpdateSnapshot();
                     }
 
                     TryAssignBestSession(e.LastLap);
@@ -112,6 +114,8 @@ namespace Rev76.DataModels.Listeners
                     {
                         _UDPClient.RequestTrackData();
                     }
+
+                   
                 });
             };
 
@@ -193,8 +197,8 @@ namespace Rev76.DataModels.Listeners
                         car.CupPosition = c.CupPosition;
                         car.Number = c.RaceNumber;
                         car.CarClass = c.CarClass;
-                        
-                        car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
+                       
+                       
                         for (int i = 0; i < c.Drivers.Count(); i++)
                         {
                             car.Drivers[i] = c.Drivers[i];
@@ -203,6 +207,7 @@ namespace Rev76.DataModels.Listeners
                     else
                     {
                         car = new Car();
+                        if (car.LapTimes == null) car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
                         car.CarIndex = c.CarIndex;
                         for (int i = 0; i < c.Drivers.Count(); i++)
                         {

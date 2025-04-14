@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Rev76.Windows.Rendering
 {
@@ -147,7 +148,7 @@ namespace Rev76.Windows.Rendering
             }
         }
 
-        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<dynamic> preRenderCallback, Action<ISVGComponent> clickHandlerCallback = null)
+        public bool DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Func<dynamic, bool> preRenderCallback, Action<ISVGComponent> clickHandlerCallback = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
             if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
@@ -160,16 +161,13 @@ namespace Rev76.Windows.Rendering
 
             var svgDocument = _SVGDocuments[documentIndex];
             
-            System.Diagnostics.Debug.WriteLine($"Drawing SVG document: {documentIndex}, Elements: {svgDocument.Children.Count}, Width: {width}, Height: {height}");
-            
-            // Process elements before rendering
+            // Process elements before rendering - this may modify the SVG content
             PreRender(preRenderCallback, svgDocument);
 
             try
             {
                 // Get the original SVG dimensions
                 var originalSize = svgDocument.GetDimensions();
-                System.Diagnostics.Debug.WriteLine($"Original SVG size: {originalSize.Width}x{originalSize.Height}");
                 
                 // Calculate scale factors to fit the SVG within the specified dimensions
                 float scaleX = width / originalSize.Width;
@@ -187,58 +185,66 @@ namespace Rev76.Windows.Rendering
                 graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                 graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
                 
-                // Apply transformations
-                graphics.TranslateTransform(x, y);
-                graphics.ScaleTransform(scaleX, scaleY);
-                
-                try
+                // Create a new bitmap for rendering
+                if (_cachedBitmap != null)
                 {
-                    // Draw the SVG document directly
-                    svgDocument.Draw(graphics);
+                    _cachedBitmap.Dispose();
                 }
-                catch (ArgumentException ex)
+                
+                _cachedBitmap = new System.Drawing.Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using (var g = System.Drawing.Graphics.FromImage(_cachedBitmap))
                 {
-                    // Handle ColorBlend error specifically
-                    if (ex.Message.Contains("ColorBlend"))
+                    // Set high quality rendering
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                    
+                    // Clear the bitmap with transparent background
+                    g.Clear(System.Drawing.Color.Transparent);
+                    
+                    // Apply transformations
+                    g.TranslateTransform(0, 0);
+                    g.ScaleTransform(scaleX, scaleY);
+                    
+                    try
                     {
-                        System.Diagnostics.Debug.WriteLine($"ColorBlend error: {ex.Message}");
-                        
-                        // Create a bitmap as a fallback
-                        using (var bitmap = new System.Drawing.Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                        // Draw the SVG document to the bitmap
+                        svgDocument.Draw(g);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        // Handle ColorBlend error specifically
+                        if (ex.Message.Contains("ColorBlend"))
                         {
-                            using (var g = System.Drawing.Graphics.FromImage(bitmap))
-                            {
-                                // Set high quality rendering
-                                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-                                
-                                // Clear the bitmap with transparent background
-                                g.Clear(System.Drawing.Color.Transparent);
-                                
-                                // Draw the SVG document to the bitmap
-                                svgDocument.Draw(g);
-                            }
-                            
-                            // Draw the bitmap to the graphics context
-                            graphics.DrawImage(bitmap, 0, 0, width, height);
+                            System.Diagnostics.Debug.WriteLine($"ColorBlend error: {ex.Message}");
+                            // Continue with the bitmap as is
+                        }
+                        else
+                        {
+                            // Re-throw if it's not a ColorBlend error
+                            throw;
                         }
                     }
-                    else
-                    {
-                        // Re-throw if it's not a ColorBlend error
-                        throw;
-                    }
                 }
+                
+                // Update cache properties
+                _cachedWidth = (int)width;
+                _cachedHeight = (int)height;
+                _cachedDocumentIndex = documentIndex;
+                
+                // Draw the bitmap to the graphics context
+                graphics.DrawImage(_cachedBitmap, x, y, width, height);
                 
                 // Restore the graphics state
                 graphics.Restore(state);
+                
+                return true; // Return true to indicate successful rendering
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"DrawSvg failed: {ex.Message}");
-                throw;
+                return false; // Return false to indicate rendering failure
             }
         }
 
@@ -313,7 +319,7 @@ namespace Rev76.Windows.Rendering
             }
         }
 
-        private void PreRender(Action<dynamic> preRenderCallback, SvgDocument svgDocument)
+        private void PreRender(Func<dynamic, bool> preRenderCallback, SvgDocument svgDocument)
         {
             if (preRenderCallback != null)
             {
@@ -322,7 +328,7 @@ namespace Rev76.Windows.Rendering
             }
         }
 
-        private void ProcessElements(IEnumerable<SvgElement> elements, Action<dynamic> preRenderCallback)
+        private void ProcessElements(IEnumerable<SvgElement> elements, Func<dynamic, bool> preRenderCallback)
         {
             try
             {
@@ -330,30 +336,28 @@ namespace Rev76.Windows.Rendering
                 {
                     try
                     {
-                        // Call the callback for this element
-                        preRenderCallback(element);
-
-                        // Log element ID for debugging
-                        if (element.ID != null)
+                        // Process the current element
+                        if (element != null)
                         {
-                            System.Diagnostics.Debug.WriteLine($"Processing element: {element.ID}");
-                        }
-
-                        // Process child elements recursively
-                        if (element.Children != null && element.Children.Count > 0)
-                        {
-                            ProcessElements(element.Children, preRenderCallback);
+                            // Call the callback for this element
+                            bool shouldContinue = preRenderCallback(element);
+                            
+                            // Process child elements regardless of the callback result
+                            if (element.Children != null && element.Children.Count > 0)
+                            {
+                                ProcessElements(element.Children, preRenderCallback);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Error processing element: {ex.Message}");
+                        Trace.WriteLine($"Error processing element {element?.ID}: {ex.Message}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error in ProcessElements: {ex.Message}");
+                Trace.WriteLine($"Error in ProcessElements: {ex.Message}");
             }
         }
 

@@ -250,7 +250,7 @@ namespace Rev76.Windows
 
                     if (!result)
                     {
-                        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "UpdateLayeredWindow (LWA_ALPHA) failed.");
+                        //throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "UpdateLayeredWindow (LWA_ALPHA) failed.");
                     }
                 }
                 finally

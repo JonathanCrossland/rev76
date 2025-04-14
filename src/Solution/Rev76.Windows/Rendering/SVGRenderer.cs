@@ -25,7 +25,7 @@ namespace Rev76.Windows.Rendering
 
         const float precisionThreshold = 0.1f;
 
-        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Action<dynamic> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
+        public void DrawSvg(System.Drawing.Graphics graphics, int documentIndex, float x, float y, float width, float height, Func<dynamic, bool> preRenderCallback, Action <ISVGComponent> clickHandlerCallback = null)
         {
             if (graphics == null) throw new ArgumentNullException(nameof(graphics));
             if (documentIndex < 0 || documentIndex >= _SVGDocuments.Count) throw new ArgumentOutOfRangeException(nameof(documentIndex));
@@ -52,13 +52,19 @@ namespace Rev76.Windows.Rendering
             graphics.Restore(state);
         }
 
-        private void PreRender(Action<dynamic> modifyAction, SvgDocument svgDocument)
+        private void PreRender(Func<dynamic, bool> modifyAction, SvgDocument svgDocument)
         {
             _ElementsClickEvent.Clear();
             foreach (var element in svgDocument.Descendants())
             {
                 var el = WireComponent(element);
-                modifyAction?.Invoke(el); // allow element modification before render
+                bool continueProcessing = modifyAction?.Invoke(el) ?? true; // allow element modification before render
+                
+                // If the callback returns false, stop processing
+                if (!continueProcessing)
+                {
+                    break;
+                }
             }
            
         }

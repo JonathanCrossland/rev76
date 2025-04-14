@@ -73,6 +73,7 @@ namespace Rev76.DataModels.Listeners
               
                 GameData.Instance.PriorityQueue.Enqueue(() =>
                 {
+                    
                     GameData.Instance.PlayerCarIndex = e.Data.PlayerCarID;
                     GameData.Instance.GameState.Status = e.Data.Status;
                     GameData.Instance.GameState.IsSetupMenuVisible = e.Data.IsSetupMenuVisible == 1;
@@ -115,7 +116,7 @@ namespace Rev76.DataModels.Listeners
                         meCar.GapAhead = e.Data.GapAhead; //always zero
                         meCar.GapBehind = e.Data.GapAhead;//always zero
                         meCar.Position = e.Data.Position;
-
+                       
                     }
 
 
