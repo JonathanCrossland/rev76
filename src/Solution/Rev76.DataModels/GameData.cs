@@ -24,6 +24,9 @@ namespace Rev76.DataModels
         internal ConcurrentQueue<Action> CommandQueue = new ConcurrentQueue<Action>();
         [JsonIgnore]
         internal ConcurrentQueue<Action> PriorityQueue = new ConcurrentQueue<Action>();
+        
+        [JsonIgnore]
+        public static Action OnRequestEntryListRefresh;
 
         [JsonIgnore]
         private readonly object _Lock = new object();
@@ -195,7 +198,7 @@ namespace Rev76.DataModels
                         GameData.Instance.UpdateSnapshot();
                     }
 
-                    await Task.Delay(10, token);
+                    await Task.Delay(5, token);
 
                 }
                 catch (Exception)

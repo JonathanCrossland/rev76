@@ -137,11 +137,11 @@ namespace Assetto.Data.Broadcasting
 
                         if (elapsedTime > 250) 
                         {
-                            adaptiveUpdateInterval = Math.Min(adaptiveUpdateInterval + 5, 250); 
+                            adaptiveUpdateInterval = Math.Min(adaptiveUpdateInterval + 10, 250); 
                         }
-                        else if (elapsedTime < 250)
+                        else if (elapsedTime < 100)
                         {
-                            adaptiveUpdateInterval = Math.Max(adaptiveUpdateInterval - 5, 20); 
+                            adaptiveUpdateInterval = Math.Max(adaptiveUpdateInterval - 5, 100); 
                         }
 
                         if (adaptiveUpdateInterval >= 350 && (DateTime.Now - lastReRegisterTime).TotalSeconds >= 30)

@@ -20,6 +20,10 @@ namespace Rev76.Windows.Widgets
         private Stopwatch _Stopwatch = new Stopwatch();
         private int _StateChangeInterval = 4500;
         private DrawState _DrawState = DrawState.State1;
+        
+        private DateTime _incompleteDataDetectedTime = DateTime.MinValue;
+        private bool _incompleteDataDetected = false;
+        private const int INCOMPLETE_DATA_REFRESH_THRESHOLD_MS = 10000; // 10 seconds
 
        
         private enum DrawState
@@ -97,7 +101,8 @@ namespace Rev76.Windows.Widgets
                 }
             }
 
-           
+            // Check for incomplete data
+            CheckIncompleteData(meCar, preCar, postCar, purpleCar);
 
             _renderer.DrawSvg(
              g,
@@ -109,7 +114,7 @@ namespace Rev76.Windows.Widgets
 
                  if (element is SvgRectangle rect)
                  {
-                     if (element.ID.StartsWith("PreDriverRect"))
+                     if (element.ID != null && element.ID.StartsWith("PreDriverRect"))
                      {
                          DrawLap(preCar, preCarLaps, rect);
                      }
@@ -228,19 +233,22 @@ namespace Rev76.Windows.Widgets
                          case "PreDriver":
                              time = float.TryParse(preCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
 
-                             if (_DrawState == DrawState.State1 || time == 0)
-                             {
-                                
-                                 if (preCar != null)
-                                 {
-                                     numberText = preCar?.Number.ToString() + "";
-                                     if (numberText.Length > 0) numberText = "#" + numberText;
-                                     var fname = preDriver.FirstName.Length >= 1 ? preDriver.FirstName[0].ToString().ToUpper() : "";
+                            if (_DrawState == DrawState.State1 || time == 0)
+                            {
+                               
+                                if (preCar != null)
+                                {
+                                    numberText = "";
+                                    if (preCar.Number > 0)
+                                    {
+                                        numberText = "#" + preCar.Number.ToString();
+                                    }
+                                    var fname = preDriver.FirstName.Length >= 1 ? preDriver.FirstName[0].ToString().ToUpper() : "";
 
-                                     el.Text = $"{fname} {preDriver.LastName} {numberText}";
-                                     el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
-                                 }
-                             }
+                                    el.Text = $"{fname} {preDriver.LastName} {numberText}";
+                                    el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                                }
+                            }
                              else if (_DrawState == DrawState.State2)
                              {
 
@@ -265,15 +273,18 @@ namespace Rev76.Windows.Widgets
                              break;
                          case "MeDriver":
 
-                             time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
-                             if (_DrawState == DrawState.State1 || time == 0)
-                             {
-                                
-                                 numberText = meCar?.Number.ToString() + "";
-                                 if (numberText.Length > 0) numberText = "#" + numberText;
-                                 el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
-                                 el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
-                             }
+                            time = float.TryParse(meCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+                            if (_DrawState == DrawState.State1 || time == 0)
+                            {
+                               
+                                numberText = "";
+                                if (meCar != null && meCar.Number > 0)
+                                {
+                                    numberText = "#" + meCar.Number.ToString();
+                                }
+                                el.Text = $"{driver.FirstName[0].ToString().ToUpper()} {driver.LastName} {numberText} ";
+                                el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                            }
                              else if (_DrawState == DrawState.State2)
                              {
                                  formattedTime = GameData.GetFormattedLapTime(time);
@@ -297,17 +308,20 @@ namespace Rev76.Windows.Widgets
                              el.Text = postCar?.Position.ToString();
                              break;
                          case "PostDriver":
-                             time = float.TryParse(postCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
-                             if (_DrawState == DrawState.State1 || time == 0)
-                             {
-                                 if (postCar != null)
-                                 {
-                                     numberText = postCar?.Number.ToString() + "";
-                                     if (numberText.Length > 0) numberText = "#" + numberText;
-                                     el.Text = $"{postDriver.FirstName[0].ToString().ToUpper()} {postDriver.LastName} {numberText}";
-                                     el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
-                                 }
-                             }
+                            time = float.TryParse(postCar?.BestSessionLap?.LaptimeMS.ToString(), out time) ? time : 0;
+                            if (_DrawState == DrawState.State1 || time == 0)
+                            {
+                                if (postCar != null)
+                                {
+                                    numberText = "";
+                                    if (postCar.Number > 0)
+                                    {
+                                        numberText = "#" + postCar.Number.ToString();
+                                    }
+                                    el.Text = $"{postDriver.FirstName[0].ToString().ToUpper()} {postDriver.LastName} {numberText}";
+                                    el.Fill = new SvgColourServer(Color.FromArgb(255, 255, 255, 255));
+                                }
+                            }
                              else if (_DrawState == DrawState.State2)
                              {
 
@@ -331,15 +345,18 @@ namespace Rev76.Windows.Widgets
                          case "PurpleDriverPos":
                              el.Text = purpleCar?.Position.ToString();
                              break;
-                         case "PurpleDriver":
+                        case "PurpleDriver":
 
-                             if (purpleCar != null)
-                             {
-                                 numberText = purpleCar?.Number.ToString();
-                                 if (numberText.Length > 0) numberText = "#" + numberText;
-                                 el.Text = $"{purpleDriver.FirstName[0].ToString().ToUpper()} {purpleDriver.LastName} {numberText}";
-                             }
-                             break;
+                            if (purpleCar != null)
+                            {
+                                numberText = "";
+                                if (purpleCar.Number > 0)
+                                {
+                                    numberText = "#" + purpleCar.Number.ToString();
+                                }
+                                el.Text = $"{purpleDriver.FirstName[0].ToString().ToUpper()} {purpleDriver.LastName} {numberText}";
+                            }
+                            break;
                          case "PurpleDriverTime":
                              time = 0;
                              if (purpleCar?.BestSessionLap != null)
@@ -659,6 +676,76 @@ namespace Rev76.Windows.Widgets
           
 
             base.OnGraphicsSetup(g);
+        }
+
+        private void CheckIncompleteData(Car meCar, Car preCar, Car postCar, Car purpleCar)
+        {
+            bool hasIncompleteData = false;
+
+            // Check each car for incomplete data
+            if (meCar != null && meCar.Position > 0 && (meCar.Number == 0 || meCar.Drivers == null || meCar.Drivers.Count == 0))
+            {
+                hasIncompleteData = true;
+            }
+            if (preCar != null && preCar.Position > 0 && (preCar.Number == 0 || preCar.Drivers == null || preCar.Drivers.Count == 0))
+            {
+                hasIncompleteData = true;
+            }
+            if (postCar != null && postCar.Position > 0 && (postCar.Number == 0 || postCar.Drivers == null || postCar.Drivers.Count == 0))
+            {
+                hasIncompleteData = true;
+            }
+            if (purpleCar != null && purpleCar.Position > 0 && (purpleCar.Number == 0 || purpleCar.Drivers == null || purpleCar.Drivers.Count == 0))
+            {
+                hasIncompleteData = true;
+            }
+
+            if (hasIncompleteData)
+            {
+                // Start timer if this is the first detection
+                if (!_incompleteDataDetected)
+                {
+                    _incompleteDataDetected = true;
+                    _incompleteDataDetectedTime = DateTime.Now;
+                    Trace.WriteLine("Incomplete car data detected in purple widget");
+                }
+                else
+                {
+                    // Check if threshold exceeded
+                    if ((DateTime.Now - _incompleteDataDetectedTime).TotalMilliseconds >= INCOMPLETE_DATA_REFRESH_THRESHOLD_MS)
+                    {
+                        Trace.WriteLine("Incomplete data threshold exceeded in purple widget - requesting entry list refresh");
+                        RequestEntryListRefresh();
+                        
+                        // Reset timer to avoid spamming requests
+                        _incompleteDataDetectedTime = DateTime.Now;
+                    }
+                }
+            }
+            else
+            {
+                // Data is complete - reset detection
+                if (_incompleteDataDetected)
+                {
+                    Trace.WriteLine("Purple widget car data is now complete");
+                    _incompleteDataDetected = false;
+                    _incompleteDataDetectedTime = DateTime.MinValue;
+                }
+            }
+        }
+
+        private void RequestEntryListRefresh()
+        {
+            try
+            {
+                // Invoke the static refresh action on GameData
+                GameData.OnRequestEntryListRefresh?.Invoke();
+                Trace.WriteLine("Entry list refresh invoked from purple widget");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error requesting entry list refresh from purple widget: {ex.Message}");
+            }
         }
 
         protected override void OnGraphicsDestroyed(System.Drawing.Graphics g)

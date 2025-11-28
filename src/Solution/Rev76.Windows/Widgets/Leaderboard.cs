@@ -25,8 +25,13 @@ namespace Rev76.Windows.Widgets
         private bool _InRender = false;
         private List<Car> carList = new List<Car>();
         private DateTime _lastCarListUpdate = DateTime.MinValue;
-        private const int CAR_LIST_UPDATE_INTERVAL_MS = 50; // Update car list every 50ms
+        private const int CAR_LIST_UPDATE_INTERVAL_MS = 20; // Update car list every 20ms
         private int _lastCarCount = 0; // Track the last car count to avoid unnecessary updates
+        private Dictionary<int, int> _lastCarPositions = new Dictionary<int, int>(); // Track positions for change detection
+        
+        private DateTime _incompleteDataDetectedTime = DateTime.MinValue;
+        private bool _incompleteDataDetected = false;
+        private const int INCOMPLETE_DATA_REFRESH_THRESHOLD_MS = 30000; // 30 seconds
 
         // Color cache to reuse SvgColourServer objects
         private Dictionary<Color, SvgColourServer> _colorCache = new Dictionary<Color, SvgColourServer>();
@@ -169,15 +174,23 @@ namespace Rev76.Windows.Widgets
 
                 _InRender = true;
 
-                // Only update car list if the count has changed or enough time has passed
+                // Check if any positions have changed
+                bool positionsChanged = HasPositionChanged();
+                
+                // Only update car list if the count has changed, positions changed, or enough time has passed
                 int currentCarCount = GameData.Snapshot.Track.Cars.Count;
-                if (currentCarCount != _lastCarCount || (DateTime.Now - _lastCarListUpdate).TotalMilliseconds >= CAR_LIST_UPDATE_INTERVAL_MS)
+                if (currentCarCount != _lastCarCount || 
+                    positionsChanged || 
+                    (DateTime.Now - _lastCarListUpdate).TotalMilliseconds >= CAR_LIST_UPDATE_INTERVAL_MS)
                 {
                     // Instead of clearing and rebuilding, update the existing list
                     UpdateCarList(currentCarCount);
                     
                     _lastCarListUpdate = DateTime.Now;
                     _lastCarCount = currentCarCount;
+                    
+                    // Update position tracking
+                    UpdatePositionTracking();
                 }
 
                 // Use the full car list instead of limiting to 8 cars
@@ -342,13 +355,27 @@ namespace Rev76.Windows.Widgets
                                     if (!renderDrivers) return false; // Skip car updates if not time
                                     
                                     var positionString = (element as SvgGroup).ID.Replace("car_", "");
-                                    int.TryParse(positionString, out int position);
-                                  
-                                    Car car = displayCarList.Find(c => c.Position == position);
+                                    int.TryParse(positionString, out int rowNumber);
+                                    
+                                    // Use list index instead of position lookup
+                                    int listIndex = rowNumber - 1; // Convert to 0-based index
+                                    if (listIndex < 0 || listIndex >= displayCarList.Count)
+                                    {
+                                        return true; // Skip if no car for this row
+                                    }
+                                    
+                                    Car car = displayCarList[listIndex];
                                     if (car != null)
                                     {
                                         SvgGroup row = element as SvgGroup;
                                         if (row == null) return true;  // Skip if row conversion failed
+                                        
+                                        // Show row even if position is 0, but log it
+                                        if (car.Position <= 0)
+                                        {
+                                            Trace.WriteLine($"Warning: Car at listIndex {listIndex} has invalid position: {car.Position}, CarIndex: {car.CarIndex}");
+                                        }
+                                        
                                         row.Visibility = "visible";
 
                                         // Lap times processing in its own try-catch
@@ -437,15 +464,26 @@ namespace Rev76.Windows.Widgets
                                         try
                                         {
                                             SvgText drivername = GetCachedElement<SvgText>(row, "drivername");
-                                            if (drivername != null && car.Drivers != null && 
-                                                car.DriverIndex >= 0 && car.DriverIndex < car.Drivers.Count)
+                                            if (drivername != null)
                                             {
-                                                DriverInfo driver;
-                                                if (car.Drivers.TryGetValue(car.DriverIndex, out driver))
+                                                if (car.Drivers != null && car.Drivers.Count > 0 &&
+                                                    car.DriverIndex >= 0 && car.DriverIndex < car.Drivers.Count)
                                                 {
-                                                    string firstNameInitial = !string.IsNullOrEmpty(driver.FirstName) ? 
-                                                        driver.FirstName[0].ToString().ToUpper() : "";
-                                                    drivername.Text = $"{firstNameInitial} {driver.LastName ?? ""}".Trim();
+                                                    DriverInfo driver;
+                                                    if (car.Drivers.TryGetValue(car.DriverIndex, out driver))
+                                                    {
+                                                        string firstNameInitial = !string.IsNullOrEmpty(driver.FirstName) ? 
+                                                            driver.FirstName[0].ToString().ToUpper() : "";
+                                                        drivername.Text = $"{firstNameInitial} {driver.LastName ?? ""}".Trim();
+                                                    }
+                                                    else
+                                                    {
+                                                        drivername.Text = "--";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    drivername.Text = "--";
                                                 }
                                             }
 
@@ -468,7 +506,15 @@ namespace Rev76.Windows.Widgets
                                             SvgText number = GetCachedElement<SvgText>(row, "number");
                                             if (number != null)
                                             {
-                                number.Text = car.Number.ToString();
+                                                if (car.Number > 0)
+                                                {
+                                                    number.Text = car.Number.ToString();
+                                                }
+                                                else
+                                                {
+                                                    number.Text = "";
+                                                    Trace.WriteLine($"Car at position {car.Position} (listIndex {listIndex}) has no number. CarIndex: {car.CarIndex}");
+                                                }
                                             }
                                         }
                                         catch (Exception ex)
@@ -486,9 +532,9 @@ namespace Rev76.Windows.Widgets
                                 lastlaptime.Text = GameData.GetFormattedLapTime(time);
                                             }
 
-                                            // Always get fresh postCar reference for gap calculation
-                                            Car postCar = displayCarList.Find(c => c.Position == position - 1);
-                                if (postCar != null)
+                                            // Get the car ahead (previous index in sorted list)
+                                            Car postCar = listIndex > 0 ? displayCarList[listIndex - 1] : null;
+                                            if (postCar != null)
                                 {
                                                 SvgText offsettime = GetCachedElement<SvgText>(row, "offsettime");
                                                 if (offsettime != null)
@@ -588,7 +634,8 @@ namespace Rev76.Windows.Widgets
                                         SvgText pos = GetCachedElement<SvgText>(row, "pos");
                                         if (pos != null)
                                         {
-                                            pos.Text = car.Position.ToString();
+                                            // Display the row number (1-based) since list is already sorted by position
+                                            pos.Text = (listIndex + 1).ToString();
 
                                             if (GameData.Snapshot.Session?.BestSession != null && 
                                                 car.CarIndex == GameData.Snapshot.Session.BestSession.CarIndex)
@@ -665,6 +712,35 @@ namespace Rev76.Windows.Widgets
             }
         }
 
+        private bool HasPositionChanged()
+        {
+            foreach (var car in GameData.Snapshot.Track.Cars.Values)
+            {
+                if (_lastCarPositions.TryGetValue(car.CarIndex, out int lastPosition))
+                {
+                    if (lastPosition != car.Position)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    // New car that wasn't tracked before
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void UpdatePositionTracking()
+        {
+            _lastCarPositions.Clear();
+            foreach (var car in GameData.Snapshot.Track.Cars.Values)
+            {
+                _lastCarPositions[car.CarIndex] = car.Position;
+            }
+        }
+
         // Optimized method to update the car list without clearing and rebuilding
         private void UpdateCarList(int currentCarCount)
         {
@@ -690,6 +766,9 @@ namespace Rev76.Windows.Widgets
             // Track which cars are still present
             HashSet<int> currentCarIndices = new HashSet<int>();
             
+            // Track incomplete data
+            bool hasIncompleteData = false;
+            
             // Update or add cars
             foreach (var car in GameData.Snapshot.Track.Cars.Values)
             {
@@ -707,6 +786,17 @@ namespace Rev76.Windows.Widgets
                     existingCar.TrackPosition = car.TrackPosition;
                     existingCar.Kmh = car.Kmh;
                     existingCar.Flag = car.Flag;
+                    existingCar.Number = car.Number;
+                    existingCar.CarClass = car.CarClass;
+
+                    // Update drivers collection
+                    if (car.Drivers != null && car.Drivers.Count > 0)
+                    {
+                        foreach (var driver in car.Drivers)
+                        {
+                            existingCar.Drivers[driver.Key] = driver.Value;
+                        }
+                    }
 
                     // Update lap times collection
                     foreach (var lap in car.LapTimes)
@@ -722,13 +812,81 @@ namespace Rev76.Windows.Widgets
                     // Add new car
                     carList.Add(car);
                 }
+                
+                // Check for incomplete data (missing driver info or number)
+                if (car.Position > 0 && (car.Number == 0 || car.Drivers == null || car.Drivers.Count == 0))
+                {
+                    hasIncompleteData = true;
+                }
             }
             
             // Remove cars that are no longer present
             carList.RemoveAll(car => !currentCarIndices.Contains(car.CarIndex));
             
-            // Sort the list by position
-            carList.Sort((a, b) => a.Position.CompareTo(b.Position));
+            // Sort the list by position, but push cars with invalid positions to the end
+            carList.Sort((a, b) => 
+            {
+                // Invalid positions go to the end
+                if (a.Position <= 0 && b.Position <= 0) return 0;
+                if (a.Position <= 0) return 1;  // a goes after b
+                if (b.Position <= 0) return -1; // b goes after a
+                
+                // Normal position comparison
+                return a.Position.CompareTo(b.Position);
+            });
+            
+            // Handle incomplete data detection
+            CheckIncompleteData(hasIncompleteData);
+        }
+        
+        private void CheckIncompleteData(bool hasIncompleteData)
+        {
+            if (hasIncompleteData)
+            {
+                // Start timer if this is the first detection
+                if (!_incompleteDataDetected)
+                {
+                    _incompleteDataDetected = true;
+                    _incompleteDataDetectedTime = DateTime.Now;
+                    Trace.WriteLine("Incomplete car data detected in leaderboard");
+                }
+                else
+                {
+                    // Check if threshold exceeded
+                    if ((DateTime.Now - _incompleteDataDetectedTime).TotalMilliseconds >= INCOMPLETE_DATA_REFRESH_THRESHOLD_MS)
+                    {
+                        Trace.WriteLine("Incomplete data threshold exceeded - requesting entry list refresh");
+                        RequestEntryListRefresh();
+                        
+                        // Reset timer to avoid spamming requests
+                        _incompleteDataDetectedTime = DateTime.Now;
+                    }
+                }
+            }
+            else
+            {
+                // Data is complete - reset detection
+                if (_incompleteDataDetected)
+                {
+                    Trace.WriteLine("Car data is now complete");
+                    _incompleteDataDetected = false;
+                    _incompleteDataDetectedTime = DateTime.MinValue;
+                }
+            }
+        }
+        
+        private void RequestEntryListRefresh()
+        {
+            try
+            {
+                // Invoke the static refresh action on GameData
+                GameData.OnRequestEntryListRefresh?.Invoke();
+                Trace.WriteLine("Entry list refresh invoked from leaderboard");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error requesting entry list refresh: {ex.Message}");
+            }
         }
 
         private SvgPaintServer GetFillForDriverLicense(DriverCategory category)
@@ -786,25 +944,24 @@ namespace Rev76.Windows.Widgets
                 return;
             }
             int maxPosition = displayCarList.Max(c => c.Position);
+            int currentRowCount = parentGroup.Children.Count;
             
-            // Rebuild if we don't have enough rows for all positions
-            if (maxPosition > parentGroup.Children.Count)
+            // Only add new rows if needed - don't clear existing ones
+            if (maxPosition > currentRowCount)
             {
-                Trace.WriteLine($"Need more rows. Current: {parentGroup.Children.Count}, Required: {maxPosition}");
-                parentGroup.Children.Clear();
-                _DriversAdded = false;
+                Trace.WriteLine($"Adding more rows. Current: {currentRowCount}, Required: {maxPosition}, Adding: {maxPosition - currentRowCount}");
             }
 
             // Add drivers if we haven't done so yet or if we need more rows
-            if (parentGroup.ID == "DriverRows" && maxPosition >= 1 && (!_DriversAdded || maxPosition > parentGroup.Children.Count))
+            if (parentGroup.ID == "DriverRows" && maxPosition >= 1 && (!_DriversAdded || maxPosition > currentRowCount))
             {
                 _CreatingLeaderboard = true;
                 
                 // Fixed height per row - this should match the SVG template height
                 const float ROW_HEIGHT = 26f;
                 
-                // Create rows for all positions up to maxPosition
-                for (int i = parentGroup.Children.Count; i < maxPosition; i++)
+                // Create rows ONLY for the new positions needed (don't rebuild existing)
+                for (int i = currentRowCount; i < maxPosition; i++)
                 {
                     // Clone the template and ensure it's a proper SvgGroup
                     SvgGroup row = template.Clone() as SvgGroup;

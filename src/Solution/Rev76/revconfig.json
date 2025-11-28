@@ -2,13 +2,13 @@
   "Widgets": [
     {
       "Name": "TyreWidgetEx",
-      "FPS": 120,
-      "X": 2853,
-      "Y": 932,
+      "FPS": 20,
+      "X": 2961,
+      "Y": 968,
       "Width": 325,
       "Height": 450,
       "Enable": true,
-      "Scale": 0.75,
+      "Scale": 0.8,
       "ShowInTaskBar": true,
       "Settings": {
         "Kind": "extended"
@@ -16,9 +16,9 @@
     },
     {
       "Name": "PurpleWidget",
-      "FPS": 120,
-      "X": 3122,
-      "Y": 925,
+      "FPS": 50,
+      "X": 3996,
+      "Y": 878,
       "Width": 430,
       "Height": 235,
       "Enable": true,
@@ -30,7 +30,7 @@
     },
     {
       "Name": "LeaderboardWidget",
-      "FPS": 120,
+      "FPS": 50,
       "X": 4256,
       "Y": 205,
       "Width": 465,
@@ -103,11 +103,11 @@
     {
       "Name": "WeatherWidget",
       "FPS": 10,
-      "X": 2967,
-      "Y": 868,
-      "Width": 300,
-      "Height": 500,
-      "Enable": true,
+      "X": 4910,
+      "Y": 49,
+      "Width": 200,
+      "Height": 140,
+      "Enable": false,
       "Scale": 1.0,
       "ShowInTaskBar": false,
       "Settings": {}

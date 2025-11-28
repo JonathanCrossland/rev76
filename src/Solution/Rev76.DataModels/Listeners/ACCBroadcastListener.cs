@@ -22,6 +22,16 @@ namespace Rev76.DataModels.Listeners
         {
            
             _UDPClient = new ACCUdpRemoteClient("127.0.0.1", 9000, "Rev76", "asd", "", 100);
+            
+            GameData.OnRequestEntryListRefresh = () =>
+            {
+                if (_UDPClient != null)
+                {
+                    Trace.WriteLine("Entry list refresh requested via GameData event");
+                    _UDPClient.RequestEntryList();
+                }
+            };
+            
             _UDPClient.OnConnectionStateChanged += (int connectionId, bool connectionSuccess, bool isReadonly, string error) =>
             {
                 GameData.Instance.CommandQueue.Enqueue(() =>
@@ -30,6 +40,13 @@ namespace Rev76.DataModels.Listeners
                     {
                         GameData.Instance.Reset();
                         _UDPClient.MessageHandler._entryListCars.Clear();
+                    }
+                    else
+                    {
+                        // Request initial data on successful connection
+                        Trace.WriteLine("Connection successful - requesting initial entry list and track data");
+                        _UDPClient.RequestEntryList();
+                        _UDPClient.RequestTrackData();
                     }
                     Connected = connectionSuccess;
                     Trace.WriteLine($"ConnectionStateChanged: {error}");
@@ -42,12 +59,10 @@ namespace Rev76.DataModels.Listeners
                 {
                     GameData.Instance.Session.Phase = e.Phase;
 
-                    if (e.Phase == SessionPhase.PreFormation || (e.Phase == SessionPhase.Session))
+                    // Request entry list if we have none, regardless of phase
+                    if (_UDPClient.MessageHandler._entryListCars.Count() == 0)
                     {
-                        if (_UDPClient.MessageHandler._entryListCars.Count() == 0)
-                        {
-                            _UDPClient.RequestEntryList();
-                        }
+                        _UDPClient.RequestEntryList();
                     }
 
                     if (GameData.Instance.Track.Cars.TryGetValue(e.FocusedCarIndex, out Car broadcastcar))
@@ -72,40 +87,53 @@ namespace Rev76.DataModels.Listeners
             {
                 GameData.Instance.CommandQueue.Enqueue(() =>
                 {
-                    
-                    LoadCarsFromEntryList();
-                  
-
-                    if (GameData.Instance.Track.Cars.TryGetValue(e.CarIndex, out Car car))
+                    if (!GameData.Instance.Track.Cars.ContainsKey(e.CarIndex) || 
+                        GameData.Instance.Track.Cars.Count < _UDPClient.MessageHandler._entryListCars.Count)
                     {
-                        car.BestSessionLap = e.BestSessionLap;
-                        car.Laps = e.Laps;
-                        car.LastLap = e.LastLap;
-                        car.CurrentLap = e.CurrentLap;
-                        car.Delta = e.Delta;
-                        car.DriverCount = e.DriverCount;
-                        car.DriverIndex = e.DriverIndex;
-                        car.Gear = e.Gear;
-                        car.Kmh = e.Kmh;
-                        car.Position = e.Position;
-                        car.SplinePosition = e.SplinePosition;
-                        car.WorldPosX = e.WorldPosX;
-                        car.WorldPosY = e.WorldPosY;
-                        car.Yaw = e.Yaw;
-                        car.CarLocation = e.CarLocation;
-                        car.CupPosition = e.CupPosition;
-                        
-
-                        if (!car.LapTimes.ContainsKey(e.Laps))
+                        if (_UDPClient.MessageHandler._entryListCars.Count > 0)
                         {
-                            if (e.Laps >= 0)
-                            {
-                                e.LastLap.LapNumber = e.Laps;
-                                car.LapTimes[e.Laps] = e.LastLap;
-                               
-                            }
+                            LoadCarsFromEntryList();
                         }
-                        GameData.Instance.UpdateSnapshot();
+                    }
+
+                    if (!GameData.Instance.Track.Cars.TryGetValue(e.CarIndex, out Car car))
+                    {
+                        car = new Car();
+                        car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
+                        car.CarIndex = e.CarIndex;
+                        GameData.Instance.Track.Cars[e.CarIndex] = car;
+                        
+                        // Request entry list when we create a new car to fill in missing data
+                        if (_UDPClient.MessageHandler._entryListCars.Count > 0)
+                        {
+                            _UDPClient.RequestEntryList();
+                        }
+                    }
+
+                    car.BestSessionLap = e.BestSessionLap;
+                    car.Laps = e.Laps;
+                    car.LastLap = e.LastLap;
+                    car.CurrentLap = e.CurrentLap;
+                    car.Delta = e.Delta;
+                    car.DriverCount = e.DriverCount;
+                    car.DriverIndex = e.DriverIndex;
+                    car.Gear = e.Gear;
+                    car.Kmh = e.Kmh;
+                    car.Position = e.Position;
+                    car.SplinePosition = e.SplinePosition;
+                    car.WorldPosX = e.WorldPosX;
+                    car.WorldPosY = e.WorldPosY;
+                    car.Yaw = e.Yaw;
+                    car.CarLocation = e.CarLocation;
+                    car.CupPosition = e.CupPosition;
+
+                    if (!car.LapTimes.ContainsKey(e.Laps))
+                    {
+                        if (e.Laps >= 0)
+                        {
+                            e.LastLap.LapNumber = e.Laps;
+                            car.LapTimes[e.Laps] = e.LastLap;
+                        }
                     }
 
                     TryAssignBestSession(e.LastLap);
@@ -114,8 +142,6 @@ namespace Rev76.DataModels.Listeners
                     {
                         _UDPClient.RequestTrackData();
                     }
-
-                   
                 });
             };
 
@@ -137,7 +163,10 @@ namespace Rev76.DataModels.Listeners
 
             _UDPClient.OnEntrylistUpdate += (sender, e) =>
             {
-                GameData.Instance.PriorityQueue.Enqueue(() => LoadCarsFromEntryList());
+                GameData.Instance.PriorityQueue.Enqueue(() =>
+                {
+                    LoadCarsFromEntryList();
+                });
             };
 
             _UDPClient.OnTrackDataUpdate += (sender, e) =>
@@ -171,19 +200,41 @@ namespace Rev76.DataModels.Listeners
         {
             try
             {
-                
-                    
                 foreach (var c in _UDPClient.MessageHandler._entryListCars)
                 {
-                    if (GameData.Instance.Track.Cars.TryGetValue(c.CarIndex, out Car car))
+                    Car car;
+                    bool isNewCar = false;
+
+                    if (!GameData.Instance.Track.Cars.TryGetValue(c.CarIndex, out car))
                     {
-                        car.CarIndex = c.CarIndex;
+                        car = new Car();
+                        car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
+                        GameData.Instance.Track.Cars[c.CarIndex] = car;
+                        isNewCar = true;
+                    }
+
+                    car.CarIndex = c.CarIndex;
+                    car.Number = c.RaceNumber;
+                    car.CarClass = c.CarClass;
+                    car.DriverCount = c.DriverCount;
+
+                    for (int i = 0; i < c.Drivers.Count(); i++)
+                    {
+                        car.Drivers[i] = c.Drivers[i];
+                    }
+
+                    if (isNewCar || c.BestSessionLap != null)
+                    {
                         car.BestSessionLap = c.BestSessionLap;
+                    }
+
+                    // Only update dynamic data for new cars - realtime updates are more accurate
+                    if (isNewCar)
+                    {
                         car.Laps = c.Laps;
                         car.LastLap = c.LastLap;
                         car.CurrentLap = c.CurrentLap;
                         car.Delta = c.Delta;
-                        car.DriverCount = c.DriverCount;
                         car.DriverIndex = c.DriverIndex;
                         car.Gear = c.Gear;
                         car.Kmh = c.Kmh;
@@ -195,25 +246,6 @@ namespace Rev76.DataModels.Listeners
                         car.Yaw = c.Yaw;
                         car.CarLocation = c.CarLocation;
                         car.CupPosition = c.CupPosition;
-                        car.Number = c.RaceNumber;
-                        car.CarClass = c.CarClass;
-                       
-                       
-                        for (int i = 0; i < c.Drivers.Count(); i++)
-                        {
-                            car.Drivers[i] = c.Drivers[i];
-                        }
-                    }
-                    else
-                    {
-                        car = new Car();
-                        if (car.LapTimes == null) car.LapTimes = new ConcurrentDictionary<int, LapInfo>();
-                        car.CarIndex = c.CarIndex;
-                        for (int i = 0; i < c.Drivers.Count(); i++)
-                        {
-                            car.Drivers[i] = c.Drivers[i];
-                        }
-                        GameData.Instance.Track.Cars[car.CarIndex] = car;
                     }
 
                     if (GameData.Instance.Session.BestSession == null)
@@ -222,18 +254,12 @@ namespace Rev76.DataModels.Listeners
                     }
 
                     TryAssignBestSession(car.BestSessionLap);
-
-                   
-
                 }
 
                 if (GameData.Instance.Track.NumberOfCars != _UDPClient.MessageHandler._entryListCars.Count())
                 {
                     GameData.Instance.Track.NumberOfCars = _UDPClient.MessageHandler._entryListCars.Count();
-                   
                 }
-                GameData.Instance.UpdateSnapshot();
-
             }
             catch (Exception ex)
             {

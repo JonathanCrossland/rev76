@@ -260,16 +260,20 @@ namespace Rev76.Windows.Widgets
                                 el.Text = $"{Math.Round(GameData.Snapshot.Tyres.BrakeTemp.RearRight, 0)}°";
                                 return true;
                             case "leftfrontbrakewear":
-                                el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontLeft), 0)}%";
+                                el.Text = GameData.Snapshot.Tyres.TyreWear.FrontLeft.ToString("0.0");
+                                //el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontLeft), 0)}%";
                                 return true;
                             case "rightfrontbrakewear":
-                                el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontRight), 0)}%";
+                                //el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.FrontRight), 0)}%";
+                                el.Text = GameData.Snapshot.Tyres.TyreWear.FrontRight.ToString("0.0");
                                 return true;
                             case "leftrearbrakewear":
-                                el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearLeft), 0)}%";
+                                //el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearLeft), 0)}%";
+                                el.Text = GameData.Snapshot.Tyres.TyreWear.RearLeft.ToString("0.0");
                                 return true;
                             case "rightrearbrakewear":
-                                el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearRight), 0)}%";
+                                //el.Text = $"{Math.Round(GameData.Snapshot.Tyres.GetPadLifePercentage(Tyres.Position.RearRight), 0)}%";
+                                el.Text = GameData.Snapshot.Tyres.TyreWear.RearRight.ToString("0.0");
                                 return true;
                             default:
                                 return false;
